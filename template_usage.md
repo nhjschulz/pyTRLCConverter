@@ -1,13 +1,20 @@
-# Python Template User Guide
+# Python Template User Guide <!-- omit in toc -->
 
 - [Install Template](#install-template)
 - [Usage with VS Code](#usage-with-vs-code)
 - [Handling dependencies](#handling-dependencies)
 - [Starting Implementation](#starting-implementation)
+- [Package installation](#package-installation)
+  - [For development](#for-development)
+  - [Current Version from source](#current-version-from-source)
 - [Folder Structure](#folder-structure)
 - [Documentation](#documentation)
+  - [High level SW Architecture](#high-level-sw-architecture)
+  - [Detailed Design](#detailed-design)
 - [Unit Testing](#unit-testing)
 - [Github](#github)
+  - [Github Work Instructions](#github-work-instructions)
+  - [Github Workflow](#github-workflow)
 
 ## Install Template
 
@@ -24,7 +31,7 @@ from <your_project_name>.version import __version__, __author__, __email__, __re
 - Change the author, email and description in `pyproject.toml`.
 - Updated the sections `[project.urls]` and `[projects.scripts]` in `pyproject.toml`.
 - Update the README file in root folder.
-- This are only the most important places where to update the template, use search and replace, to find all occurances of `templat_python`and replace it by you project name.
+- This are only the most important places where to update the template, use search and replace, to find all occurances of `template_python`and replace it by you project name.
 
 ## Usage with VS Code
 

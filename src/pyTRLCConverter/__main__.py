@@ -1,8 +1,8 @@
 """The main module with the program entry point.
 
-Enter detailed module description here
+The main module contains the table with the supported converters.
 
-Author: Name (mail)
+Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
 # *******************************************************************************
@@ -15,7 +15,7 @@ import sys
 import logging
 
 try:
-    from template_python.version import __version__, __author__, __email__, __repository__, __license__
+    from pyTRLCConverter.version import __version__, __author__, __email__, __repository__, __license__
 except ModuleNotFoundError:
     # provide dummy information when not installed as package but called directly
     # also necessary to get sphinx running without error
