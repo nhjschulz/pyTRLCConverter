@@ -43,3 +43,6 @@ pyTRLCConverter = "pyTRLCConverter.__main__:main"
 pythonpath = [
   "src"
 ]
+
+[tool.setuptools.package-data]
+pyTRLCConverter = ["pyproject.toml"]
