@@ -11,18 +11,18 @@ requires-python = ">=3.10"
 authors = [
     { name = "Andreas Merkle", email = "andreas.merkle@newtec.de" }
 ]
-license = {text = "BSD 3-Clause"}
+license = {text = "GPL-3.0"}
 classifiers = [
-    "License :: OSI Approved :: BSD 3-Clause",
+    "License :: OSI Approved :: GPL-3.0",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13"
+    "Programming Language :: Python :: 3.12"
 ]
 
 dependencies = [
-    "toml>=0.10.2"
+    "toml>=0.10.2",
+    "trlc @ https://github.com/NewTec-GmbH/trlc/archive/refs/heads/main.zip"
 ]
 
 [project.optional-dependencies]

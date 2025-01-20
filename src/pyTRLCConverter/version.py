@@ -1,8 +1,20 @@
-"""This module provides version and author information."""
+"""This module provides version and author information.
 
-#*******************************************************************************
-# Copyright (c) NewTec GmbH 2024   -   www.newtec.de
-#*******************************************************************************
+    Author: Andreas Merkle (andreas.merkle@newtec.de)
+"""
+
+# This file is part of the pyTRLCConverter program.
+#
+# The pyTRLCConverter program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# The pyTRLCConverter program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with pyTRLCConverter.
+# If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
 import importlib.metadata as meta
@@ -22,7 +34,6 @@ __license__ = "???"
 
 # Functions ********************************************************************
 
-
 def resource_path(relative_path):
     """ Get the absolute path to the resource, works for dev and for PyInstaller """
     try:
@@ -34,7 +45,6 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
-
 
 def init_from_metadata():
     """Initialize dunders from importlib.metadata
@@ -52,7 +62,6 @@ def init_from_metadata():
         my_metadata['Author-email'], \
         my_metadata['Project-URL'].replace("repository, ", ""), \
         my_metadata['License']
-
 
 def init_from_toml():
     """Initialize dunders from pypackage.toml file
@@ -74,7 +83,6 @@ def init_from_toml():
         data["project"]["license"]["text"]
 
 # Main *************************************************************************
-
 
 try:
     __version__, __author__, __email__, __repository__, __license__ = init_from_metadata()

@@ -1,1 +1,2 @@
 toml==0.10.2
+trlc @ https://github.com/NewTec-GmbH/trlc/archive/refs/heads/main.zip

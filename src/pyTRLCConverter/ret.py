@@ -1,4 +1,7 @@
-"""__init__""" # pylint: disable=invalid-name
+"""Script to convert requirements to markdown format.
+
+    Author: Andreas Merkle (andreas.merkle@newtec.de)
+"""
 
 # This file is part of the pyTRLCConverter program.
 #
@@ -13,4 +16,18 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-from .version import __version__, __author__, __email__, __repository__, __license__
+# Imports **********************************************************************
+from enum import IntEnum
+
+# Variables ********************************************************************
+
+# Classes **********************************************************************
+
+class Ret(IntEnum):
+    """ The function return values."""
+    OK      = 0
+    ERROR   = 1
+
+# Functions ********************************************************************
+
+# Main *************************************************************************

@@ -1,4 +1,4 @@
-"""__init__""" # pylint: disable=invalid-name
+#!/bin/bash
 
 # This file is part of the pyTRLCConverter program.
 #
@@ -13,4 +13,10 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-from .version import __version__, __author__, __email__, __repository__, __license__
+OUT_PATH=./out
+
+pyTRLCConverter --source=. markdown --out=$OUT_PATH
+
+if [ $? -ne 0 ]; then
+    read -p "Press any key to continue..."
+fi

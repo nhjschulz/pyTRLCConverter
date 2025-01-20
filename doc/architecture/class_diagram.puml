@@ -1,0 +1,75 @@
+@startuml class_diagram
+
+interface IConverter {
+    + {abstract} register(args_parser) : bool
+    + {abstract} convert(args, symbols : Symbol_Table) : bool
+}
+
+note top of IConverter
+    Interface for converting a single document to a different format.
+    Implementations should register with the main program
+    and provide a conversion function.
+end note
+
+class MarkdownConverter {
+}
+
+note bottom of MarkdownConverter
+    Converts a single document to Markdown format.
+end note
+
+class version <<module>> {
+}
+
+note top of version
+    Module for handling version information.
+end note
+
+rectangle Utilities {
+
+    class log_verbose <<module>> {
+    }
+
+    note top of log_verbose
+        Module for handling verbose logging.
+    end note
+
+    class plantuml <<module>> {
+    }
+
+    note top of plantuml
+        Module for handling PlantUML diagram generation.
+    end note
+
+    enum Ret {
+        OK
+        ERROR
+    }
+
+    note top of Ret
+        Return codes for functions.
+    end note
+}
+
+note top of Utilities
+    Utility functionality which can be used
+    by any part of the program.
+end note
+
+class main <<module>> {
+    - _table: []
+    + main() : int
+}
+
+note top of main
+    Main program entry point with a single instance
+    of the converter table.
+end note
+
+IConverter <|.. MarkdownConverter: <<realize>>
+
+main ..> IConverter: <<use>>
+main *---> MarkdownConverter
+main ..> version: <<use>>
+
+@enduml

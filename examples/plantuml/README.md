@@ -1,14 +1,9 @@
 # pyTRLCConverter <!-- omit in toc -->
 
-## Examples
-The following examples show different functionality as well as possibilities. Because one part of the innovation is still on the user side, e.g. by introducing a Digram type and not just deal with requirements.
+## Simple Requirement Example With Project Specific Conversion
+The example just shows how the requirements in a **single file** are converted to Markdown format **with a project specific conversion**. pyTRLCConverter will generate without project specific conversion functions just a simple output.
 
-| Example | Single/Multiple source(s) | With project specific conversion functions | Diagram support |
-| ------- | ------------------------- | ------------------------------------------ | --------------- |
-| [simple_req](./simple_req/) | Single | No | No |
-| [simple_req_multi](./simple_req_multi/) | Multiple | No | No |
-| [simple_req_proj_spec](./simple_req/) | Single | Yes | No |
-| [plantuml](./plantuml/) | Single | Yes | Yes |
+The addition is the Diagram type, which can convert a **PlantUML diagram** to PNG image and includes it in the Markdown file.
 
 ## Issues, Ideas And Bugs
 

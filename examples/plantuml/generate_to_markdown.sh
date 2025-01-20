@@ -1,4 +1,4 @@
-"""__init__""" # pylint: disable=invalid-name
+#!/bin/bash
 
 # This file is part of the pyTRLCConverter program.
 #
@@ -13,4 +13,16 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-from .version import __version__, __author__, __email__, __repository__, __license__
+OUT_PATH=./out
+PLANTUML=plantuml.jar
+
+if [ ! -f "$PLANTUML" ]; then
+    echo "Download PlantUML java program..."
+    wget https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar -O $PLANTUML
+fi
+
+pyTRLCConverter --source=. markdown --out=$OUT_PATH --project=req.py
+
+if [ $? -ne 0 ]; then
+    read -p "Press any key to continue..."
+fi
