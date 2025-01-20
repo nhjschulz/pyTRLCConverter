@@ -4,10 +4,8 @@
 		"scope": "python",
 		"isFileTemplate": true,
 		"body": [
-			"\"\"\"${1:Enter short module description here}",
-			"",
-			"${2:Enter detailed module description here}",
-			"\"\"\"",
+			"pyTRLCConverter - A tool to convert PlantUML diagrams to image files.",
+			"Copyright (c) 2024 - $CURRENT_YEAR NewTec GmbH",
 			"",
 			"# This file is part of the pyTRLCConverter program.",
 			"#",

@@ -3,7 +3,10 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# This file is part of the pyTRLCConverter program.
+# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# Copyright (c) 2024 - 2025 NewTec GmbH
+#
+# This file is part of pyTRLCConverter program.
 #
 # The pyTRLCConverter program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software Foundation,
