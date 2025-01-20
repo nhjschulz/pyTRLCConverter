@@ -34,7 +34,7 @@ from pyTRLCConverter.log_verbose import enable_verbose, log_verbose, is_verbose_
 
 PROG_NAME = "pyTrlcConverter"
 PROG_DESC = "A CLI tool to convert TRLC into different formats."
-PROG_COPYRIGHT = "Copyright (c) 2024 NewTec GmbH - " + __license__
+PROG_COPYRIGHT = "Copyright (c) 2024 - 2025 NewTec GmbH - " + __license__
 PROG_GITHUB = "Find the project on GitHub: " + __repository__
 PROG_EPILOG = PROG_COPYRIGHT + " - " + PROG_GITHUB
 
