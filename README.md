@@ -22,7 +22,7 @@ Because the definition of TRLC types is project specific, it supports to inject 
 
 ## Overview
 
-![context](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/NewTec-GmbH/KTANE/main/doc/context_diagram.puml)
+![context](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/NewTec-GmbH/pyTRLCConverter/refs/heads/main/doc/architecture/context_diagram.puml)
 
 ## Installation
 
