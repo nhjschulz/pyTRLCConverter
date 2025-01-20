@@ -99,6 +99,24 @@ def _create_args_parser() -> argparse.ArgumentParser:
         help="Add source directory which shall not be considered for conversion. Can be specified several times."
     )
 
+    parser.add_argument(
+        "-o",
+        "--out",
+        type=str,
+        default="",
+        required=False,
+        help="Output path, e.g. /out/markdown."
+    )
+
+    parser.add_argument(
+        "-p",
+        "--project",
+        type=str,
+        default=None,
+        required=False,
+        help="Python module with project specific conversion functions."
+    )
+
     return parser
 
 def main():

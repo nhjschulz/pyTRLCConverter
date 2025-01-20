@@ -51,24 +51,6 @@ class MarkdownConverter(IConverter):
             help="Convert to Markdown format."
         )
 
-        parser.add_argument(
-            "-o",
-            "--out",
-            type=str,
-            default="",
-            required=False,
-            help="Output path, e.g. /out/markdown."
-        )
-
-        parser.add_argument(
-            "-p",
-            "--project",
-            type=str,
-            default=None,
-            required=False,
-            help="Python module with project specific conversion functions."
-        )
-
         parser.set_defaults(func=self.convert)
 
     def convert(self, args, symbols):
