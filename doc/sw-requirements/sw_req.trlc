@@ -1,0 +1,92 @@
+package SwRequirements
+
+section "Software Requirements" {
+
+    section "General" {
+
+        SwReq sw_req_cli {
+            description = "The software shall be a command-line interface (CLI) application."
+            verification_proposal = "Every feature shall be accessible via the command line. Therefore its verified by the CLI tests."
+        }
+
+        SwReq sw_req_prj_spec {
+            description = "The software shall support project specific adaptions for the conversion."
+            verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
+            info = "Every project might have different requirements how the converted output should look like."
+        }
+
+        SwReq sw_req_prj_spec_file {
+            description = "The project specific conversion file shall be a Python file."
+            verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
+            derived = [sw_req_prj_spec]
+        }
+
+        SwReq sw_req_version {
+            description = "The software shall provide a version information in the format '<program-name> <major>.<minor>.<patch>'."
+            verification_proposal = "Verify by requesting the version information and use the format '<program-name> <major>.<minor>.<patch>'."
+        }
+    }
+
+    section "Command Line Arguments" {
+        SwReq sw_req_cli_help {
+            description = "The software shall support the command line argument '--help' to show the help information."
+            verification_proposal = "Verify by calling the software with the argument '--help' and check if the help information is shown."
+        }
+
+        SwReq sw_req_cli_version {
+            description = "The software shall support the command line argument '--version' to show the version information."
+            verification_proposal = "Verify by calling the software with the argument '--version' and check if the version information is shown."
+            derived = [sw_req_version]
+        }
+
+        SwReq sw_req_cli_source {
+            description = "The software shall support the command line argument '--source' to specify the source file(s) (*.rsl and *.trlc)."
+            verification_proposal = "Verify by calling the software with the argument '--source' and check if the source file(s) are used for conversion."
+            info = "Its equal to TRLC --source program argument."
+        }
+
+        SwReq sw_req_cli_include {
+            description = "The software shall support the command line argument '--include' to specify the file(s) for automatic inclusion."
+            verification_proposal = "Verify by calling the software with the argument '--include' and check if the file(s) are included."
+            info = "Its equal to TRLC --include program argument."
+        }
+
+        SwReq sw_req_cli_exclude {
+            description = "The software shall support the command line argument '--exclude' to specify the file(s) for automatic exclusion."
+            verification_proposal = "Verify by calling the software with the argument '--exclude' and check if the file(s) are excluded."
+            info = "This is necessary in case an defined archtecture element traces to a requirement, but the requirement should not be included in the output."
+        }
+    }
+
+    section "Markdown" {
+        SwReq sw_req_markdown {
+            description = "The software shall support the conversion into Markdown format."
+            verification_proposal = "Verify by converting one or more TRLC files into Markdown format."
+        }
+
+        SwReq sw_req_no_prj_spec {
+            description = "If no project specific conversion file is provided, the software shall use a default conversion."
+            verification_proposal = "Verify by converting one or more TRLC files without a project specific conversion file."
+        }
+    }
+}
+
+section "Software Constraints" {
+    
+    SwConstraint sw_constraint_os_win {
+        description = "The software shall not support the Windows operating system."
+    }
+    
+    SwConstraint sw_constraint_os_linux {
+        description = "The software shall not support the Linux operating system."
+    }
+
+    SwConstraint sw_constraint_prg_lang {
+        description = "The software shall be implemented in the Python programming language v3.12."
+        info = "TRLC as 3rd party library supports only up to Python v3.12."
+    }
+
+    SwConstraint sw_constraint_pep8 {
+        description = "The software shall comply with the PEP8 coding standard."
+    }
+}

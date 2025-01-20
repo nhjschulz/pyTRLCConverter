@@ -173,3 +173,7 @@ cython_debug/
 
 # Development Scripts
 dev/
+
+# Requirement conversion output files
+tools/req2markdown/plantuml.jar
+tools/req2markdown/out/

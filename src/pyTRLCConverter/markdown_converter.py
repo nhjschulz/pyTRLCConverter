@@ -255,4 +255,20 @@ class MarkdownConverter(IConverter):
 
 # Functions ********************************************************************
 
+def markdown_escape(text):
+    """Escapes the text to be used in a Markdown document.
+
+    Args:
+        text (str): Text to escape
+
+    Returns:
+        str: Escaped text
+    """
+    characters = ["\\", "`", "*", "_", "{", "}", "[", "]", "<", ">", "(", ")", "#", "+", "-", ".", "!", "|"]
+
+    for character in characters:
+        text = text.replace(character, "\\" + character)
+
+    return text
+
 # Main *************************************************************************
