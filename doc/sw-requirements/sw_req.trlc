@@ -31,7 +31,7 @@ section "pyTRLCConverter" {
 
         section "Command Line Arguments" {
             SwReq sw_req_cli_help {
-                description = "The software shall support the command line argument '--help' to show the help information."
+                description = "The software shall support the command line argument '-h' and --help' to show the help information."
                 verification_proposal = "Verify by calling the software with the argument '--help' and check if the help information is shown."
             }
 
@@ -42,21 +42,31 @@ section "pyTRLCConverter" {
             }
 
             SwReq sw_req_cli_source {
-                description = "The software shall support the command line argument '--source' to specify the source file(s) (*.rsl and *.trlc)."
+                description = "The software shall support the command line argument '-s' and '--source' multiple times to specify the source file(s) (*.rsl and *.trlc)."
                 verification_proposal = "Verify by calling the software with the argument '--source' and check if the source file(s) are used for conversion."
                 info = "Its equal to TRLC --source program argument."
             }
 
             SwReq sw_req_cli_include {
-                description = "The software shall support the command line argument '--include' to specify the file(s) for automatic inclusion."
+                description = "The software shall support the command line argument '-i' and '--include' multiple times to specify the file(s) for automatic inclusion."
                 verification_proposal = "Verify by calling the software with the argument '--include' and check if the file(s) are included."
                 info = "Its equal to TRLC --include program argument."
             }
 
             SwReq sw_req_cli_exclude {
-                description = "The software shall support the command line argument '--exclude' to specify the file(s) for automatic exclusion."
+                description = "The software shall support the command line argument '-ex' and '--exclude' multiple times to specify the file(s) for automatic exclusion."
                 verification_proposal = "Verify by calling the software with the argument '--exclude' and check if the file(s) are excluded."
                 info = "This is necessary in case an defined archtecture element traces to a requirement, but the requirement should not be included in the output."
+            }
+
+            SwReq sw_req_no_prj_spec {
+                description = "If no project specific conversion file is provided, the software shall use a default conversion."
+                verification_proposal = "Verify by converting one or more TRLC files without a project specific conversion file."
+            }
+
+            SwReq sw_req_cli_out {
+                description = "The software shall support the command line argument '-o' and '--out' to specify the output directory."
+                verification_proposal = "Verify by calling the software with the argument '--out' and check if the output is written to the specified directory."
             }
         }
 
@@ -66,9 +76,24 @@ section "pyTRLCConverter" {
                 verification_proposal = "Verify by converting one or more TRLC files into Markdown format."
             }
 
-            SwReq sw_req_no_prj_spec {
-                description = "If no project specific conversion file is provided, the software shall use a default conversion."
-                verification_proposal = "Verify by converting one or more TRLC files without a project specific conversion file."
+            SwReq sw_req_markdown_file {
+                description = "The software shall create a Markdown file for each TRLC file."
+                verification_proposal = "Verify by converting one or more TRLC files into Markdown format and check if a Markdown file is created for each TRLC file."
+            }
+
+            SwReq sw_req_markdown_section {
+                description = "If no project specific conversion file is available, a TRLC section shall be converted into a Markdown heading by considering the depth level."
+                verification_proposal = "Verify by converting a TRLC section into a Markdown heading."
+            }
+
+            SwReq sw_req_markdown_record {
+                description = "If no project specific conversion file is available, consecutive TRLC records shall be converted into a Markdown table."
+                verification_proposal = "Verify by converting consecutive TRLC records into a Markdown table."
+            }
+
+            SwReq sw_req_markdown_prj_spec {
+                description = "If a project specific conversion file is available, the software shall use the conversion rules defined in the file."
+                verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
             }
         }
     }
