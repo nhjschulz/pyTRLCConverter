@@ -50,7 +50,7 @@ def _print_sw_req_table_head(fd):
     Args:
         fd (file): File descriptor
     """
-    result = "\n"
+    result = ""
     column_headings = ["ID", "Description", "Verification Proposal", "Info", "Derived"]
 
     for idx, heading in enumerate(column_headings):
@@ -80,7 +80,7 @@ def _print_sw_constraint_table_head(fd):
     Args:
         fd (file): File descriptor
     """
-    result = "\n"
+    result = ""
     column_headings = ["ID", "Description", "Info"]
 
     for idx, heading in enumerate(column_headings):
@@ -236,7 +236,8 @@ def convert_section(fd, section, level):
         fd.write("\n")
         _set_table_active(False)
 
-    fd.write(f"{'#' * (level + 1)} {markdown_escape(section)}\n")
+    # Markdown compliance requires always one empty line after a heading.
+    fd.write(f"{'#' * (level + 1)} {markdown_escape(section)}\n\n")
 
     return Ret.OK
 
@@ -253,7 +254,6 @@ def convert_record_object(fd, record_object, level):
     if record_object.n_typ.name == "SwReqDiagram":
         # If a table is active, close it.
         if _is_table_active is True:
-            fd.write("\n")
             _set_table_active(False)
 
         _print_diagram(fd, record_object)
