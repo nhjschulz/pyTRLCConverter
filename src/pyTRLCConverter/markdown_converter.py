@@ -253,4 +253,92 @@ def markdown_escape(text):
 
     return text
 
+def markdown_create_heading(text, level):
+    """Create a Markdown heading.
+        The text will be automatically escaped for Markdown if necessary.
+
+    Args:
+        text (str): Heading text
+        level (int): Heading level
+
+    Returns:
+        str: Markdown heading
+    """
+    return f"{'#' * level} {markdown_escape(text)}\n\n"
+
+def markdown_create_table_head(column_titles):
+    """Create the table head for a Markdown table.
+        The titles will be automatically escaped for Markdown if necessary.
+
+    Args:
+        column_titles ([str]): List of column titles.
+
+    Returns:
+        str: Table head
+    """
+    table_head = "|"
+
+    for column_title in column_titles:
+        table_head += f" {markdown_escape(column_title)} |"
+
+    table_head += "\n"
+
+    table_head += "|"
+
+    for column_title in column_titles:
+        for _ in range(len(markdown_escape(column_title))):
+            table_head += "-"
+
+        table_head += " |"
+
+    table_head += "\n"
+
+    return table_head
+
+def markdown_append_table_row(row_values):
+    """Append a row to a Markdown table.
+        The values will be automatically escaped for Markdown if necessary.
+
+    Args:
+        row_values ([str]): List of row values.
+
+    Returns:
+        str: Table row
+    """
+    table_row = "|"
+
+    for row_value in row_values:
+        table_row += f" {markdown_escape(row_value)} |"
+
+    table_row += "\n"
+
+    return table_row
+
+def markdown_create_link(text, url):
+    """Create a Markdown link.
+        The text will be automatically escaped for Markdown if necessary.
+        There will be no newline appended at the end.
+
+    Args:
+        text (str): Link text
+        url (str): Link URL
+
+    Returns:
+        str: Markdown link
+    """
+    return f"[{markdown_escape(text)}]({url})"
+
+def markdown_create_diagram_link(diagram_file_name, diagram_caption):
+    """Create a Markdown diagram link.
+        The caption will be automatically escaped for Markdown if necessary.
+
+    Args:
+        diagram_file_name (str): Diagram file name
+        diagram_caption (str): Diagram caption
+
+    Returns:
+        str: Markdown diagram link
+    """
+    return f"![{markdown_escape(diagram_caption)}](./{diagram_file_name})\n"
+
 # Main *************************************************************************

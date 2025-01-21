@@ -24,7 +24,8 @@ import os
 import shutil
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.plantuml import PlantUML
-from pyTRLCConverter.markdown_converter import markdown_escape
+from pyTRLCConverter.markdown_converter import markdown_create_heading, markdown_create_table_head, \
+    markdown_append_table_row, markdown_create_diagram_link
 
 # Variables ********************************************************************
 _source_items = []
@@ -50,29 +51,10 @@ def _print_sw_req_table_head(fd):
     Args:
         fd (file): File descriptor
     """
-    result = ""
-    column_headings = ["ID", "Description", "Verification Proposal", "Info", "Derived"]
+    column_titles = ["ID", "Description", "Verification Proposal", "Info", "Derived"]
+    markdown_table_head = markdown_create_table_head(column_titles)
 
-    for idx, heading in enumerate(column_headings):
-        if 0 < idx:
-            result += " "
-
-        result += f"| {heading}"
-
-    result += " |\n"
-
-    for idx, heading in enumerate(column_headings):
-        if 0 < idx:
-            result += " "
-
-        result += "| "
-
-        for _ in range(len(heading)):
-            result += "-"
-
-    result += " |\n"
-
-    fd.write(result)
+    fd.write(markdown_table_head)
 
 def _print_sw_constraint_table_head(fd):
     """Prints the table head for software constraint.
@@ -80,29 +62,10 @@ def _print_sw_constraint_table_head(fd):
     Args:
         fd (file): File descriptor
     """
-    result = ""
-    column_headings = ["ID", "Description", "Info"]
+    column_titles = ["ID", "Description", "Info"]
+    markdown_table_head = markdown_create_table_head(column_titles)
 
-    for idx, heading in enumerate(column_headings):
-        if 0 < idx:
-            result += " "
-
-        result += f"| {heading}"
-
-    result += " |\n"
-
-    for idx, heading in enumerate(column_headings):
-        if 0 < idx:
-            result += " "
-
-        result += "| "
-
-        for _ in range(len(heading)):
-            result += "-"
-
-    result += " |\n"
-
-    fd.write(result)
+    fd.write(markdown_table_head)
 
 def _print_diagram(fd, diagram):
     """Prints the diagram.
@@ -158,7 +121,8 @@ def _print_diagram(fd, diagram):
         shutil.copy(full_file_path, _out_path)
         file_dst_path = os.path.basename(full_file_path)
 
-    fd.write(f"![{caption}](./{file_dst_path})\n")
+    markdown_image = markdown_create_diagram_link(file_dst_path, caption)
+    fd.write(markdown_image)
 
 def _print_sw_req(fd, sw_req):
     """Prints the software requirement.
@@ -186,11 +150,9 @@ def _print_sw_req(fd, sw_req):
 
             derived_info += derived_req
 
-    fd.write(f"| {sys_req_id} ")
-    fd.write(f"| {markdown_escape(description)} ")
-    fd.write(f"| {markdown_escape(verification_proposal)} ")
-    fd.write(f"| {markdown_escape(info)} ")
-    fd.write(f"| {derived_info} |\n")
+    row_values = [sys_req_id, description, verification_proposal, info, derived_info]
+    markdown_table_row = markdown_append_table_row(row_values)
+    fd.write(markdown_table_row)
 
 def _print_sw_constraint(fd, sw_req):
     """Prints the software constraint.
@@ -207,9 +169,9 @@ def _print_sw_constraint(fd, sw_req):
     if info is None:
         info = "N/A"
 
-    fd.write(f"| {sw_constraint_id} ")
-    fd.write(f"| {markdown_escape(description)} ")
-    fd.write(f"| {info} |\n")
+    row_values = [sw_constraint_id, description, info]
+    markdown_table_row = markdown_append_table_row(row_values)
+    fd.write(markdown_table_row)
 
 def init(sources, out_path):
     """Initializes the Markdown converter.
@@ -236,8 +198,8 @@ def convert_section(fd, section, level):
         fd.write("\n")
         _set_table_active(False)
 
-    # Markdown compliance requires always one empty line after a heading.
-    fd.write(f"{'#' * (level + 1)} {markdown_escape(section)}\n\n")
+    markdown_text = markdown_create_heading(section, level + 1)
+    fd.write(markdown_text)
 
     return Ret.OK
 
