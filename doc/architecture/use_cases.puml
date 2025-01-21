@@ -11,8 +11,8 @@ rectangle "System" {
     usecase "Convert item project specific" as ucConvertItemProjectSpecific
 
     ucConvertToFormat ..> ucCreateDestinationFile: <<include>>
-    ucConvertToFormat ..> ucConvertItem: <<extend>>
-    ucConvertToFormat ..> ucConvertItemProjectSpecific: <<extend>>
+    ucConvertToFormat <.. ucConvertItem: <<extend>>
+    ucConvertToFormat <.. ucConvertItemProjectSpecific: <<extend>>
 }
 
 actor "User" as user
