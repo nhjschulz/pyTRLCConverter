@@ -145,11 +145,11 @@ section "pyTRLCConverter" {
     section "Software Constraints" {
         
         SwConstraint sw_constraint_os_win {
-            description = "The software shall not support the Windows operating system."
+            description = "The software shall support the Windows operating system."
         }
         
         SwConstraint sw_constraint_os_linux {
-            description = "The software shall not support the Linux operating system."
+            description = "The software shall support the Linux operating system."
         }
 
         SwConstraint sw_constraint_prg_lang {
