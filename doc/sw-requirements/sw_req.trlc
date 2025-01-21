@@ -17,15 +17,27 @@ section "pyTRLCConverter" {
                 info = "Every project might have different requirements how the converted output should look like."
             }
 
+            SwReq sw_req_version {
+                description = "The software shall provide a version information in the format '<program-name> <major>.<minor>.<patch>'."
+                verification_proposal = "Verify by requesting the version information and use the format '<program-name> <major>.<minor>.<patch>'."
+            }
+        }
+
+        section "Project Specific Conversion" {
             SwReq sw_req_prj_spec_file {
                 description = "The project specific conversion file shall be a Python file."
                 verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
                 derived = [sw_req_prj_spec]
             }
 
-            SwReq sw_req_version {
-                description = "The software shall provide a version information in the format '<program-name> <major>.<minor>.<patch>'."
-                verification_proposal = "Verify by requesting the version information and use the format '<program-name> <major>.<minor>.<patch>'."
+            SwReq sw_req_prj_spec_func {
+                description = "The project specific conversion shall be able to import functions from the appropriate conversion file."
+                verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
+            }
+
+            SwReq sw_req_prj_exec {
+                description = "The software shall execute the interface functions from the project specific conversion file."
+                verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
             }
         }
 
@@ -94,6 +106,38 @@ section "pyTRLCConverter" {
             SwReq sw_req_markdown_prj_spec {
                 description = "If a project specific conversion file is available, the software shall use the conversion rules defined in the file."
                 verification_proposal = "Verify by converting one or more TRLC files with a project specific conversion file."
+            }
+
+            SwReq sw_req_markdown_heading {
+                description = "The software shall support the conversion of TRLC sections into Markdown headings."
+                verification_proposal = "Verify by converting one or more TRLC sections into a Markdown heading."
+            }
+
+            SwReq sw_req_markdown_table {
+                description = "The software shall support the conversion of TRLC records into a Markdown table."
+                verification_proposal = "Verify by converting one or more TRLC records into a Markdown table."
+            }
+
+            SwReq sw_req_markdown_table_row {
+                description = "The software shall support the conversion of TRLC records into a Markdown table row."
+                verification_proposal = "Verify by converting one or more TRLC records into a Markdown table row."
+            }
+
+            SwReq sw_req_markdown_link {
+                description = "The software shall support the creation of a Markdown link for references to other TRLC records."
+                verification_proposal = "Verify by converting one or more TRLC records with references into a Markdown link."
+            }
+
+            SwReq sw_req_markdown_image {
+                description = "The software shall support the creation of a Markdown image to embed images."
+                verification_proposal = "Verify by converting one or more TRLC records with images into a Markdown image."
+            }
+        }
+
+        section "PlantUML" {
+            SwReq sw_req_plantuml {
+                description = "The software shall support the conversion of a PlantUML diagram to a propriate image format."
+                verification_proposal = "Verify by converting a PlantUML diagram into a propriate image format."
             }
         }
     }
