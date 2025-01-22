@@ -21,8 +21,8 @@ classifiers = [
 ]
 
 dependencies = [
-    "toml>=0.10.2",
-    "trlc @ https://github.com/NewTec-GmbH/trlc/archive/refs/heads/main.zip"
+    "toml >= 0.10.2",
+    "trlc >= 2.0.1"
 ]
 
 [project.optional-dependencies]
