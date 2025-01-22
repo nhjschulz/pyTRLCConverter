@@ -24,7 +24,7 @@ if [ ! -f "$PLANTUML" ]; then
     wget https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar -O $PLANTUML
 fi
 
-pyTRLCConverter --source=. markdown --out=$OUT_PATH --project=req.py
+pyTRLCConverter --source=. --out=$OUT_PATH --project=req.py markdown
 
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."

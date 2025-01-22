@@ -18,7 +18,7 @@ rem If not, see <https://www.gnu.org/licenses/>.
 
 set OUT_PATH=./out
 
-pyTRLCConverter --source=. markdown --out=%OUT_PATH%
+pyTRLCConverter --source=. --out=%OUT_PATH% markdown
 
 if errorlevel 1 (
     pause

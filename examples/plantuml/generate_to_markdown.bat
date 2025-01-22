@@ -24,7 +24,7 @@ if not exist "%PLANTUML%" (
     powershell -Command "Invoke-WebRequest https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar -OutFile %PLANTUML%"
 )
 
-pyTRLCConverter --source=. markdown --out=%OUT_PATH% --project=req.py
+pyTRLCConverter --source=. --out=%OUT_PATH% --project=req.py markdown
 
 if errorlevel 1 (
     pause

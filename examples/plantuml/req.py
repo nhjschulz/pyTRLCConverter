@@ -24,6 +24,8 @@ import os
 import shutil
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.plantuml import PlantUML
+from pyTRLCConverter.markdown_converter import markdown_create_heading, markdown_create_table_head, \
+    markdown_append_table_row, markdown_create_diagram_link
 
 # Variables ********************************************************************
 _source_items = []
@@ -49,29 +51,10 @@ def _print_req_table_head(fd):
     Args:
         fd (file): File descriptor
     """
-    result = "\n"
-    column_headings = ["ID", "Description"]
+    column_titles = ["ID", "Description"]
+    markdown_table_head = markdown_create_table_head(column_titles)
 
-    for idx, heading in enumerate(column_headings):
-        if 0 < idx:
-            result += " "
-
-        result += f"| {heading}"
-
-    result += " |\n"
-
-    for idx, heading in enumerate(column_headings):
-        if 0 < idx:
-            result += " "
-
-        result += "| "
-
-        for _ in range(len(heading)):
-            result += "-"
-
-    result += " |\n"
-
-    fd.write(result)
+    fd.write(markdown_table_head)
 
 def _print_req(fd, req):
     """Prints the requirement.
@@ -81,11 +64,12 @@ def _print_req(fd, req):
         req (Record_Object): Requirement to print
     """
     req_id = req.name
-    sys_req_attributes = req.to_python_dict()
-    description = sys_req_attributes["description"]
+    req_attributes = req.to_python_dict()
+    description = req_attributes["description"]
 
-    fd.write(f"| {req_id} ")
-    fd.write(f"| {description} |\n")
+    row_values = [req_id, description, description]
+    markdown_table_row = markdown_append_table_row(row_values)
+    fd.write(markdown_table_row)
 
 def _print_diagram(fd, diagram):
     """Prints the diagram.
@@ -141,7 +125,8 @@ def _print_diagram(fd, diagram):
         shutil.copy(full_file_path, _out_path)
         file_dst_path = os.path.basename(full_file_path)
 
-    fd.write(f"![{caption}](./{file_dst_path})\n")
+    markdown_image = markdown_create_diagram_link(file_dst_path, caption)
+    fd.write(markdown_image)
 
 def init(sources, out_path):
     """Initializes the Markdown converter.
@@ -168,7 +153,8 @@ def convert_section(fd, section, level):
         fd.write("\n")
         _set_table_active(False)
 
-    fd.write(f"{'#' * (level + 1)} {section}\n")
+    markdown_text = markdown_create_heading(section, level + 1)
+    fd.write(markdown_text)
 
     return Ret.OK
 
