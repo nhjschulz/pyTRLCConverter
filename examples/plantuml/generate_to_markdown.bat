@@ -20,8 +20,7 @@ set OUT_PATH=./out
 
 rem Use either local jar file or plantuml server URL for rendering.
 set PLANTUML=plantuml.jar
-set PLANTUML=http://www.plantuml.com/plantuml
-set PLANTUML=https://puml.ww10ds423.synology.me
+rem set PLANTUML=http://www.plantuml.com/plantuml
 
 rem Skip plantuml jar file download check if PLANTUML points to a server.
 echo %PLANTUML% | findstr /i "^http://" >nul

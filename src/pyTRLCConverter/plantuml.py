@@ -32,8 +32,8 @@ from pyTRLCConverter.log_verbose import log_verbose
 
 # Variables ********************************************************************
 
+# URL encoding char sets.
 # See https://plantuml.com/de/text-encoding for differences to base64 in URL encode.
-#
 BASE64_ENCODE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 PLANTUML_ENCODE_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
 
@@ -44,7 +44,7 @@ class PlantUML():
     """PlantUML image generator.
     """
     def __init__(self) -> None:
-        self.server_url = None
+        self._server_url = None
         self._plantuml_jar = None
         self._working_directory = os.path.abspath(os.getcwd())
 
@@ -52,10 +52,10 @@ class PlantUML():
             plantuml_access = os.environ["PLANTUML"]
             try:
                 if urllib.parse.urlparse(plantuml_access).scheme in ['http', 'https']:
-                    self.server_url = plantuml_access
+                    self._server_url = plantuml_access
                 else:
-                     self._plantuml_jar = os.environ["PLANTUML"]
-            except Exception as exc:
+                    self._plantuml_jar = os.environ["PLANTUML"]
+            except ValueError:
                 self._plantuml_jar = os.environ["PLANTUML"]
 
     def _get_absolute_path(self, path):
@@ -98,7 +98,6 @@ class PlantUML():
         """Generate plantuml server GET URL for diagram data
 
         Args:
-            server_url (str): URL of plantuml server (i.e. http://www.plantuml.com)
             diagram_type (str): Diagram type, e.g. svg. See PlantUML -t options.
             diagram_path (str): Path to the PlantUML diagram.
 
@@ -106,7 +105,7 @@ class PlantUML():
             FileNotFoundError: PlantUML diagram file not found.
         """
         # Read PlantUML diagram data
-        with open(diagram_path, 'r') as input_file:
+        with open(diagram_path, 'r', encoding='utf-8') as input_file:
             diagram_string = input_file.read().encode('utf-8')
 
         # Compress the data using deflate.
@@ -125,14 +124,14 @@ class PlantUML():
 
         # Create the URL for the PlantUML server
         query_url = (
-            f"{self.server_url}/"
+            f"{self._server_url}/"
             f"{diagram_type}/"
             f"{urllib.parse.quote(puml_encoded_data)}"
         )
 
         return query_url
 
-    def generate(self, diagram_type: str, diagram_path: str, dst_path: str) -> None: 
+    def generate(self, diagram_type: str, diagram_path: str, dst_path: str) -> None:
         """Generate plantuml image.
 
         Args:
@@ -146,7 +145,7 @@ class PlantUML():
             requests.exceptions.RequestException: Error during GET request to PlantUML server.
             OSError: Destination path does not exist.
         """
-        if self.server_url is not None:
+        if self._server_url is not None:
             self._generate_server(diagram_type, diagram_path, dst_path)
         else:
             self._generate_local(diagram_type, diagram_path, dst_path)
@@ -173,7 +172,7 @@ class PlantUML():
         # Send a GET request to the PlantUML server
         url = self._make_server_url(diagram_type, diagram_path)
         log_verbose(f"Sending GET request {url}")
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
 
         if response.status_code == 200:
             # Save the response content in image file
