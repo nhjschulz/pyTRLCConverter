@@ -91,7 +91,7 @@ class PlantUML():
         if diagram_path.endswith(".plantuml") or \
             diagram_path.endswith(".puml") or \
             diagram_path.endswith(".wsd"):
-                is_valid = True
+            is_valid = True
 
         return is_valid
 
