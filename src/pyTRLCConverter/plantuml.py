@@ -51,6 +51,7 @@ class PlantUML():
         if "PLANTUML" in os.environ:
             plantuml_access = os.environ["PLANTUML"]
             try:
+                # Use server method if PLANTUML is a URL.
                 if urllib.parse.urlparse(plantuml_access).scheme in ['http', 'https']:
                     self._server_url = plantuml_access
                 else:
@@ -90,12 +91,12 @@ class PlantUML():
         if diagram_path.endswith(".plantuml") or \
             diagram_path.endswith(".puml") or \
             diagram_path.endswith(".wsd"):
-            is_valid = True
+                is_valid = True
 
         return is_valid
 
     def _make_server_url(self, diagram_type: str, diagram_path: str) -> str:
-        """Generate plantuml server GET URL for diagram data
+        """Generate a plantuml server GET URL from a diagram data file.
 
         Args:
             diagram_type (str): Diagram type, e.g. svg. See PlantUML -t options.
@@ -104,7 +105,7 @@ class PlantUML():
         Raises:
             FileNotFoundError: PlantUML diagram file not found.
         """
-        # Read PlantUML diagram data
+        # Read PlantUML diagram data from given file.
         with open(diagram_path, 'r', encoding='utf-8') as input_file:
             diagram_string = input_file.read().encode('utf-8')
 
@@ -112,17 +113,17 @@ class PlantUML():
         # Strib Zlib's 2 byte header and 4 byte checksum for raw deflate data.
         compressed_data = zlib.compress(diagram_string)[2:-4]
 
-        # encode compressed data using base64
+        # Encode the compressed data using base64.
         base64_encoded_data = base64.b64encode(compressed_data)
 
-        # Translate from base64 to plantuml encoding.
+        # Translate from base64 to plantuml char encoding.
         base64_to_puml_trans = bytes.maketrans(
             BASE64_ENCODE_CHARS.encode('utf-8'),
             PLANTUML_ENCODE_CHARS.encode('utf-8')
         )
         puml_encoded_data = base64_encoded_data.translate(base64_to_puml_trans).decode('utf-8')
 
-        # Create the URL for the PlantUML server
+        # Create the URL for the PlantUML server.
         query_url = (
             f"{self._server_url}/"
             f"{diagram_type}/"
@@ -140,7 +141,7 @@ class PlantUML():
             dst_path (str): Path to the destination of the generated image.
 
         Raises:
-            FileNotFoundError: PlantUML java jar file not found in local mode
+            FileNotFoundError: PlantUML java jar file not found in local mode.
             FileNotFoundError: PlantUML diagram file not found.
             requests.exceptions.RequestException: Error during GET request to PlantUML server.
             OSError: Destination path does not exist.
@@ -151,7 +152,7 @@ class PlantUML():
             self._generate_local(diagram_type, diagram_path, dst_path)
 
     def _generate_server(self, diagram_type: str, diagram_path: str, dst_path: str) -> None:
-        """Generate image using a plantuml server
+        """Generate image using a plantuml server.
 
         This is does not require java installed and is usually a lot faster
         as no java startup time needed when using the plantuml.jar file.
@@ -169,13 +170,13 @@ class PlantUML():
         if not os.path.exists(dst_path):
             os.makedirs(dst_path)
 
-        # Send a GET request to the PlantUML server
+        # Send GET request to the PlantUML server.
         url = self._make_server_url(diagram_type, diagram_path)
         log_verbose(f"Sending GET request {url}")
         response = requests.get(url, timeout=10)
 
         if response.status_code == 200:
-            # Save the response content in image file
+            # Save the response content in image file.
             output_file = os.path.splitext(os.path.basename(diagram_path))[0]
             output_file += "." + diagram_type
             output_file = os.path.join(dst_path, output_file)
