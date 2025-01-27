@@ -21,36 +21,38 @@ set LOBSTER_PYTHON=lobster-python
 set LOBSTER_REPORT=lobster-report
 set LOBSTER_RENDERER=lobster-html-report
 set OUT_DIR=out
-set SOURCES=..\..\doc\sw-requirements
-set MODELS=..\..\doc\models
-set PYTHON_SOURCES=..\..\src\pyTRLCConverter
+set SOURCES=..\..\..\doc\sw-requirements
+set MODELS=..\..\..\doc\models
+set PYTHON_SOURCES=..\..\..\src\pyTRLCConverter
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
 )
 
-%LOBSTER_TRLC% --config-file lobster-trlc.conf --out %OUT_DIR%\trlc.lobster %SOURCES% %MODELS%
+cd %OUT_DIR%
+
+%LOBSTER_TRLC% --config-file ..\lobster-trlc.conf --out trlc.lobster %SOURCES% %MODELS%
 
 if errorlevel 1 (
     pause
 )
 
-%LOBSTER_PYTHON% --out %OUT_DIR%\python.lobster %PYTHON_SOURCES%
+%LOBSTER_PYTHON% --out python.lobster %PYTHON_SOURCES%
 
 if errorlevel 1 (
     pause
 )
 
-%LOBSTER_REPORT% --lobster-config lobster.conf --out %OUT_DIR%\lobster-report.lobster
+%LOBSTER_REPORT% --lobster-config ..\lobster.conf --out lobster-report.lobster
 
 if errorlevel 1 (
     pause
 )
 
-%LOBSTER_RENDERER% --out %OUT_DIR%\tracing_report.html 
-
-lobster-html-report --out %OUT_DIR%\tracing_report.html %OUT_DIR%\lobster-report.lobster
+%LOBSTER_RENDERER% --out tracing_report.html lobster-report.lobster
 
 if errorlevel 1 (
     pause
 )
+
+cd ..

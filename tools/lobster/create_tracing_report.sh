@@ -21,34 +21,34 @@ LOBSTER_PYTHON=lobster-python
 LOBSTER_REPORT=lobster-report
 LOBSTER_RENDERER=lobster-html-report
 OUT_DIR=out
-SOURCES=../../doc/sw-requirements
-MODELS=../../doc/models
-PYTHON_SOURCES=../../src/pyTRLCConverter
+SOURCES=../../../doc/sw-requirements
+MODELS=../../../doc/models
+PYTHON_SOURCES=../../../src/pyTRLCConverter
 
 if [ ! -d "$OUT_DIR" ]; then
     mkdir "$OUT_DIR"
 fi
 
-$LOBSTER_TRLC --config-file lobster-trlc.conf --out "$OUT_DIR/trlc.lobster" "$SOURCES" "$MODELS"
+cd "$OUT_DIR"
 
+$LOBSTER_TRLC --config-file ../lobster-trlc.conf --out trlc.lobster $SOURCES $MODELS
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."
 fi
 
-$LOBSTER_PYTHON --out "$OUT_DIR/python.lobster" "$PYTHON_SOURCES"
-
+$LOBSTER_PYTHON --out python.lobster $PYTHON_SOURCES
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."
 fi
 
-$LOBSTER_REPORT --lobster-config lobster.conf --out "$OUT_DIR/lobster-report.lobster"
-
+$LOBSTER_REPORT --lobster-config ../lobster.conf --out lobster-report.lobster
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."
 fi
 
-$LOBSTER_RENDERER --out "$OUT_DIR/tracing_report.html" "$OUT_DIR/lobster-report.lobster"
-
+$LOBSTER_RENDERER --out tracing_report.html lobster-report.lobster
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."
 fi
+
+cd ..
