@@ -2,4 +2,4 @@
 
 ## How to generate a tracing report?
 
-![tracing_toolchain](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/NewTec-GmbH/pyTRLCConverter/main/tools/lobster/tracing_oolchain.puml)
+![tracing_toolchain](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/NewTec-GmbH/pyTRLCConverter/refs/heads/main/tools/lobster/tracing_toolchain.puml)
