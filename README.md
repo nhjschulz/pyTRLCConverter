@@ -8,6 +8,9 @@ Because the definition of TRLC types is project specific, it supports to inject 
 
 - [Overview](#overview)
 - [Installation](#installation)
+  - [Clone this Project](#clone-this-project)
+  - [Setup a virtual Python Environment](#setup-a-virtual-python-environment)
+  - [Tool Installation](#tool-installation)
 - [Usage](#usage)
   - [Convert to required format](#convert-to-required-format)
   - [Show tool version](#show-tool-version)
@@ -96,7 +99,7 @@ in the folder `/doc/detailed-design/_build/html/index.html`
 
 ### How to get a trace report?
 
-See [Tracing Toolchain](./tools/lobster/tracing_toolchain.puml).
+See [Tracing Toolchain](./tools/lobster/README.md).
 
 ## Used Libraries
 
