@@ -117,8 +117,10 @@ def _print_diagram(fd, diagram):
         # ensure that the generated filename is as expected.
         expected_dst_path = os.path.join(_out_path, file_dst_path)
         if os.path.isfile(expected_dst_path) is False:
-            raise FileNotFoundError( \
-                f"{file_path} diagram name ('@startuml <name>') may differ from file name.")
+            raise FileNotFoundError(
+                f"{file_path} diagram name ('@startuml <name>') may differ from file name,"
+                 " expected {expected_dst_path}."
+            )
 
     else:
         # Copy diagram image file to output folder.

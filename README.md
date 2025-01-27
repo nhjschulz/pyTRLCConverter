@@ -27,10 +27,31 @@ Because the definition of TRLC types is project specific, it supports to inject 
 
 ## Installation
 
+Follow these steps to setup an editable pyTRLCConverter workspace using a virtual python environment.
+
+### Clone this Project
+
 ```bash
 git clone https://github.com/NewTec-GmbH/pyTRLCConverter.git
 cd pyTRLCConverter
-pip install .
+```
+
+### Setup a virtual Python Environment
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate.ps1 # <- Windows Power Shell version
+```
+
+Note:
+
+- For Windows CMD shell, use ```.venv\Scripts\activate.bat``` to activate the virtual environment.
+- For Linux/Macos, use ```source .venv/bin/activate``` to activate the virtual environment.
+
+### Tool Installation
+
+```bash
+pip install -e .
 ```
 
 ## Usage
@@ -48,11 +69,10 @@ pyTRLCConverter --help
 ```
 
 ### PlantUML
+
 With the PlantUML extension the tool supports the automatic diagram generation out of a PlantUML file.
 
 Activate the support by adding the path to the java jar file to the ```PLANTUML``` environment variable.
-
-
 
 ## Examples
 
@@ -86,6 +106,7 @@ Used 3rd party libraries which are not part of the standard Python package:
 | ------- | ----------- | ------- |
 | [trlc](https://github.com/bmw-software-engineering/trlc) | Treat Requirements Like Code | GPL-3.0 |
 | [toml](https://github.com/uiri/toml) | Parsing [TOML](https://en.wikipedia.org/wiki/TOML) | MIT |
+| [requests](https://github.com/psf/requests) | HTTP processing | Apache-2.0 |
 
 see also [requirements.txt](requirements.txt)
 

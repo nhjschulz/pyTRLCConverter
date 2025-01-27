@@ -101,8 +101,9 @@ def _print_diagram(fd, diagram):
             raise FileNotFoundError(f"{file_path} not found.")
 
     if plantuml_generator.is_plantuml_file(file_path):
-        plantuml_generator.generate(image_format, full_file_path, _out_path)
 
+        plantuml_generator.generate(image_format, full_file_path, _out_path)
+        
         file_dst_path = os.path.basename(full_file_path)
         file_dst_path = os.path.splitext(file_dst_path)[0]
         file_dst_path += "." + image_format
@@ -113,8 +114,10 @@ def _print_diagram(fd, diagram):
         # ensure that the generated filename is as expected.
         expected_dst_path = os.path.join(_out_path, file_dst_path)
         if os.path.isfile(expected_dst_path) is False:
-            raise FileNotFoundError( \
-                f"{file_path} diagram name ('@startuml <name>') may differ from file name.")
+            raise FileNotFoundError(
+                f"{file_path} diagram name ('@startuml <name>') may differ from file name,"
+                 " expected {expected_dst_path}."
+            )
 
     else:
         # Copy diagram image file to output folder.

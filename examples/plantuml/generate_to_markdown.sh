@@ -17,11 +17,20 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 OUT_PATH=./out
-PLANTUML=plantuml.jar
 
-if [ ! -f "$PLANTUML" ]; then
-    echo "Download PlantUML java program..."
-    wget https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar -O $PLANTUML
+# Use either local jar file or plantuml server URL for rendering.
+export PLANTUML=plantuml.jar
+#export PLANTUML=http://www.plantuml.com/plantuml
+
+# check if given parameter is not a URL
+if ! [[ $PLANTUML =~ ^https?:// ]]
+then
+    # Assume local plantuml jar usage, download if not available.
+    if [ ! -f "$PLANTUML" ]
+    then
+        echo "Download PlantUML java program..."
+        wget https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar -O $PLANTUML
+    fi
 fi
 
 pyTRLCConverter --source=. --out=$OUT_PATH --project=req.py markdown
