@@ -21,6 +21,11 @@ section "pyTRLCConverter" {
                 description = "The software shall provide a version information in the format '<program-name> <major>.<minor>.<patch>'."
                 verification_proposal = "Verify by requesting the version information and use the format '<program-name> <major>.<minor>.<patch>'."
             }
+
+            SwReq sw_req_destination_format {
+                description = "The software shall convert the TRLC files to the required destination format."
+                verification_proposal = "Verify by converting to one or more destination formats. Depended on the available formats."
+            }
         }
 
         section "Project Specific Conversion" {
@@ -131,6 +136,16 @@ section "pyTRLCConverter" {
             SwReq sw_req_markdown_image {
                 description = "The software shall support the creation of a Markdown image to embed images."
                 verification_proposal = "Verify by converting one or more TRLC records with images into a Markdown image."
+            }
+
+            SwReq sw_req_markdown_out_folder {
+                description = "The software shall create the converted files in the specified output folder."
+                verification_proposal = "Verify by specifing an output folder, that doesn't exist. It must exist after the conversion."
+            }
+
+            SwReq sw_req_markdown_escape {
+                description = "The software shall escape all strings according the Markdown format."
+                verification_proposal = "Verify by using strings with characters, which needs escaping."
             }
         }
 

@@ -36,11 +36,13 @@ class MarkdownConverter(IConverter):
     """Converts a section tree to Markdown format.
     """
     def __init__(self) -> None:
+        # lobster-trace: SwRequirements.sw_req_markdown
         self._source_items = []
         self._out_path = ""
         self._project_module = None
 
     def register(self, args_parser):
+        # lobster-trace: SwRequirements.sw_req_markdown
         """Register converter specific argument parser.
 
         Args:
@@ -54,6 +56,8 @@ class MarkdownConverter(IConverter):
         parser.set_defaults(func=self.convert)
 
     def convert(self, args, symbols):
+        # lobster-trace: SwRequirements.sw_req_prj_spec
+        # lobster-trace: SwRequirements.sw_req_markdown_file
         """Convert the section tree to the destination format.
 
         Args:
@@ -81,7 +85,7 @@ class MarkdownConverter(IConverter):
             files_dict = get_file_dict_from_symbols(symbols)
 
             for file_name, item_list in files_dict.items():
-                self._init_project_module()
+                self._project_module_init()
 
                 # Skip files from excluded paths.
                 skip_it = False
@@ -103,6 +107,8 @@ class MarkdownConverter(IConverter):
         return result
 
     def _load_project_module(self, project_module):
+        # lobster-trace: SwRequirements.sw_req_prj_spec
+        # lobster-trace: SwRequirements.sw_req_prj_spec_func
         """Load the project module.
 
         Args:
@@ -123,6 +129,7 @@ class MarkdownConverter(IConverter):
         return result
 
     def _create_out_folder(self):
+        # lobster-trace: SwRequirements.sw_req_markdown_out_folder
         """Create output folder if it doesn't exist.
         """
         if 0 < len(self._out_path):
@@ -130,6 +137,7 @@ class MarkdownConverter(IConverter):
                 os.makedirs(self._out_path)
 
     def _generate_out_file(self, file_name, item_list):
+        # lobster-trace: SwRequirements.sw_req_markdown_out_folder
         """Generate the output file.
 
         Args:
@@ -153,6 +161,8 @@ class MarkdownConverter(IConverter):
         return result
 
     def _convert(self, fd, item_list):
+        # lobster-trace: SwRequirements.sw_req_markdown_section
+        # lobster-trace: SwRequirements.sw_req_markdown_record
         """Convert the list of items to the destination format.
             The item list contains a list of tuples with sections and
             record objects.
@@ -179,14 +189,58 @@ class MarkdownConverter(IConverter):
 
         return Ret.OK
 
-    def _init_project_module(self):
+    def _project_module_init(self):
+        # lobster-trace: SwRequirements.sw_req_prj_exec
         """Initialize the project module.
         """
         if self._project_module is not None:
             if hasattr(self._project_module, "init"):
                 self._project_module.init(self._source_items, self._out_path)
 
+    def _project_module_convert_section(self, fd, section, level):
+        # lobster-trace: SwRequirements.sw_req_prj_exec
+        """Convert a section to the destination format in a user project specific way.
+
+        Args:
+            fd (File): File descriptor of the output file.
+            section (str): The section name.
+            level (int): The section level.
+
+        Returns:
+            Ret: Status
+        """
+        result = Ret.ERROR
+
+        if self._project_module is not None:
+            if hasattr(self._project_module, "convert_section"):
+                result = self._project_module.convert_section(fd, section, level)
+
+        return result
+
+    def _project_module_convert_record_object(self, fd, record_object, level):
+        # lobster-trace: SwRequirements.sw_req_prj_exec
+        """Convert a record object to the destination format in a use project specific way.
+
+        Args:
+            fd (File): File descriptor of the output file.
+            record_object (Record_Object): The record object to convert.
+            level (int): The record level.
+
+        Returns:
+            Ret: Status
+        """
+        result = Ret.ERROR
+
+        if self._project_module is not None:
+            if hasattr(self._project_module, "convert_record_object"):
+                result = self._project_module.convert_record_object(fd, record_object, level)
+
+        return result
+
     def _convert_section(self, fd, section, level):
+        # lobster-trace: SwRequirements.sw_req_markdown_section
+        # lobster-trace: SwRequirements.sw_req_markdown_prj_spec
+        # lobster-trace: SwRequirements.sw_req_no_prj_spec
         """Convert a section to the destination format.
 
         Args:
@@ -203,14 +257,14 @@ class MarkdownConverter(IConverter):
             fd.write(f"{'#' * (level + 1)} {section}\n\n")
 
         else:
-            if hasattr(self._project_module, "convert_section"):
-                result = self._project_module.convert_section(fd, section, level)
-            else:
-                result = Ret.ERROR
+            result = self._project_module_convert_section(fd, section, level)
 
         return result
 
     def _convert_record_object(self, fd, record_object, level):
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        # lobster-trace: SwRequirements.sw_req_markdown_prj_spec
+        # lobster-trace: SwRequirements.sw_req_no_prj_spec
         """Convert a record object to the destination format.
 
         Args:
@@ -228,16 +282,14 @@ class MarkdownConverter(IConverter):
             fd.write(f"{record_object.to_python_dict()}\n\n")
 
         else:
-            if hasattr(self._project_module, "convert_record_object"):
-                result = self._project_module.convert_record_object(fd, record_object, level)
-            else:
-                result = Ret.ERROR
+            result = self._project_module_convert_record_object(fd, record_object, level)
 
         return result
 
 # Functions ********************************************************************
 
 def markdown_escape(text):
+    # lobster-trace: SwRequirements.sw_req_markdown_escape
     """Escapes the text to be used in a Markdown document.
 
     Args:
@@ -254,6 +306,7 @@ def markdown_escape(text):
     return text
 
 def markdown_create_heading(text, level):
+    # lobster-trace: SwRequirements.sw_req_markdown_heading
     """Create a Markdown heading.
         The text will be automatically escaped for Markdown if necessary.
 
@@ -267,6 +320,7 @@ def markdown_create_heading(text, level):
     return f"{'#' * level} {markdown_escape(text)}\n\n"
 
 def markdown_create_table_head(column_titles):
+    # lobster-trace: SwRequirements.sw_req_markdown_table
     """Create the table head for a Markdown table.
         The titles will be automatically escaped for Markdown if necessary.
 
@@ -296,6 +350,7 @@ def markdown_create_table_head(column_titles):
     return table_head
 
 def markdown_append_table_row(row_values):
+    # lobster-trace: SwRequirements.sw_req_markdown_table_row
     """Append a row to a Markdown table.
         The values will be automatically escaped for Markdown if necessary.
 
@@ -315,6 +370,7 @@ def markdown_append_table_row(row_values):
     return table_row
 
 def markdown_create_link(text, url):
+    # lobster-trace: SwRequirements.sw_req_markdown_link
     """Create a Markdown link.
         The text will be automatically escaped for Markdown if necessary.
         There will be no newline appended at the end.
@@ -329,6 +385,7 @@ def markdown_create_link(text, url):
     return f"[{markdown_escape(text)}]({url})"
 
 def markdown_create_diagram_link(diagram_file_name, diagram_caption):
+    # lobster-trace: SwRequirements.sw_req_markdown_image
     """Create a Markdown diagram link.
         The caption will be automatically escaped for Markdown if necessary.
 

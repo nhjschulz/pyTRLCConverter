@@ -29,6 +29,7 @@ from pyTRLCConverter.ret import Ret
 
 # pylint: disable=too-few-public-methods
 class IConverter(ABC):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Abstract converter interface."""
     def __init__(self) -> None:
         pass

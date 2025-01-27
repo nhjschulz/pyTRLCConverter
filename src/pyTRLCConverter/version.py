@@ -38,6 +38,7 @@ __license__ = "???"
 # Functions ********************************************************************
 
 def resource_path(relative_path):
+    # lobster-trace: SwRequirements.sw_req_version
     """ Get the absolute path to the resource, works for dev and for PyInstaller """
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
@@ -50,6 +51,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def init_from_metadata():
+    # lobster-trace: SwRequirements.sw_req_version
     """Initialize dunders from importlib.metadata
     Requires that the package was installed.
 
@@ -67,6 +69,7 @@ def init_from_metadata():
         my_metadata['License']
 
 def init_from_toml():
+    # lobster-trace: SwRequirements.sw_req_version
     """Initialize dunders from pypackage.toml file
 
     Tried if package wasn't installed.

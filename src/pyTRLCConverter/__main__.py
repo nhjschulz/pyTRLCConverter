@@ -47,6 +47,7 @@ CONVERTER_TABLE = {
 # Functions ********************************************************************
 
 def _create_args_parser() -> argparse.ArgumentParser:
+    # lobster-trace: SwRequirements.sw_req_cli_help
     """ Creater parser for command line arguments.
 
     Returns:
@@ -56,6 +57,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
                                      description=PROG_DESC,
                                      epilog=PROG_EPILOG)
 
+    # lobster-trace: SwRequirements.sw_req_cli_version
     parser.add_argument(
         "--version",
         action="version",
@@ -70,6 +72,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
                 "Enables logs of type INFO and WARNING."
     )
 
+    # lobster-trace: SwRequirements.sw_req_cli_include
     parser.add_argument(
         "-i",
         "--include",
@@ -80,6 +83,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
         help="Add additional directory which to include on demand. Can be specified several times."
     )
 
+    # lobster-trace: SwRequirements.sw_req_cli_source
     parser.add_argument(
         "-s",
         "--source",
@@ -89,6 +93,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
         help="The path to the TRLC files folder or a single TRLC file."
     )
 
+    # lobster-trace: SwRequirements.sw_req_cli_exclude
     parser.add_argument(
         "-ex",
         "--exclude",
@@ -99,6 +104,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
         help="Add source directory which shall not be considered for conversion. Can be specified several times."
     )
 
+    # lobster-trace: SwRequirements.sw_req_cli_out
     parser.add_argument(
         "-o",
         "--out",
@@ -108,6 +114,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
         help="Output path, e.g. /out/markdown."
     )
 
+    # lobster-trace: SwRequirements.sw_req_prj_spec_file
     parser.add_argument(
         "-p",
         "--project",
@@ -120,6 +127,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
     return parser
 
 def main():
+    # lobster-trace: SwRequirements.sw_req_cli
     """Main program entry point.
 
     Returns:

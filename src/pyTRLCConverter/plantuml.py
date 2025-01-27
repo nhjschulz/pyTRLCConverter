@@ -41,6 +41,7 @@ PLANTUML_ENCODE_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrs
 
 
 class PlantUML():
+    # lobster-trace: SwRequirements.sw_req_plantuml
     """PlantUML image generator.
     """
     def __init__(self) -> None:
