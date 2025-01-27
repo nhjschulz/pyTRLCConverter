@@ -101,6 +101,7 @@ Used 3rd party libraries which are not part of the standard Python package:
 | ------- | ----------- | ------- |
 | [trlc](https://github.com/bmw-software-engineering/trlc) | Treat Requirements Like Code | GPL-3.0 |
 | [toml](https://github.com/uiri/toml) | Parsing [TOML](https://en.wikipedia.org/wiki/TOML) | MIT |
+| [requests](https://github.com/psf/requests) | HTTP processing | Apache-2.0 |
 
 see also [requirements.txt](requirements.txt)
 
