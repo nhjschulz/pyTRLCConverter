@@ -44,7 +44,7 @@ jobs:
         id: build
         run: |
             cd ./tools/lobster
-            ./create_tracing_online_report.sh ${{ github.sha }}
+            sudo ./create_tracing_online_report.sh ${{ github.sha }}
             rm -f ./out/*.lobster
       - name: Upload static files as artifacts
         id: deployment
