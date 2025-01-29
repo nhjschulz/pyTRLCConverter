@@ -33,22 +33,27 @@ cd "$OUT_DIR"
 
 $LOBSTER_TRLC --config-file ../lobster-trlc.conf --out trlc.lobster $SOURCES $MODELS
 if [ $? -ne 0 ]; then
-    read -p "Press any key to continue..."
+    echo "Error in $LOBSTER_TRLC"
+    exit 1
 fi
 
 $LOBSTER_PYTHON --out python.lobster $PYTHON_SOURCES
 if [ $? -ne 0 ]; then
-    read -p "Press any key to continue..."
+    echo "Error in $LOBSTER_PYTHON"
+    exit 1
 fi
 
 $LOBSTER_REPORT --lobster-config ../lobster.conf --out lobster-report.lobster
 if [ $? -ne 0 ]; then
-    read -p "Press any key to continue..."
+    echo "Error in $LOBSTER_REPORT"
+    exit 1
 fi
 
 $LOBSTER_RENDERER --out tracing_report.html lobster-report.lobster
 if [ $? -ne 0 ]; then
-    read -p "Press any key to continue..."
+    echo "Error in $LOBSTER_RENDERER"
+    exit 1
 fi
 
+echo "Tracing report generated successfully"
 cd ..

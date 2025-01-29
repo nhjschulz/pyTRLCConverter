@@ -19,11 +19,19 @@ rem If not, see <https://www.gnu.org/licenses/>.
 set LOBSTER_TRLC=lobster-trlc
 set LOBSTER_PYTHON=lobster-python
 set LOBSTER_REPORT=lobster-report
+set LOBSTER_ONLINE_REPORT=lobster-online-report
 set LOBSTER_RENDERER=lobster-html-report
 set OUT_DIR=out
 set SOURCES=..\..\..\doc\sw-requirements
 set MODELS=..\..\..\doc\models
 set PYTHON_SOURCES=..\..\..\src\pyTRLCConverter
+set LOCAL_REPOSITORY_ROOT=..\..\..
+set COMMIT=%~1
+
+if "%1" == "" (
+    echo Branch/Commit hash is missing.
+    goto error
+)
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
@@ -49,7 +57,13 @@ if errorlevel 1 (
     goto error
 )
 
-%LOBSTER_RENDERER% --out tracing_report.html lobster-report.lobster
+%LOBSTER_ONLINE_REPORT% --out online-report.lobster lobster-report.lobster --repo-root %LOCAL_REPOSITORY_ROOT% --commit %COMMIT%
+
+if errorlevel 1 (
+    goto error
+)
+
+%LOBSTER_RENDERER% --out tracing_online_report.html online-report.lobster
 
 if errorlevel 1 (
     goto error
@@ -58,7 +72,6 @@ if errorlevel 1 (
 goto finished
 
 :error
-pause
 
 :finished
 cd ..

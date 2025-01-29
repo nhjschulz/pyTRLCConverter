@@ -9,7 +9,10 @@ skinparam component {
 component "lobster-trlc" as lobsterTrlc<<tool>>
 component "lobster-python" as lobsterPython<<tool>>
 component "lobster-report" as lobsterReport<<tool>>
+component "lobster-online-report" as lobsterOnlineReport<<tool>>
 component "lobster-html-report" as lobsterHtmlReport<<tool>>
+component "lobster-html-report" as lobsterHtmlReportOnline<<tool>>
+
 file "lobster-trlc.conf" as lobsterTrlcConf<<config>>
 file "trlc.lobster" as trlcLobsterFile
 file "Source file(s)\n(*.trlc)" as sourceFiles
@@ -17,8 +20,10 @@ file "Model(s)\n(*.rls)" as modelFiles
 file "Python file(s)\n(*.py)" as pythonFiles
 file "python.lobster" as pythonLobsterFile
 file "report.lobster" as reportLobsterFile
+file "online-report.lobster" as onlineReportLobsterFile
 file "lobster.conf" as lobsterConf
 file "tracing_report.html" as tracingReportHtml
+file "tracing_online_report.html" as tracingOnlineReportHtml
 
 lobsterTrlc ..> trlcLobsterFile: <<create>>
 
@@ -37,9 +42,13 @@ trlcLobsterFile <.. lobsterConf: <<trace>>
 pythonLobsterFile <.. lobsterConf: <<trace>>
 
 reportLobsterFile .> lobsterHtmlReport: <<flow>>
-
 lobsterHtmlReport .> tracingReportHtml: <<create>>
 
+reportLobsterFile .> lobsterOnlineReport: <<flow>>
+lobsterOnlineReport .> onlineReportLobsterFile: <<create>>
+
+onlineReportLobsterFile .> lobsterHtmlReportOnline: <<flow>>
+lobsterHtmlReportOnline .> tracingOnlineReportHtml: <<create>>
 
 note left of lobsterTrlcConf
     Defines which attributes shall be taken over
@@ -76,7 +85,19 @@ note bottom of reportLobsterFile
 end note
 
 note left of tracingReportHtml
-    The user friendly HTML report.
+    The user friendly HTML report, which links to
+    the local sources.
+    
+    It can't not be used for online deployment,
+    because of the links to local files.
+end note
+
+note left of tracingOnlineReportHtml
+    The user friendly HTML report, which links to
+    the sources in the repository, by considering
+    branch and commit hash.
+
+    Its used to be deployed online.
 end note
 
 @enduml
