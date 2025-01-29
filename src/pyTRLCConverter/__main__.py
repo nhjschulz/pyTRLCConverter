@@ -32,7 +32,7 @@ from pyTRLCConverter.log_verbose import enable_verbose, log_verbose, is_verbose_
 
 # Variables ********************************************************************
 
-PROG_NAME = "pyTrlcConverter"
+PROG_NAME = "pyTRLCConverter"
 PROG_DESC = "A CLI tool to convert TRLC into different formats."
 PROG_COPYRIGHT = "Copyright (c) 2024 - 2025 NewTec GmbH - " + __license__
 PROG_GITHUB = "Find the project on GitHub: " + __repository__
