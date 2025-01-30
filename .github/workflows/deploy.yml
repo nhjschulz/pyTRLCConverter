@@ -41,13 +41,25 @@ jobs:
           pip install -r requirements-dev.txt
           pip install .
 
-      - name: Build static files
-        id: build
+      - name: Generate requirements to Markdown
+        run: |
+          cd ./tools/req2markdown
+          chmod +x req2markdown.sh
+          ./req2markdown.sh
+          cd ../..
+
+      - name: Build tracing report
         run: |
             cd ./tools/lobster
             chmod +x create_tracing_online_report.sh
             ./create_tracing_online_report.sh ${{ github.sha }}
             rm -f ./out/*.lobster
+            cd ../..
+
+      - name: Build sphinx
+        run: |
+          cd ./tools/sphinx
+          make html
 
       - name: Upload static files as artifacts
         id: deployment
@@ -55,4 +67,4 @@ jobs:
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./tools/lobster/out
+          publish_dir: ./tools/sphinx/build/html
