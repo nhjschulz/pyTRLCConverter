@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y graphviz curl
+          sudo apt-get install -y graphviz curl default-jre
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
           pip install .
@@ -44,9 +44,7 @@ jobs:
       - name: Generate requirements in Markdown
         run: |
           cd ./tools/req2markdown
-          ls -Al
           chmod +x req2markdown.sh
-          ls -Al
           ./req2markdown.sh
           cd ../..
 
