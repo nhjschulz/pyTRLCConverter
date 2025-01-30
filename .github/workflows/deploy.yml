@@ -49,6 +49,14 @@ jobs:
           pip install -r requirements-dev.txt
           pip install .
 
+      - name: Setup PlantUML locally
+        run: |
+          cd ./tools/plantuml
+          chmod +x get_plantuml.sh
+          ./get_plantuml.sh
+          export
+          cd ../..
+
       - name: Generate requirements in Markdown
         run: |
           cd ./tools/req2markdown
