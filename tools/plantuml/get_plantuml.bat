@@ -16,27 +16,9 @@ rem
 rem You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 rem If not, see <https://www.gnu.org/licenses/>.
 
-cd ..\plantuml
-get_plantuml.bat
-cd ..\req2markdown
+set PLANTUML=%~dp0\plantuml.jar
 
-if not exist "out" (
-    md out
-)
-
-rem ****************************************************************************************************
-rem Software Requirements
-rem ****************************************************************************************************
-set SWE_REQ_OUT_FORMAT=markdown
-set SWE_REQ_OUT_DIR=.\out\sw-requirements\%SWE_REQ_OUT_FORMAT%
-
-if not exist %SWE_REQ_OUT_DIR% (
-    md %SWE_REQ_OUT_DIR%
-)
-
-echo Generate software requirements ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% -p=req2markdown %SWE_REQ_OUT_FORMAT%
-
-if errorlevel 1 (
-    pause
+if not exist "%PLANTUML%" (
+    echo Download PlantUML java program...
+    powershell -Command "Invoke-WebRequest https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar -OutFile %PLANTUML%"
 )

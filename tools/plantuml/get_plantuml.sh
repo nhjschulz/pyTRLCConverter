@@ -16,28 +16,9 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-cd ../plantuml
-chmod +x get_plantuml.sh
-./get_plantuml.sh
-cd ../req2markdown
+PLANTUML="$(dirname "$0")/plantuml.jar"
 
-if [ ! -d "out" ]; then
-    mkdir out
-fi
-
-# ****************************************************************************************************
-# Software Requirements
-# ****************************************************************************************************
-SWE_REQ_OUT_FORMAT="markdown"
-SWE_REQ_OUT_DIR="./out/sw-requirements/$SWE_REQ_OUT_FORMAT"
-
-if [ ! -d "$SWE_REQ_OUT_DIR" ]; then
-    mkdir -p "$SWE_REQ_OUT_DIR"
-fi
-
-echo "Generate software requirements ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/models -o="$SWE_REQ_OUT_DIR" -p=req2markdown "$SWE_REQ_OUT_FORMAT"
-
-if [ $? -ne 0 ]; then
-    read -p "Press any key to continue..."
+if [ ! -f "$PLANTUML" ]; then
+    echo "Download PlantUML java program..."
+    curl -L -o "$PLANTUML" https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
 fi
