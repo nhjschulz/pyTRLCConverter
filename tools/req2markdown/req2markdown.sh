@@ -18,7 +18,7 @@
 
 cd ../plantuml
 chmod +x get_plantuml.sh
-./get_plantuml.sh
+. ./get_plantuml.sh
 cd ../req2markdown
 
 if [ ! -d "out" ]; then

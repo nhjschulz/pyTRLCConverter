@@ -53,7 +53,7 @@ jobs:
         run: |
           cd ./tools/plantuml
           chmod +x get_plantuml.sh
-          ./get_plantuml.sh
+          . ./get_plantuml.sh
           export
           cd ../..
 
