@@ -18,7 +18,7 @@ Because the definition of TRLC types is project specific, it supports to inject 
 - [Examples](#examples)
 - [Compile into an executable](#compile-into-an-executable)
 - [SW Documentation](#sw-documentation)
-  - [How to get a trace report?](#how-to-get-a-trace-report)
+- [Tools](#tools)
 - [Used Libraries](#used-libraries)
 - [Issues, Ideas And Bugs](#issues-ideas-and-bugs)
 - [License](#license)
@@ -97,9 +97,9 @@ More information on the deployment and architecture can be found in the [documen
 For Detailed Software Design run `$ /doc/detailed-design/make html` to generate the detailed design documentation that then can be found
 in the folder `/doc/detailed-design/_build/html/index.html`
 
-### How to get a trace report?
+## Tools
 
-See [Tracing Toolchain](./tools/lobster/README.md).
+Tools used for development or automations, see [Tools](./tools/README.md).
 
 ## Used Libraries
 
