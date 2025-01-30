@@ -17,6 +17,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 PLANTUML="$(dirname "$0")/plantuml.jar"
+export PLANTUML
 
 if [ ! -f "$PLANTUML" ]; then
     echo "Download PlantUML java program..."
