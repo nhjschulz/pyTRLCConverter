@@ -8,9 +8,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
-env:
-  ACTIONS_RUNNER_DEBUG: true
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
   # The introduction just shows some useful informations.
@@ -39,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y graphviz
+          sudo apt-get install -y graphviz curl
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
           pip install .
@@ -47,7 +44,9 @@ jobs:
       - name: Generate requirements in Markdown
         run: |
           cd ./tools/req2markdown
+          ls -Al
           chmod +x req2markdown.sh
+          ls -Al
           ./req2markdown.sh
           cd ../..
 
