@@ -1,0 +1,11 @@
+package SwTests
+import SwRequirements
+
+type SwTestCase {
+	description	String
+	derived     SwRequirements.SwReq [0 .. *]
+}
+
+type SwTestSuite {
+    contains    SwTestCase [0 .. *]
+}

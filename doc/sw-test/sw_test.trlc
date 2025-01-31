@@ -1,0 +1,10 @@
+package SwTests
+import SwRequirements
+
+section "SW-Test" {
+
+    SwTestCase tc1 {
+        description = "Test"
+        derived = [SwRequirements.sw_req_cli]
+    }
+}

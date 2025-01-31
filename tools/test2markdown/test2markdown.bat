@@ -18,24 +18,24 @@ rem If not, see <https://www.gnu.org/licenses/>.
 
 cd ..\plantuml
 call get_plantuml.bat
-cd ..\req2markdown
+cd ..\test2markdown
 
 if not exist "out" (
     md out
 )
 
 rem ****************************************************************************************************
-rem Software Requirements
+rem Software Tests
 rem ****************************************************************************************************
-set SWE_REQ_OUT_FORMAT=markdown
-set SWE_REQ_OUT_DIR=.\out\sw-requirements\%SWE_REQ_OUT_FORMAT%
+set SW_TEST_OUT_FORMAT=markdown
+set SW_TEST_OUT_DIR=.\out\sw-tests\%SW_TEST_OUT_FORMAT%
 
-if not exist %SWE_REQ_OUT_DIR% (
-    md %SWE_REQ_OUT_DIR%
+if not exist %SW_TEST_OUT_DIR% (
+    md %SW_TEST_OUT_DIR%
 )
 
-echo Generate software requirements ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% -p=req2markdown %SWE_REQ_OUT_FORMAT%
+echo Generate software tests ...
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% -p=test2markdown %SW_TEST_OUT_FORMAT%
 
 if errorlevel 1 (
     pause

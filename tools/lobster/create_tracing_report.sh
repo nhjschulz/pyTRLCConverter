@@ -21,39 +21,91 @@ LOBSTER_PYTHON=lobster-python
 LOBSTER_REPORT=lobster-report
 LOBSTER_RENDERER=lobster-html-report
 OUT_DIR=out
-SOURCES=../../../doc/sw-requirements
 MODELS=../../../doc/models
-PYTHON_SOURCES=../../../src/pyTRLCConverter
+
+SW_REQ_SOURCES=../../../doc/sw-requirements
+SW_REQ_LOBSTER_CONF=../lobster-sw-req.conf
+SW_REQ_LOBSTER_OUT=sw_req.lobster
+
+SW_TEST_SOURCES=../../../doc/sw-test
+SW_TEST_LOBSTER_CONF=../lobster-sw-test.conf
+SW_TEST_LOBSTER_OUT=sw_test.lobster
+
+SW_CODE_SOURCES=../../../src/pyTRLCConverter
+SW_CODE_LOBSTER_OUT=sw_code.lobster
+
+SW_TEST_CODE_SOURCES=../../../tests
+SW_TEST_CODE_LOBSTER_OUT=sw_test_code.lobster
+
+SW_REQ_LOBSTER_REPORT_CONF=../lobster-report-sw-req.conf
+SW_REQ_LOBSTER_REPORT_OUT=lobster-report-sw-req.lobster
+SW_REQ_LOBSTER_HTML_OUT=sw_req_tracing_report.html
+
+SW_TEST_LOBSTER_REPORT_CONF=../lobster-report-sw-test.conf
+SW_TEST_LOBSTER_REPORT_OUT=lobster-report-sw-test.lobster
+SW_TEST_LOBSTER_HTML_OUT=sw_test_tracing_report.html
 
 if [ ! -d "$OUT_DIR" ]; then
     mkdir "$OUT_DIR"
 fi
 
-cd "$OUT_DIR"
+cd "$OUT_DIR" || exit
 
-$LOBSTER_TRLC --config-file ../lobster-trlc.conf --out trlc.lobster $SOURCES $MODELS
+# ********** SW-Requirements **********
+$LOBSTER_TRLC --config-file "$SW_REQ_LOBSTER_CONF" --out "$SW_REQ_LOBSTER_OUT" "$SW_REQ_SOURCES" "$MODELS"
 if [ $? -ne 0 ]; then
-    echo "Error in $LOBSTER_TRLC"
+    echo "Error in SW-Requirements"
     exit 1
 fi
 
-$LOBSTER_PYTHON --out python.lobster $PYTHON_SOURCES
+# ********** SW-Tests **********
+$LOBSTER_TRLC --config-file "$SW_TEST_LOBSTER_CONF" --out "$SW_TEST_LOBSTER_OUT" "$SW_REQ_SOURCES" "$SW_TEST_SOURCES" "$MODELS"
 if [ $? -ne 0 ]; then
-    echo "Error in $LOBSTER_PYTHON"
+    echo "Error in SW-Tests"
     exit 1
 fi
 
-$LOBSTER_REPORT --lobster-config ../lobster.conf --out lobster-report.lobster
+# ********** SW-Code **********
+$LOBSTER_PYTHON --out "$SW_CODE_LOBSTER_OUT" "$SW_CODE_SOURCES"
 if [ $? -ne 0 ]; then
-    echo "Error in $LOBSTER_REPORT"
+    echo "Error in SW-Code"
     exit 1
 fi
 
-$LOBSTER_RENDERER --out tracing_report.html lobster-report.lobster
+# ********** SW-Test Code **********
+$LOBSTER_PYTHON --out "$SW_TEST_CODE_LOBSTER_OUT" --activity "$SW_TEST_CODE_SOURCES"
 if [ $? -ne 0 ]; then
-    echo "Error in $LOBSTER_RENDERER"
+    echo "Error in SW-Test Code"
     exit 1
 fi
 
-echo "Tracing report generated successfully"
+# ********** Report SW-Requirements **********
+$LOBSTER_REPORT --lobster-config "$SW_REQ_LOBSTER_REPORT_CONF" --out "$SW_REQ_LOBSTER_REPORT_OUT"
+if [ $? -ne 0 ]; then
+    echo "Error in Report SW-Requirements"
+    exit 1
+fi
+
+# ********** Report SW-Requirements to HTML **********
+$LOBSTER_RENDERER --out "$SW_REQ_LOBSTER_HTML_OUT" "$SW_REQ_LOBSTER_REPORT_OUT"
+if [ $? -ne 0 ]; then
+    echo "Error in Report SW-Requirements to HTML"
+    exit 1
+fi
+
+# ********** Report SW-Tests **********
+$LOBSTER_REPORT --lobster-config "$SW_TEST_LOBSTER_REPORT_CONF" --out "$SW_TEST_LOBSTER_REPORT_OUT"
+if [ $? -ne 0 ]; then
+    echo "Error in Report SW-Tests"
+    exit 1
+fi
+
+# ********** Report SW-Tests to HTML **********
+$LOBSTER_RENDERER --out "$SW_TEST_LOBSTER_HTML_OUT" "$SW_TEST_LOBSTER_REPORT_OUT"
+if [ $? -ne 0 ]; then
+    echo "Error in Report SW-Tests to HTML"
+    exit 1
+fi
+
+echo "Finished"
 cd ..

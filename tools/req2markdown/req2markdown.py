@@ -103,7 +103,7 @@ def _print_diagram(fd, diagram):
     if plantuml_generator.is_plantuml_file(file_path):
 
         plantuml_generator.generate(image_format, full_file_path, _out_path)
-        
+
         file_dst_path = os.path.basename(full_file_path)
         file_dst_path = os.path.splitext(file_dst_path)[0]
         file_dst_path += "." + image_format
@@ -134,12 +134,12 @@ def _print_sw_req(fd, sw_req):
         fd (file): File descriptor
         sw_req (Record_Object): Software requirement to print
     """
-    sys_req_id = sw_req.name
-    sys_req_attributes = sw_req.to_python_dict()
-    description = sys_req_attributes["description"]
-    verification_proposal = sys_req_attributes["verification_proposal"]
-    info = sys_req_attributes["info"]
-    derived = sys_req_attributes["derived"]
+    sw_req_id = sw_req.name
+    sw_req_attributes = sw_req.to_python_dict()
+    description = sw_req_attributes["description"]
+    verification_proposal = sw_req_attributes["verification_proposal"]
+    info = sw_req_attributes["info"]
+    derived = sw_req_attributes["derived"]
     derived_info = "N/A"
 
     if info is None:
@@ -153,7 +153,7 @@ def _print_sw_req(fd, sw_req):
 
             derived_info += derived_req
 
-    row_values = [sys_req_id, description, verification_proposal, info, derived_info]
+    row_values = [sw_req_id, description, verification_proposal, info, derived_info]
     markdown_table_row = markdown_append_table_row(row_values)
     fd.write(markdown_table_row)
 
