@@ -66,6 +66,13 @@ jobs:
           ./req2markdown.sh
           cd ../..
 
+      - name: Generate tests in Markdown
+        run: |
+          cd ./tools/test2markdown
+          chmod +x test2markdown.sh
+          ./test2markdown.sh
+          cd ../..
+
       - name: Build tracing report
         run: |
             cd ./tools/lobster
