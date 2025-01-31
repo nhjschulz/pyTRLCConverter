@@ -41,12 +41,12 @@ SW_TEST_CODE_LOBSTER_OUT=sw_test_code.lobster
 SW_REQ_LOBSTER_REPORT_CONF=../lobster-report-sw-req.conf
 SW_REQ_LOBSTER_REPORT_OUT=lobster-report-sw-req.lobster
 SW_REQ_LOBSTER_ONLINE_REPORT_OUT=lobster-online-report-sw-req.lobster
-SW_REQ_LOBSTER_HTML_OUT=sw_req_tracing_report.html
+SW_REQ_LOBSTER_HTML_OUT=sw_req_tracing_online_report.html
 
 SW_TEST_LOBSTER_REPORT_CONF=../lobster-report-sw-test.conf
 SW_TEST_LOBSTER_REPORT_OUT=lobster-report-sw-test.lobster
 SW_TEST_LOBSTER_ONLINE_REPORT_OUT=lobster-online-report-sw-rest.lobster
-SW_TEST_LOBSTER_HTML_OUT=sw_test_tracing_report.html
+SW_TEST_LOBSTER_HTML_OUT=sw_test_tracing_online_report.html
 
 LOCAL_REPOSITORY_ROOT=../../..
 COMMIT=$1
