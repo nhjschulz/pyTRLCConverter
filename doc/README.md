@@ -16,4 +16,4 @@ The following section describes the high level software architecture
 
 ## Sequence Diagram
 
-TODO
+![context_diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/NewTec-GmbH/pyTRLCConverter/main/doc/architecture/sequence_diagram.puml)

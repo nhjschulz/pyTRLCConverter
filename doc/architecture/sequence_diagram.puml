@@ -1,0 +1,62 @@
+@startuml sequence_diagram
+
+participant "main" as main
+participant "Format converter" as formatConverter
+participant "Proj. specific converter" as projSpecConv
+
+autoactivate on
+
+-> main
+
+loop every converter in converter table
+    main -> formatConverter: register command specific\nprogram arguments
+    main <-- formatConverter
+end
+
+main -> main: get TRLC symbols
+main <-- main: TRLC symbols
+
+main -> formatConverter: convert with program arguments, TRLC symbols
+
+    loop every TRLC document
+        formatConverter -> formatConverter: create corresponding output file
+
+            alt Project specific converter is available
+                formatConverter -> projSpecConv: initialize
+                formatConverter <-- projSpecConv
+            end
+
+            loop every item in TRLC symbols
+
+                alt Item is a section
+
+                    alt Project specific converter is available
+                        formatConverter -> projSpecConv: convert section
+                        formatConverter <-- projSpecConv: Result
+                    else Project specific converter is NOT available
+                        formatConverter -> formatConverter: convert section
+                        formatConverter <-- formatConverter: Result
+                    end
+
+                else Item is a record object
+
+                    alt Project specific converter is available
+                        formatConverter -> projSpecConv: convert record object
+                        formatConverter <-- projSpecConv: Result
+                    else Project specific converter is NOT available
+                        formatConverter -> formatConverter: convert record object
+                        formatConverter <-- formatConverter: Result
+                    end
+
+                end
+
+            end
+
+        formatConverter <-- formatConverter
+    end
+
+main <-- formatConverter: Status
+
+<-- main: Status
+
+@enduml
