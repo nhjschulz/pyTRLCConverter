@@ -23,3 +23,9 @@ Used to convert the requirements written with TRLC to the Markdown format.
 Used to generate static HTML files, which will be deployed on Github pages.
 
 [Details](./sphinx/README.md)
+
+## test2markdown
+
+Used to convert the tests written with TRLC to the Markdown format.
+
+[Details](./test2markdown/README.md)
