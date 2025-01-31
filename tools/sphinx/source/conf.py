@@ -25,6 +25,7 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = []
 
+# Support restructured text and Markdown
 source_suffix = ['.rst', '.md']
 
 # -- Options for HTML output -------------------------------------------------
@@ -33,4 +34,11 @@ source_suffix = ['.rst', '.md']
 html_theme = 'haiku'
 html_static_path = ['_static']
 
+# Copy favorite icon to static path.
+html_favicon = '../../../doc/images/favicon.ico'
+
+# Copy logo to static path.
+html_logo = '../../../doc/images/NewTec_Logo.png'
+
+# PlantUML is called OS depended and the java jar file is provided by environment variable.
 plantuml = ['java', '-jar', os.getenv('PLANTUML')]
