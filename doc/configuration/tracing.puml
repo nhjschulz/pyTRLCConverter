@@ -1,0 +1,26 @@
+@startuml tracing
+
+left to right direction
+
+component "SW-Requirements" as swRequirements
+component "SW-Tests" as swTests
+file "SW-Implementation\n(/src/pyTRLCConverter/*.py)" as swImplementation
+file "SW-Test Implementation\n(/tests/*.py)" as swTestImplementation
+
+file "SW-Requirement Model\n(sw_req.rsl)" as swReqRsl
+file "SW-Requirements\n(sw_req.trlc)" as swReqTrlc
+
+file "SW-Test Model\n(sw_req.rsl)" as swTestRsl
+file "SW-Test\n(sw_req.trlc)" as swTestTrlc
+
+swReqRsl <.. swRequirements
+swReqTrlc <.. swRequirements
+
+swTests ..> swTestRsl
+swTests ..> swTestTrlc
+
+swRequirements <..> swTests: <<trace>>
+swRequirements <.> swImplementation: <<trace>>
+swTests <.> swTestImplementation: <<trace>>
+
+@enduml
