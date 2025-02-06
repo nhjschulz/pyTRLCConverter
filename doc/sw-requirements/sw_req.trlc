@@ -2,6 +2,10 @@ package SwRequirements
 
 section "pyTRLCConverter" {
 
+    Information info_sec_pyTRLCConverter {
+        text = "This documents defines the requirements for the pyTRLCConverter project. See https://github.com/NewTec-GmbH/pyTRLCConverter for details."
+    }
+
     section "Software Requirements" {
 
         section "General" {

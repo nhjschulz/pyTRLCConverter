@@ -37,7 +37,6 @@ class DocxConverter(IConverter):
     """Converts a section tree to docx format.
     """
     def __init__(self) -> None:
-        # lobster-trace: SwRequirements.sw_req_markdown
         self._source_items = []
         self._out_path = ""
         self._project_module = None
@@ -45,7 +44,6 @@ class DocxConverter(IConverter):
         self._docx = None
 
     def register(self, args_parser):
-        # lobster-trace: SwRequirements.sw_req_markdown
         """Register converter specific argument parser.
 
         Args:
@@ -59,8 +57,6 @@ class DocxConverter(IConverter):
         parser.set_defaults(func=self.convert)
 
     def convert(self, args, symbols):
-        # lobster-trace: SwRequirements.sw_req_prj_spec
-        # lobster-trace: SwRequirements.sw_req_markdown_file
         """Convert the section tree to the destination format.
 
         Args:
@@ -121,8 +117,6 @@ class DocxConverter(IConverter):
         return result
 
     def _load_project_module(self, project_module):
-        # lobster-trace: SwRequirements.sw_req_prj_spec
-        # lobster-trace: SwRequirements.sw_req_prj_spec_func
         """Load the project module.
 
         Args:
@@ -143,7 +137,6 @@ class DocxConverter(IConverter):
         return result
 
     def _create_out_folder(self):
-        # lobster-trace: SwRequirements.sw_req_markdown_out_folder
         """Create output folder if it doesn't exist.
         """
         if 0 < len(self._out_path):
@@ -151,8 +144,6 @@ class DocxConverter(IConverter):
                 os.makedirs(self._out_path)
 
     def _convert(self, item_list):
-        # lobster-trace: SwRequirements.sw_req_markdown_section
-        # lobster-trace: SwRequirements.sw_req_markdown_record
         """Convert the list of items to the destination format.
             The item list contains a list of tuples with sections and
             record objects.
@@ -180,7 +171,6 @@ class DocxConverter(IConverter):
         return Ret.OK
 
     def _project_module_init(self):
-        # lobster-trace: SwRequirements.sw_req_prj_exec
         """Initialize the project module.
         """
         if self._project_module is not None:
@@ -188,7 +178,6 @@ class DocxConverter(IConverter):
                 self._project_module.init(self._source_items, self._out_path)
 
     def _project_module_convert_section(self, section, level):
-        # lobster-trace: SwRequirements.sw_req_prj_exec
         """Convert a section to the destination format in a user project specific way.
 
         Args:
@@ -208,7 +197,6 @@ class DocxConverter(IConverter):
         return result
 
     def _project_module_convert_record_object(self, record_object, level):
-        # lobster-trace: SwRequirements.sw_req_prj_exec
         """Convert a record object to the destination format in a use project specific way.
 
         Args:
@@ -228,9 +216,6 @@ class DocxConverter(IConverter):
 
 
     def _convert_section(self, section, level):
-        # lobster-trace: SwRequirements.sw_req_markdown_section
-        # lobster-trace: SwRequirements.sw_req_markdown_prj_spec
-        # lobster-trace: SwRequirements.sw_req_no_prj_spec
         """Convert a section to the destination format.
 
         Args:
@@ -251,9 +236,28 @@ class DocxConverter(IConverter):
         return result
 
     def _convert_record_object(self, record_object, level):
-        # lobster-trace: SwRequirements.sw_req_markdown_record
-        # lobster-trace: SwRequirements.sw_req_markdown_prj_spec
-        # lobster-trace: SwRequirements.sw_req_no_prj_spec
+        """Convert a record object to the destination format.  """
+
+        match record_object.n_typ.name:
+            case "Information": # TODO: Discuss with the team if type name specific formatter is a good idea
+                ret = self._convert_record_object_info(record_object)
+            case _:
+                ret = self._convert_record_object_other(record_object, level)
+        return ret
+
+    def _convert_record_object_info(self, record_object):
+        """Convert an information record object to the destination format.
+
+        Args:
+            record_object (Record_Object): The record object to convert.
+        """
+        attributes = record_object.to_python_dict()
+        if "text" in attributes:
+            self._docx.add_paragraph(attributes.get("text", "N/A"))
+
+        return Ret.OK
+
+    def _convert_record_object_other(self, record_object, level):
         """Convert a record object to the destination format.
 
         Args:
@@ -273,10 +277,12 @@ class DocxConverter(IConverter):
             table.style = 'Table Grid'
             table.autofit = True
 
+            # Set table headers
             header_cells = table.rows[0].cells
             header_cells[0].text = "Element"
             header_cells[1].text = "Value"
 
+            # Populate table with attribute key-value pairs
             for key, value in attributes.items():
                 if value is None:
                     value = "N/A"
@@ -284,6 +290,10 @@ class DocxConverter(IConverter):
                 cells = table.add_row().cells
                 cells[0].text = key
                 cells[1].text = value
+
+            # Add a paragraph with the record object location
+            p = self._docx.add_paragraph()
+            p.add_run(f"from {record_object.location.file_name}:{record_object.location.line_no}").italic = True
         else:
             result = self._project_module_convert_record_object(record_object, level)
 
