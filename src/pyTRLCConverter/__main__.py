@@ -28,6 +28,7 @@ from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.version import __license__, __repository__, __version__
 from pyTRLCConverter.trlc_helper import get_trlc_symbols
 from pyTRLCConverter.markdown_converter import MarkdownConverter
+from pyTRLCConverter.docx_converter import DocxConverter
 from pyTRLCConverter.log_verbose import enable_verbose, log_verbose, is_verbose_enabled
 
 # Variables ********************************************************************
@@ -39,7 +40,8 @@ PROG_GITHUB = "Find the project on GitHub: " + __repository__
 PROG_EPILOG = PROG_COPYRIGHT + " - " + PROG_GITHUB
 
 CONVERTER_TABLE = {
-    "Markdown": MarkdownConverter()
+    "Markdown": MarkdownConverter(),
+    "docx": DocxConverter()
 }
 
 # Classes **********************************************************************
