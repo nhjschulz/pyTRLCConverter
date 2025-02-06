@@ -25,55 +25,35 @@ import shutil
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.plantuml import PlantUML
 from pyTRLCConverter.markdown_converter import markdown_create_heading, markdown_create_table_head, \
-    markdown_append_table_row, markdown_create_diagram_link
+    markdown_append_table_row, markdown_create_diagram_link, markdown_create_link, markdown_escape
 
 # Variables ********************************************************************
 _source_items = []
-_out_path = ""
-_is_table_active = False
+_OUT_PATH = ""
 
 # Classes **********************************************************************
 
 # Functions ********************************************************************
 
-def _set_table_active(value):
-    """Sets the table active flag to the given value.
-
-    Args:
-        value (bool): If the table is active, set to True, otherwise False.
-    """
-    global _is_table_active # pylint: disable=global-statement
-    _is_table_active = value
-
-def _print_sw_req_table_head(fd):
-    """Prints the table head for software requirements.
+def _print_table_head(fd):
+    """Prints the table head for software requirements and constraints.
 
     Args:
         fd (file): File descriptor
     """
-    column_titles = ["ID", "Description", "Verification Proposal", "Info", "Derived"]
+    column_titles = ["Attribute", "Value"]
     markdown_table_head = markdown_create_table_head(column_titles)
 
     fd.write(markdown_table_head)
 
-def _print_sw_constraint_table_head(fd):
-    """Prints the table head for software constraint.
-
-    Args:
-        fd (file): File descriptor
-    """
-    column_titles = ["ID", "Description", "Info"]
-    markdown_table_head = markdown_create_table_head(column_titles)
-
-    fd.write(markdown_table_head)
-
-def _print_diagram(fd, diagram):
+# pylint: disable=unused-argument
+def _print_diagram(fd, diagram, level):
     """Prints the diagram.
 
     Args:
         fd (file): File descriptor
-        out_path (str): Output path
         diagram (Record_Object): Diagram to print
+        level (int): Current level of the record object
     """
     plantuml_generator = PlantUML()
     image_format = "png"
@@ -102,7 +82,7 @@ def _print_diagram(fd, diagram):
 
     if plantuml_generator.is_plantuml_file(file_path):
 
-        plantuml_generator.generate(image_format, full_file_path, _out_path)
+        plantuml_generator.generate(image_format, full_file_path, _OUT_PATH)
 
         file_dst_path = os.path.basename(full_file_path)
         file_dst_path = os.path.splitext(file_dst_path)[0]
@@ -112,7 +92,7 @@ def _print_diagram(fd, diagram):
         # The diagram name may differ from the filename.
         # To aovid that a invalid reference will be in the Markdown document,
         # ensure that the generated filename is as expected.
-        expected_dst_path = os.path.join(_out_path, file_dst_path)
+        expected_dst_path = os.path.join(_OUT_PATH, file_dst_path)
         if os.path.isfile(expected_dst_path) is False:
             raise FileNotFoundError(
                 f"{file_path} diagram name ('@startuml <name>') may differ from file name,"
@@ -121,18 +101,19 @@ def _print_diagram(fd, diagram):
 
     else:
         # Copy diagram image file to output folder.
-        shutil.copy(full_file_path, _out_path)
+        shutil.copy(full_file_path, _OUT_PATH)
         file_dst_path = os.path.basename(full_file_path)
 
     markdown_image = markdown_create_diagram_link(file_dst_path, caption)
     fd.write(markdown_image)
 
-def _print_sw_req(fd, sw_req):
+def _print_sw_req(fd, sw_req, level):
     """Prints the software requirement.
 
     Args:
         fd (file): File descriptor
         sw_req (Record_Object): Software requirement to print
+        level (int): Current level of the record object
     """
     sw_req_id = sw_req.name
     sw_req_attributes = sw_req.to_python_dict()
@@ -151,18 +132,36 @@ def _print_sw_req(fd, sw_req):
             if 0 < idx:
                 derived_info += ", "
 
-            derived_info += derived_req
+            anchor_tag = "#" + derived_req.replace("SwRequirements.", "").lower()
+            anchor_tag = anchor_tag.replace(" ", "-")
 
-    row_values = [sw_req_id, description, verification_proposal, info, derived_info]
-    markdown_table_row = markdown_append_table_row(row_values)
-    fd.write(markdown_table_row)
+            derived_info += markdown_create_link(derived_req, anchor_tag)
 
-def _print_sw_constraint(fd, sw_req):
+    markdown_text = markdown_create_heading(sw_req_id, level + 1)
+    fd.write(markdown_text)
+
+    _print_table_head(fd)
+
+    table = [
+        ["Description", markdown_escape(description)],
+        ["Verification Proposal", markdown_escape(verification_proposal)],
+        ["Info", markdown_escape(info)],
+        ["Derived", derived_info]
+    ]
+
+    for row in table:
+        markdown_table_row = markdown_append_table_row(row, False)
+        fd.write(markdown_table_row)
+
+    fd.write("\n")
+
+def _print_sw_constraint(fd, sw_req, level):
     """Prints the software constraint.
 
     Args:
         fd (file): File descriptor
         sw_req (Record_Object): Software constraint to print
+        level (int): Current level of the record object
     """
     sw_constraint_id = sw_req.name
     sw_constraint_attributes = sw_req.to_python_dict()
@@ -172,9 +171,21 @@ def _print_sw_constraint(fd, sw_req):
     if info is None:
         info = "N/A"
 
-    row_values = [sw_constraint_id, description, info]
-    markdown_table_row = markdown_append_table_row(row_values)
-    fd.write(markdown_table_row)
+    markdown_text = markdown_create_heading(sw_constraint_id, level + 1)
+    fd.write(markdown_text)
+
+    _print_table_head(fd)
+
+    table = [
+        ["Description", description],
+        ["Info", info]
+    ]
+
+    for row in table:
+        markdown_table_row = markdown_append_table_row(row)
+        fd.write(markdown_table_row)
+
+    fd.write("\n")
 
 def init(sources, out_path):
     """Initializes the Markdown converter.
@@ -183,11 +194,9 @@ def init(sources, out_path):
         sources (list): List of source paths
         out_path (str): Output path
     """
-    global _source_items, _out_path # pylint: disable=global-statement
+    global _source_items, _OUT_PATH # pylint: disable=global-statement
     _source_items = sources
-    _out_path = out_path
-
-    _set_table_active(False)
+    _OUT_PATH = out_path
 
 def convert_section(fd, section, level):
     """Converts a section to Markdown format.
@@ -197,10 +206,6 @@ def convert_section(fd, section, level):
         section (dict): Section to convert
         level (int): Current level of the section
     """
-    if _is_table_active is True:
-        fd.write("\n")
-        _set_table_active(False)
-
     markdown_text = markdown_create_heading(section, level + 1)
     fd.write(markdown_text)
 
@@ -217,27 +222,13 @@ def convert_record_object(fd, record_object, level):
     """
 
     if record_object.n_typ.name == "SwReqDiagram":
-        # If a table is active, close it.
-        if _is_table_active is True:
-            _set_table_active(False)
-
-        _print_diagram(fd, record_object)
+        _print_diagram(fd, record_object, level)
 
     elif record_object.n_typ.name == "SwReq":
-        # Sofware requirements are printed in a table.
-        if _is_table_active is False:
-            _print_sw_req_table_head(fd)
-            _set_table_active(True)
-
-        _print_sw_req(fd, record_object)
+        _print_sw_req(fd, record_object, level)
 
     elif record_object.n_typ.name == "SwConstraint":
-        # Sofware constraints are printed in a table.
-        if _is_table_active is False:
-            _print_sw_constraint_table_head(fd)
-            _set_table_active(True)
-
-        _print_sw_constraint(fd, record_object)
+        _print_sw_constraint(fd, record_object, level)
 
     else:
         # Skipped.
