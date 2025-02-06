@@ -305,7 +305,7 @@ def markdown_escape(text):
 
     return text
 
-def markdown_create_heading(text, level):
+def markdown_create_heading(text, level, escape = True):
     # lobster-trace: SwRequirements.sw_req_markdown_heading
     """Create a Markdown heading.
         The text will be automatically escaped for Markdown if necessary.
@@ -313,19 +313,26 @@ def markdown_create_heading(text, level):
     Args:
         text (str): Heading text
         level (int): Heading level
+        escape (boolean): Escape the text (default: True).
 
     Returns:
         str: Markdown heading
     """
-    return f"{'#' * level} {markdown_escape(text)}\n\n"
+    text_raw = text
 
-def markdown_create_table_head(column_titles):
+    if escape is True:
+        text_raw = markdown_escape(text)
+
+    return f"{'#' * level} {text_raw}\n\n"
+
+def markdown_create_table_head(column_titles, escape = True):
     # lobster-trace: SwRequirements.sw_req_markdown_table
     """Create the table head for a Markdown table.
         The titles will be automatically escaped for Markdown if necessary.
 
     Args:
         column_titles ([str]): List of column titles.
+        escape (boolean): Escape the titles (default: True).
 
     Returns:
         str: Table head
@@ -333,14 +340,24 @@ def markdown_create_table_head(column_titles):
     table_head = "|"
 
     for column_title in column_titles:
-        table_head += f" {markdown_escape(column_title)} |"
+        column_title_raw = column_title
+
+        if escape is True:
+            column_title_raw = markdown_escape(column_title)
+
+        table_head += f" {column_title_raw} |"
 
     table_head += "\n"
 
     table_head += "|"
 
     for column_title in column_titles:
-        for _ in range(len(markdown_escape(column_title))):
+        column_title_raw = column_title
+
+        if escape is True:
+            column_title_raw = markdown_escape(column_title)
+
+        for _ in range(len(column_title_raw)):
             table_head += "-"
 
         table_head += " |"
@@ -349,13 +366,14 @@ def markdown_create_table_head(column_titles):
 
     return table_head
 
-def markdown_append_table_row(row_values):
+def markdown_append_table_row(row_values, escape = True):
     # lobster-trace: SwRequirements.sw_req_markdown_table_row
     """Append a row to a Markdown table.
         The values will be automatically escaped for Markdown if necessary.
 
     Args:
         row_values ([str]): List of row values.
+        escape (boolean): Escapes every row value (default: True).
 
     Returns:
         str: Table row
@@ -363,13 +381,18 @@ def markdown_append_table_row(row_values):
     table_row = "|"
 
     for row_value in row_values:
-        table_row += f" {markdown_escape(row_value)} |"
+        row_value_raw = row_value
+
+        if escape is True:
+            row_value_raw = markdown_escape(row_value)
+
+        table_row += f" {row_value_raw} |"
 
     table_row += "\n"
 
     return table_row
 
-def markdown_create_link(text, url):
+def markdown_create_link(text, url, escape = True):
     # lobster-trace: SwRequirements.sw_req_markdown_link
     """Create a Markdown link.
         The text will be automatically escaped for Markdown if necessary.
@@ -378,13 +401,19 @@ def markdown_create_link(text, url):
     Args:
         text (str): Link text
         url (str): Link URL
+        escape (boolean): Escapes text (default: True).
 
     Returns:
         str: Markdown link
     """
-    return f"[{markdown_escape(text)}]({url})"
+    text_raw = text
 
-def markdown_create_diagram_link(diagram_file_name, diagram_caption):
+    if escape is True:
+        text_raw = markdown_escape(text)
+
+    return f"[{text_raw}]({url})"
+
+def markdown_create_diagram_link(diagram_file_name, diagram_caption, escape = True):
     # lobster-trace: SwRequirements.sw_req_markdown_image
     """Create a Markdown diagram link.
         The caption will be automatically escaped for Markdown if necessary.
@@ -392,10 +421,16 @@ def markdown_create_diagram_link(diagram_file_name, diagram_caption):
     Args:
         diagram_file_name (str): Diagram file name
         diagram_caption (str): Diagram caption
+        escape (boolean): Escapes caption (default: True).
 
     Returns:
         str: Markdown diagram link
     """
-    return f"![{markdown_escape(diagram_caption)}](./{diagram_file_name})\n"
+    diagram_caption_raw = diagram_caption
+
+    if escape is True:
+        diagram_caption_raw = markdown_escape(diagram_caption)
+
+    return f"![{diagram_caption_raw}](./{diagram_file_name})\n"
 
 # Main *************************************************************************

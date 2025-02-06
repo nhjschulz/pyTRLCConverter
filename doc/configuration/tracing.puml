@@ -7,11 +7,11 @@ component "SW-Tests" as swTests
 file "SW-Implementation\n(/src/pyTRLCConverter/*.py)" as swImplementation
 file "SW-Test Implementation\n(/tests/*.py)" as swTestImplementation
 
-file "SW-Requirement Model\n(sw_req.rsl)" as swReqRsl
-file "SW-Requirements\n(sw_req.trlc)" as swReqTrlc
+file "SW-Requirement Model\n(/doc/model/sw_req.rsl)" as swReqRsl
+file "SW-Requirements\n(/doc/sw-requirements/sw_req.trlc)" as swReqTrlc
 
-file "SW-Test Model\n(sw_req.rsl)" as swTestRsl
-file "SW-Test\n(sw_req.trlc)" as swTestTrlc
+file "SW-Test Model\n(/doc/model/sw_req.rsl)" as swTestRsl
+file "SW-Test\n(/doc/sw-test/sw_req.trlc)" as swTestTrlc
 
 swReqRsl <.. swRequirements
 swReqTrlc <.. swRequirements
@@ -22,5 +22,19 @@ swTests ..> swTestTrlc
 swRequirements <..> swTests: <<trace>>
 swRequirements <.> swImplementation: <<trace>>
 swTests <.> swTestImplementation: <<trace>>
+
+note bottom of swImplementation
+    Use lobster-trace comments to trace to the sw-requirement.
+    <code>
+    # lobster-trace: SW-Requirements.<SW-REQ-ID>
+    </code>
+end note
+
+note bottom of swTestImplementation
+    Use lobster-trace comments to trace to the sw-test case.
+    <code>
+    # lobster-trace: SW-Tests.<SW-TEST-CASE-ID>
+    </code>
+end note
 
 @enduml
