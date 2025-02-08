@@ -36,7 +36,7 @@ if [ ! -d "$SWE_REQ_OUT_DIR" ]; then
 fi
 
 echo "Generate software requirements ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/models -o="$SWE_REQ_OUT_DIR" -p=req2markdown "$SWE_REQ_OUT_FORMAT"
+pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/models -o="$SWE_REQ_OUT_DIR" --verbose --project=req2markdown "$SWE_REQ_OUT_FORMAT"
 
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."

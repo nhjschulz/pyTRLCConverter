@@ -1,4 +1,4 @@
-"""Converter to Markdown format.
+"""Converter to Word docx format.
 
     Author: Norbert Schulz (norbert.schulz@newtec.de)
 """
@@ -21,281 +21,151 @@
 
 # Imports **********************************************************************
 import os
-import sys
-import importlib
 import docx
-from pyTRLCConverter.iconverter import IConverter
-from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.trlc_helper import get_file_dict_from_symbols, is_item_section, is_item_record
+from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.log_verbose import log_verbose
+from pyTRLCConverter.plantuml import PlantUML
+from pyTRLCConverter.ret import Ret
+from pyTRLCConverter.trlc_helper import Record_Object
 
 # Variables ********************************************************************
 
 # Classes **********************************************************************
-
-class DocxConverter(IConverter):
-    """Converts a section tree to docx format.
+class DocxConverter(BaseConverter):
     """
-    def __init__(self) -> None:
-        self._source_items = []
-        self._out_path = ""
-        self._project_module = None
-        self._docx_filename = None
-        self._docx = None
+    Converter to docx format.
+    """
+    def __init__(self, args: any) -> None:
+        # lobster-trace: SwRequirements.sw_req_docx
+        """
+        Initialize the docx converter.
+        """
+        super().__init__(args)
 
-    def register(self, args_parser):
+        if args.template is not None:
+            log_verbose(f"Loading template file {args.template}.")
+
+        self._docx = docx.Document(docx=args.template)
+
+    @staticmethod
+    def get_subcommand() -> str:
+        """ Return subcommand token for this converter.
+        """
+        return "docx"
+
+    @staticmethod
+    def get_description() -> str:
+        """ Return converter description.
+        """
+        return "Convert into docx format."
+
+    @staticmethod
+    def register(args_parser, cls : type):
         """Register converter specific argument parser.
 
         Args:
             args_parser (object): Argument parser
+            cls (type): The class type to register
         """
-        parser = args_parser.add_parser(
-            'docx',
-            help="Convert to docx format."
+        BaseConverter.register(args_parser, cls)
+        BaseConverter._parser.add_argument(
+            "-t",
+            "--template",
+            type=str,
+            default=None,
+            required=False,
+            help="Load the given docx file as a template to append to."
         )
-
-        parser.set_defaults(func=self.convert)
-
-    def convert(self, args, symbols):
-        """Convert the section tree to the destination format.
+        BaseConverter._parser.add_argument(
+            "-n",
+            "--name",
+            type=str,
+            default="output.docx",
+            required=False,
+            help="Name of the generated output file inside the output folder (default = output.docx)."
+        )
+    def enter_file(self, file_name: str) -> Ret:
+        """Enter a file.
 
         Args:
-            args (object): Program arguments.
-            symbols (Symbol_Table): The symbol table.
+            file_name (str): File name
+        """
+        result = Ret.OK
+        return result
+
+    def leave_file(self, file_name: str) -> Ret:
+        """Leave a file.
+
+        Args:
+            file_name (str): File name
+        """
+        return Ret.OK
+
+    def visit_section(self, section: str, level: int) -> Ret:
+        """Process the given section item.
+
+        Args:
+            section (str): The section name
+            level (int): The section indentation level
         
         Returns:
             Ret: Status
         """
-        result = Ret.OK
+        self._docx.add_heading(section, level)
+        return Ret.OK
 
-        # Take over some program arguments.
-        self._source_items = args.source
-        self._out_path = args.out
-
-        # Add path to the output file name.
-        if 0 < len(self._out_path):
-            self._docx_filename = os.path.join(self._out_path, "output.docx")
-        else:
-            self._docx_filename = "output.docx"
-
-        # Load the project module if specified.
-        if args.project is not None:
-            result = self._load_project_module(args.project)
-
-        if result == Ret.OK:
-            # Prepare output folder.
-            self._create_out_folder()
-
-            # create word document
-            self._docx = docx.Document()
-
-            # get input file list
-            files_dict = get_file_dict_from_symbols(symbols)
-
-            for file_name, item_list in files_dict.items():
-                self._project_module_init()
-
-                # Skip files from excluded paths.
-                skip_it = False
-                if args.exclude is not None:
-                    for excluded_path in args.exclude:
-                        if os.path.commonpath([excluded_path, file_name]) == excluded_path:
-                            skip_it = True
-                            break
-
-                if skip_it is True:
-                    log_verbose(f"Skip file {file_name}.")
-                else:
-                    log_verbose(f"Generate for {file_name}.")
-
-                    result = self._convert(item_list)
-
-                    if result != Ret.OK:
-                        break
-
-            self._docx.save(self._docx_filename)
-        return result
-
-    def _load_project_module(self, project_module):
-        """Load the project module.
+    def visit_record_object(self, record: Record_Object, level: int) -> Ret:
+        """Process the given record object.
 
         Args:
-            project_module (str): Python module name.
-
-        Returns:
-            Ret: Status
-        """
-        result = Ret.OK
-        try:
-            sys.path.append(os.path.dirname(project_module))
-            module_name = os.path.basename(project_module).replace('.py', '')
-            self._project_module = importlib.import_module(module_name)
-        except ImportError as exc:
-            print(exc)
-            result = Ret.ERROR
-
-        return result
-
-    def _create_out_folder(self):
-        """Create output folder if it doesn't exist.
-        """
-        if 0 < len(self._out_path):
-            if not os.path.exists(self._out_path):
-                os.makedirs(self._out_path)
-
-    def _convert(self, item_list):
-        """Convert the list of items to the destination format.
-            The item list contains a list of tuples with sections and
-            record objects.
-
-        Args:
-            fd (File): File descriptor of the output file.
-            item_list (list[tuple]): The item list.
+            record (Record_Object): The record object
+            level (int): The record level
         
         Returns:
             Ret: Status
         """
-        result = Ret.OK
+        self._docx.add_heading(f"{record.name} ({record.n_typ.name})", level + 1)
+        attributes = record.to_python_dict()
 
-        for item in item_list:
-            if is_item_section(item):
-                result = self._convert_section(item[0], item[1])
-            elif is_item_record(item):
-                result = self._convert_record_object(item[0], item[1])
-            else:
-                result = Ret.ERROR
+        table = self._docx.add_table(rows=1, cols=2)
+        table.style = 'Table Grid'
+        table.autofit = True
 
-            if result != Ret.OK:
-                break
+        # Set table headers
+        header_cells = table.rows[0].cells
+        header_cells[0].text = "Element"
+        header_cells[1].text = "Value"
 
+        # Populate table with attribute key-value pairs
+        for key, value in attributes.items():
+            if value is None:
+                value = "N/A"
+
+            cells = table.add_row().cells
+            cells[0].text = key
+            cells[1].text = value
+
+        # Add a paragraph with the record object location
+        p = self._docx.add_paragraph()
+        p.add_run(f"from {record.location.file_name}:{record.location.line_no}").italic = True
         return Ret.OK
 
-    def _project_module_init(self):
-        """Initialize the project module.
-        """
-        if self._project_module is not None:
-            if hasattr(self._project_module, "init"):
-                self._project_module.init(self._source_items, self._out_path)
-
-    def _project_module_convert_section(self, section, level):
-        """Convert a section to the destination format in a user project specific way.
-
-        Args:
-            fd (File): File descriptor of the output file.
-            section (str): The section name.
-            level (int): The section level.
-
-        Returns:
-            Ret: Status
-        """
-        result = Ret.ERROR
-
-        if self._project_module is not None:
-            if hasattr(self._project_module, "convert_section"):
-                result = self._project_module.convert_section(section, level)
-
-        return result
-
-    def _project_module_convert_record_object(self, record_object, level):
-        """Convert a record object to the destination format in a use project specific way.
-
-        Args:
-            record_object (Record_Object): The record object to convert.
-            level (int): The record level.
-
-        Returns:
-            Ret: Status
-        """
-        result = Ret.ERROR
-
-        if self._project_module is not None:
-            if hasattr(self._project_module, "convert_record_object"):
-                result = self._project_module.convert_record_object(self, record_object, level)
-
-        return result
-
-
-    def _convert_section(self, section, level):
-        """Convert a section to the destination format.
-
-        Args:
-            fd (File): File descriptor of the output file.
-            section (str): The section name.
-            level (int): The section level.
+    def finish(self) -> Ret:
+        """Finish the conversion.
 
         Returns:
             Ret: Status
         """
         result = Ret.OK
 
-        if self._project_module is None:
-            self._docx.add_heading(section, level)
-        else:
-            result = self._project_module_convert_section(section, level)
+        if self._docx is not None:
+            output_file_name = self._args.name
+            if 0 < len(self._args.out):
+                output_file_name = os.path.join(self._args.out, self._args.name)
 
-        return result
-
-    def _convert_record_object(self, record_object, level):
-        """Convert a record object to the destination format.  """
-
-        match record_object.n_typ.name:
-            case "Information": # TODO: Discuss with the team if type name specific formatter is a good idea
-                ret = self._convert_record_object_info(record_object)
-            case _:
-                ret = self._convert_record_object_other(record_object, level)
-        return ret
-
-    def _convert_record_object_info(self, record_object):
-        """Convert an information record object to the destination format.
-
-        Args:
-            record_object (Record_Object): The record object to convert.
-        """
-        attributes = record_object.to_python_dict()
-        if "text" in attributes:
-            self._docx.add_paragraph(attributes.get("text", "N/A"))
-
-        return Ret.OK
-
-    def _convert_record_object_other(self, record_object, level):
-        """Convert a record object to the destination format.
-
-        Args:
-            record_object (Record_Object): The record object to convert.
-            level (int): The record level.
-
-        Returns:
-            Ret: Status
-        """
-        result = Ret.OK
-
-        if self._project_module is None:
-            self._docx.add_heading(f"{record_object.name} ({record_object.n_typ.name})", level + 1)
-            attributes = record_object.to_python_dict()
-
-            table = self._docx.add_table(rows=1, cols=2)
-            table.style = 'Table Grid'
-            table.autofit = True
-
-            # Set table headers
-            header_cells = table.rows[0].cells
-            header_cells[0].text = "Element"
-            header_cells[1].text = "Value"
-
-            # Populate table with attribute key-value pairs
-            for key, value in attributes.items():
-                if value is None:
-                    value = "N/A"
-
-                cells = table.add_row().cells
-                cells[0].text = key
-                cells[1].text = value
-
-            # Add a paragraph with the record object location
-            p = self._docx.add_paragraph()
-            p.add_run(f"from {record_object.location.file_name}:{record_object.location.line_no}").italic = True
-        else:
-            result = self._project_module_convert_record_object(record_object, level)
+            log_verbose(f"Writing docx {output_file_name}.")
+            self._docx.save(output_file_name)
+            self._docx = None
 
         return result
 

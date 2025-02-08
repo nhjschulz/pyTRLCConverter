@@ -6,6 +6,11 @@ section "pyTRLCConverter" {
         text = "This documents defines the requirements for the pyTRLCConverter project. See https://github.com/NewTec-GmbH/pyTRLCConverter for details."
     }
 
+    SwReqDiagram diag_sec_pyTRLCConverter {
+        caption = "Hi, I'm a PUML"
+        file_path = "../architecture/class_diagram.puml"
+    }
+
     section "Software Requirements" {
 
         section "General" {
