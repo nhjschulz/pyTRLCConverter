@@ -207,6 +207,7 @@ class PlantUML():
 
             plantuml_cmd = [
                 "java",
+                "-Djava.awt.headless=true",
                 "-jar", f"{self._plantuml_jar}",
                 f"{diagram_path}",
                 f"-t{diagram_type}",
@@ -215,9 +216,13 @@ class PlantUML():
 
             try:
                 output = subprocess.run(plantuml_cmd, capture_output=True, text=True, check=False)
+                if output.stderr:
+                    print(output.stderr)
                 print(output.stdout)
             except FileNotFoundError as exc:
                 raise FileNotFoundError(f"{self._plantuml_jar} not found.") from exc
+        else:
+            raise FileNotFoundError("plantuml.jar not found, set PLANTUML environment variable.")
 
 # Functions ********************************************************************
 
