@@ -129,7 +129,7 @@ class MarkdownConverter(BaseConverter):
             output_file_name = os.path.join(self._out_path, output_file_name)
 
         try:
-            self._fd = open(output_file_name, "w", encoding="utf-8")
+            self._fd = open(output_file_name, "w", encoding="utf-8") #pylint: disable=consider-using-with
         except IOError as e:
             print(f"Failed to open file {output_file_name}: {e}", file=sys.stderr)
             result = Ret.ERROR

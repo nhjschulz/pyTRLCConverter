@@ -24,7 +24,6 @@ import os
 import docx
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.log_verbose import log_verbose
-from pyTRLCConverter.plantuml import PlantUML
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
 

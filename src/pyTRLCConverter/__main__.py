@@ -217,7 +217,7 @@ def _get_project_converter() -> AbstractConverter:
             project_module_name = argval[3:]
         elif argval.startswith("--project="):
             project_module_name = argval[10:]
-        elif (argval == "-p" or argval == "--project") and index < len(arglist):
+        elif argval in ('-p', '--project') and index < len(arglist):
             project_module_name = arglist[index + 1]
 
         if project_module_name is not None:

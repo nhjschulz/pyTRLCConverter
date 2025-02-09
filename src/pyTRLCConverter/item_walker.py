@@ -29,7 +29,7 @@ from pyTRLCConverter.log_verbose import log_verbose
 from pyTRLCConverter.trlc_helper import get_file_dict_from_symbols, is_item_record, is_item_section
 from pyTRLCConverter.ret import Ret
 
-class ItemWalker:
+class ItemWalker: #pylint: disable=too-few-public-methods
     """
     A walker that traverses through the TRLC items in the given symbol table.
 
