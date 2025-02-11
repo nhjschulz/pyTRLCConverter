@@ -31,7 +31,8 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 class CustomDocxConverter(DocxConverter):
-    """Custom Project specific MarkdownConverter Example
+    # lobster-trace: Docx.sw_req_docx_prj_spec
+    """Custom Project specific DocxConverter Example
     """
     def __init__(self, args: any):
         super().__init__(args)
@@ -44,8 +45,8 @@ class CustomDocxConverter(DocxConverter):
         """
         return "Convert into project extended docx format."
 
-        # pylint: disable=unused-argument
-    def visit_record_object(self, record: Record_Object, level: int) -> Ret:
+    # pylint: disable=unused-argument
+    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
         """Converts a record object to docx format.
 
         Args:
@@ -58,7 +59,7 @@ class CustomDocxConverter(DocxConverter):
             case "SwReqDiagram":
                 ret = self._convert_record_object_sw_diagram(record, level)
             case _:
-                ret = super().visit_record_object(record, level)
+                ret = super().convert_record_object(record, level)
 
         return ret
 
@@ -75,6 +76,7 @@ class CustomDocxConverter(DocxConverter):
         return Ret.OK
 
     def _convert_record_object_sw_diagram(self, record: Record_Object, level: int) -> Ret:
+        # lobster-trace: sw_req_docx_image
         """Convert a software diagram record object to the destination format."""
 
         result = Ret.ERROR

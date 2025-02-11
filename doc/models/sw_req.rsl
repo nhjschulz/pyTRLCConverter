@@ -1,9 +1,5 @@
 package SwRequirements
 
-type Information {
-    text		String
-}
-
 type SwReqDiagram {
     file_path	String
     caption		String

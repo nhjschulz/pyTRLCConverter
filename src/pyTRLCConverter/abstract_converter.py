@@ -1,4 +1,4 @@
-"""Abstract converter interface which all converter implmentations.
+"""Abstract converter interface which all implementations must fullfill.
 
 Author: Norbert Schulz (norbert.schulz@newtec.de)
 """
@@ -61,7 +61,7 @@ class AbstractConverter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def visit_section(self, section: str, level: int) -> Ret:
+    def convert_section(self, section: str, level: int) -> Ret:
         """ Process the given section item.
 
         Args:
@@ -74,7 +74,7 @@ class AbstractConverter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def visit_record_object(self, record : Record_Object, level: int ) -> Ret:
+    def convert_record_object(self, record : Record_Object, level: int ) -> Ret:
         """ Process the given  record object
         
         Args:

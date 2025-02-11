@@ -31,6 +31,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 class DocxConverter(BaseConverter):
+    # lobster-trace: Docx.sw_req_docx
     """
     Converter to docx format.
     """
@@ -44,6 +45,7 @@ class DocxConverter(BaseConverter):
         if args.template is not None:
             log_verbose(f"Loading template file {args.template}.")
 
+        # lobster-trace: Docx.sw_req_docx_template
         self._docx = docx.Document(docx=args.template)
 
     @staticmethod
@@ -83,6 +85,7 @@ class DocxConverter(BaseConverter):
             required=False,
             help="Name of the generated output file inside the output folder (default = output.docx)."
         )
+
     def enter_file(self, file_name: str) -> Ret:
         """Enter a file.
 
@@ -100,7 +103,8 @@ class DocxConverter(BaseConverter):
         """
         return Ret.OK
 
-    def visit_section(self, section: str, level: int) -> Ret:
+    def convert_section(self, section: str, level: int) -> Ret:
+        # lobster-trace: Docx.sw_req_docx_section
         """Process the given section item.
 
         Args:
@@ -113,7 +117,8 @@ class DocxConverter(BaseConverter):
         self._docx.add_heading(section, level)
         return Ret.OK
 
-    def visit_record_object(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
+        # lobster-trace: Docx.sw_req_docx_record
         """Process the given record object.
 
         Args:
@@ -150,6 +155,7 @@ class DocxConverter(BaseConverter):
         return Ret.OK
 
     def finish(self) -> Ret:
+        # lobster-trace: Docx.sw_req_docx_file
         """Finish the conversion.
 
         Returns:

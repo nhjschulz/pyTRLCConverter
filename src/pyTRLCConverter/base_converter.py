@@ -1,4 +1,4 @@
-""" Converter base class which does nothing (besides printing call names in verbose mode.)
+""" Converter base class which does the argparser handling and provides helper functions.
 
     Author: Norbert Schulz (norbert.schulz@newtec.de)
 """
@@ -73,7 +73,7 @@ class BaseConverter(AbstractConverter):
         """
         return Ret.OK
 
-    def visit_section(self, section: str, level: int) -> Ret:
+    def convert_section(self, section: str, level: int) -> Ret:
         """Process the given section item.
 
         Args:
@@ -85,7 +85,7 @@ class BaseConverter(AbstractConverter):
         """
         return Ret.OK
 
-    def visit_record_object(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
         """Process the given record object.
 
         Args:

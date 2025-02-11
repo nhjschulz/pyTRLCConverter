@@ -76,7 +76,7 @@ class MarkdownConverter(BaseConverter):
 
         return Ret.OK
 
-    def visit_section(self, section: str, level: int) -> Ret:
+    def convert_section(self, section: str, level: int) -> Ret:
         """Process the given section item.
 
         Args:
@@ -90,7 +90,7 @@ class MarkdownConverter(BaseConverter):
 
         return Ret.OK
 
-    def visit_record_object(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
         """Process the given record object.
 
         Args:

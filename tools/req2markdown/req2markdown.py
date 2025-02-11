@@ -44,7 +44,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         return "Convert into project extended markdown format."
 
-    def visit_section(self, section: str, level: int) -> Ret:
+    def convert_section(self, section: str, level: int) -> Ret:
         """Converts a section to Markdown format.
 
         Args:
@@ -57,7 +57,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         return Ret.OK
 
     # pylint: disable=unused-argument
-    def visit_record_object(self, record: Record_Object, level: int):
+    def convert_record_object(self, record: Record_Object, level: int):
         """Converts a record object to Markdown format.
 
         Args:

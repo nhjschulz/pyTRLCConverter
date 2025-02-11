@@ -27,6 +27,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 
 class DumpConverter(BaseConverter):
+    #lobster-trace: Dump.sw_req_ascii_conversion
     """Simple converter implemention that just dumps all items.
     """
 
@@ -60,7 +61,7 @@ class DumpConverter(BaseConverter):
         print(f"Leaving file: {file_name}")
         return Ret.OK
 
-    def visit_section(self, section: str, level: int) -> Ret:
+    def convert_section(self, section: str, level: int) -> Ret:
         """Process the given section item.
 
         Args:
@@ -73,7 +74,7 @@ class DumpConverter(BaseConverter):
         print(f"{_blanks(level)}Section: {section} at level: {level}")
         return Ret.OK
 
-    def visit_record_object(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
         """Process the given record object.
 
         Args:

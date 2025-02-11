@@ -145,9 +145,9 @@ class ItemWalker: #pylint: disable=too-few-public-methods
         result = Ret.OK
 
         if is_item_section(item):
-            result = self._converter.visit_section(item[0], item[1])
+            result = self._converter.convert_section(item[0], item[1])
         elif is_item_record(item):
-            result = self._converter.visit_record_object(item[0], item[1])
+            result = self._converter.convert_record_object(item[0], item[1])
         else:
             print(f"Unrecognized item type {item}", file=sys.stderr)
             result = Ret.ERROR
