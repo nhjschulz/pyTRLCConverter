@@ -18,7 +18,7 @@ end note
 class BaseConverter <<abstract>> {
 }
 
-rectangle "Output Converter" {
+rectangle "Built-in Converter" {
 
     class MarkdownConverter {
     }
@@ -93,10 +93,10 @@ class "ProjectSpecific Converter" {
 }
 
 note right of "ProjectSpecific Converter"
-May also subclass one of the "Output Converter"
+May also subclass one of the "Built-in Converter"
 end note
 
-BaseConverter <|.. "ProjectSpecific Converter": <<realize>>
+BaseConverter <|.r. "ProjectSpecific Converter": <<realize>>
 main o- "ProjectSpecific Converter" : Dynamic loading "--project <file>" option
 
 @enduml

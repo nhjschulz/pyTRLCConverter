@@ -161,8 +161,8 @@ section "pyTRLCConverter" {
             }
 
             SwReq sw_req_docx_file {
-                description = "The software shall create a combined docx file for each TRLC file."
-                verification_proposal = "Verify by converting one or more TRLC files into docx format and check if a merged docx file is generated."
+                description = "The software shall create a combined docx file for each TRLC file in file read order as provided by TRLC."
+                verification_proposal = "Verify by converting one or more TRLC files into docx format and check if a merged docx file is generated as expected."
             }
 
             SwReq sw_req_docx_section {
@@ -181,14 +181,14 @@ section "pyTRLCConverter" {
             }
 
             SwReq sw_req_docx_image {
-                description = "The software shall support the creation of a plantuuml image"
+                description = "The software shall support the creation of a plantuml image."
                 verification_proposal = "Verify by converting one or more TRLC records with images into a docx file."
             }
         }
 
         section "Dump" {
             SwReq sw_req_ascii_conversion {
-                description = "The software shall support asimple conversion into text format to console out."
+                description = "The software shall support a simple conversion into text format to console out."
                 verification_proposal = "Verify by converting one or more TRLC files using the dump converter."
             }
         }

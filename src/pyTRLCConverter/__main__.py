@@ -27,6 +27,7 @@ import inspect
 import os
 import sys
 import argparse
+from typing import Optional
 from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.dump_converter import DumpConverter
 from pyTRLCConverter.item_walker import ItemWalker
@@ -45,7 +46,7 @@ PROG_COPYRIGHT = "Copyright (c) 2024 - 2025 NewTec GmbH - " + __license__
 PROG_GITHUB = "Find the project on GitHub: " + __repository__
 PROG_EPILOG = PROG_COPYRIGHT + " - " + PROG_GITHUB
 
-# List of build-in converters to use or subclass by a project converter.
+# List of built-in converters to use or subclass by a project converter.
 BUILD_IN_CONVERTER_LIST = [
     MarkdownConverter,
     DocxConverter,
@@ -150,16 +151,16 @@ def main() -> int:
     args_sub_parser = args_parser.add_subparsers(required='True')
 
     # Check if a project specific converter is given and load it.
-    process_converter_cmd = None
-    process_converter = _get_project_converter()
+    project_converter_cmd = None
+    project_converter = _get_project_converter()
 
-    if process_converter is not None:
-        process_converter.register(args_sub_parser, process_converter)
-        process_converter_cmd = process_converter.get_subcommand()
+    if project_converter is not None:
+        project_converter.register(args_sub_parser, project_converter)
+        project_converter_cmd = project_converter.get_subcommand()
 
     # Load the built-in converters unless a project converter is replacing built-in.
     for converter in BUILD_IN_CONVERTER_LIST:
-        if converter.get_subcommand() != process_converter_cmd:
+        if converter.get_subcommand() != project_converter_cmd:
             converter.register(args_sub_parser, converter)
 
 
@@ -201,9 +202,9 @@ def main() -> int:
 
     return ret_status
 
-def _get_project_converter() -> AbstractConverter:
+def _get_project_converter() -> Optional[AbstractConverter]:
     # lobster-trace: SwRequirements.sw_req_prj_spec_file
-    """Get the project specific converter class from --project argument.
+    """Get the project specific converter class from a --project or -p argument.
 
     Returns:
         AbstractConverter: The project specific converter or None if not found.

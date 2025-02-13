@@ -21,6 +21,7 @@
 
 # Imports **********************************************************************
 import os
+from typing import Optional
 from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -33,7 +34,7 @@ class BaseConverter(AbstractConverter):
     # converter specific sub parser
     _parser = None
 
-    def __init__(self, args: any):
+    def __init__(self, args: any) -> None:
         """
         Initializes the converter with the given arguments.
 
@@ -43,7 +44,7 @@ class BaseConverter(AbstractConverter):
         self._args = args
 
     @staticmethod
-    def register(args_parser, cls : type):
+    def register(args_parser, cls : type) -> None:
         """Register converter specific argument parser.
 
         Args:
@@ -56,12 +57,14 @@ class BaseConverter(AbstractConverter):
         )
         BaseConverter._parser.set_defaults(converter_class=cls)
 
-
     def enter_file(self, file_name: str) -> Ret:
         """Enter a file.
 
         Args:
             file_name (str): File name
+
+        Returns:
+            Ret: Status
         """
         return Ret.OK
 
@@ -70,6 +73,9 @@ class BaseConverter(AbstractConverter):
 
         Args:
             file_name (str): File name
+        
+        Returns:
+            Ret: Status
         """
         return Ret.OK
 
@@ -104,7 +110,7 @@ class BaseConverter(AbstractConverter):
 
     # helpers **************************************************************
 
-    def _locate_file(self, file_path: str) -> str:
+    def _locate_file(self, file_path: str) -> Optional[str]:
         """
         Locate a file by searching through the sources list if it 
         cannot be accessed by the given file_path.

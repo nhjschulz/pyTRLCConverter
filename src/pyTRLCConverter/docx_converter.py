@@ -31,7 +31,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 class DocxConverter(BaseConverter):
-    # lobster-trace: Docx.sw_req_docx
+    # lobster-trace: SwRequirements.sw_req_docx
     """
     Converter to docx format.
     """
@@ -45,23 +45,29 @@ class DocxConverter(BaseConverter):
         if args.template is not None:
             log_verbose(f"Loading template file {args.template}.")
 
-        # lobster-trace: Docx.sw_req_docx_template
+        # lobster-trace: SwRequirements.sw_req_docx_template
         self._docx = docx.Document(docx=args.template)
 
     @staticmethod
     def get_subcommand() -> str:
         """ Return subcommand token for this converter.
+
+        Returns:
+            Ret: Status
         """
         return "docx"
 
     @staticmethod
     def get_description() -> str:
         """ Return converter description.
+        
+        Returns:
+            Ret: Status
         """
         return "Convert into docx format."
 
     @staticmethod
-    def register(args_parser, cls : type):
+    def register(args_parser, cls : type) -> None:
         """Register converter specific argument parser.
 
         Args:
@@ -91,20 +97,25 @@ class DocxConverter(BaseConverter):
 
         Args:
             file_name (str): File name
+        
+        Returns:
+            Ret: Status
         """
-        result = Ret.OK
-        return result
+        return Ret.OK
 
     def leave_file(self, file_name: str) -> Ret:
         """Leave a file.
 
         Args:
             file_name (str): File name
+
+        Returns:
+            Ret: Status
         """
         return Ret.OK
 
     def convert_section(self, section: str, level: int) -> Ret:
-        # lobster-trace: Docx.sw_req_docx_section
+        # lobster-trace: SwRequirements.sw_req_docx_section
         """Process the given section item.
 
         Args:
@@ -118,7 +129,7 @@ class DocxConverter(BaseConverter):
         return Ret.OK
 
     def convert_record_object(self, record: Record_Object, level: int) -> Ret:
-        # lobster-trace: Docx.sw_req_docx_record
+        # lobster-trace: SwRequirements.sw_req_docx_record
         """Process the given record object.
 
         Args:
@@ -155,7 +166,7 @@ class DocxConverter(BaseConverter):
         return Ret.OK
 
     def finish(self) -> Ret:
-        # lobster-trace: Docx.sw_req_docx_file
+        # lobster-trace: SwRequirements.sw_req_docx_file
         """Finish the conversion.
 
         Returns:

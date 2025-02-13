@@ -34,12 +34,18 @@ class DumpConverter(BaseConverter):
     @staticmethod
     def get_subcommand() -> str:
         """ Return subcommand token for this converter.
+
+        Returns:
+            str: Parser subcommand token
         """
         return "dump"
 
     @staticmethod
     def get_description() -> str:
         """ Return converter description.
+
+        Returns:
+            str: Converter description
         """
         return "Dump TRCL item list to console."
 
@@ -48,6 +54,9 @@ class DumpConverter(BaseConverter):
 
         Args:
             file_name (str): File name
+
+        Returns:
+            Ret: Status
         """
         print(f"Entering file: {file_name}")
         return Ret.OK
@@ -57,6 +66,9 @@ class DumpConverter(BaseConverter):
 
         Args:
             file_name (str): File name
+        
+        Returns:
+            Ret: Status
         """
         print(f"Leaving file: {file_name}")
         return Ret.OK
@@ -88,13 +100,21 @@ class DumpConverter(BaseConverter):
         print(f"{record.dump(indent=level+1)}")
         return Ret.OK
 
-    def finish(self):
+    def finish(self)-> Ret:
         """Finish the conversion process.
+
+         Returns:
+            Ret: Status
         """
         print("Finishing conversion process.")
         return Ret.OK
 
 
 def _blanks(count: int) -> str:
-    """ Create a string with 'count' blanks."""
+    """ Create a string with 'count' blanks.
+     Args:
+            count (int): number of blanks for string creation.
+    Returns:
+            str: string with count blanks.
+    """
     return ' ' * count

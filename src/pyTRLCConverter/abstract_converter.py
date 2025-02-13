@@ -80,19 +80,35 @@ class AbstractConverter(ABC):
         Args:
             record (Record_Object): The record object
             level (int): The record indentation level
+
+        Returns:
+            Ret: Status
         """
         raise NotImplementedError
 
     @abstractmethod
     def finish(self) -> Ret:
         """ Finish the conversion process.
+
+        Returns:
+            Ret: Status
         """
         raise NotImplementedError
 
     @staticmethod
     def get_subcommand() -> str:
-        """ Return subcommand token for this converter. """
+        """ Return subcommand token for this converter.
+
+        Returns:
+            str: subcomand argument token
+        """
+        raise NotImplementedError
 
     @staticmethod
     def get_description() -> str:
-        """ Return converter description. """
+        """ Return converter description. 
+        
+        Returns:
+            str: Converter description
+        """
+        raise NotImplementedError

@@ -22,6 +22,7 @@
 # Imports **********************************************************************
 import os
 import sys
+from typing import List
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -46,12 +47,18 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def get_subcommand() -> str:
         """ Return subcommand token for this converter.
+
+        Returns:
+            str: Parser subcommand token
         """
         return "markdown"
 
     @staticmethod
     def get_description() -> str:
         """ Return converter description.
+
+        Returns:
+            str: Converter description
         """
         return "Convert into markdown format."
 
@@ -60,6 +67,9 @@ class MarkdownConverter(BaseConverter):
 
         Args:
             file_name (str): File name
+        
+        Returns:
+            Ret: Status
         """
 
         return self._generate_out_file(file_name)
@@ -69,6 +79,9 @@ class MarkdownConverter(BaseConverter):
 
         Args:
             file_name (str): File name
+
+        Returns:
+            Ret: Status
         """
         if self._fd is not None:
             self._fd.close()
@@ -106,6 +119,9 @@ class MarkdownConverter(BaseConverter):
 
     def finish(self) -> Ret:
         """Finish the conversion process.
+
+        Returns:
+            Ret: Status
         """
         return Ret.OK
 
@@ -137,7 +153,7 @@ class MarkdownConverter(BaseConverter):
         return result
 
     @staticmethod
-    def markdown_escape(text):
+    def markdown_escape(text: str) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_escape
         """Escapes the text to be used in a Markdown document.
 
@@ -155,7 +171,7 @@ class MarkdownConverter(BaseConverter):
         return text
 
     @staticmethod
-    def markdown_create_heading(text, level, escape = True):
+    def markdown_create_heading(text: str, level: int, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_heading
         """Create a Markdown heading.
             The text will be automatically escaped for Markdown if necessary.
@@ -163,7 +179,7 @@ class MarkdownConverter(BaseConverter):
         Args:
             text (str): Heading text
             level (int): Heading level
-            escape (boolean): Escape the text (default: True).
+            escape (bool): Escape the text (default: True).
 
         Returns:
             str: Markdown heading
@@ -176,14 +192,14 @@ class MarkdownConverter(BaseConverter):
         return f"{'#' * level} {text_raw}\n\n"
 
     @staticmethod
-    def markdown_create_table_head(column_titles, escape = True):
+    def markdown_create_table_head(column_titles : List[str], escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_table
         """Create the table head for a Markdown table.
             The titles will be automatically escaped for Markdown if necessary.
 
         Args:
             column_titles ([str]): List of column titles.
-            escape (boolean): Escape the titles (default: True).
+            escape (bool): Escape the titles (default: True).
 
         Returns:
             str: Table head
@@ -218,14 +234,14 @@ class MarkdownConverter(BaseConverter):
         return table_head
 
     @staticmethod
-    def markdown_append_table_row(row_values, escape = True):
+    def markdown_append_table_row(row_values: List[str], escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_table_row
         """Append a row to a Markdown table.
             The values will be automatically escaped for Markdown if necessary.
 
         Args:
             row_values ([str]): List of row values.
-            escape (boolean): Escapes every row value (default: True).
+            escape (bool): Escapes every row value (default: True).
 
         Returns:
             str: Table row
@@ -245,7 +261,7 @@ class MarkdownConverter(BaseConverter):
         return table_row
 
     @staticmethod
-    def markdown_create_link(text, url, escape = True):
+    def markdown_create_link(text: str, url: str, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_link
         """Create a Markdown link.
             The text will be automatically escaped for Markdown if necessary.
@@ -254,7 +270,7 @@ class MarkdownConverter(BaseConverter):
         Args:
             text (str): Link text
             url (str): Link URL
-            escape (boolean): Escapes text (default: True).
+            escape (bool): Escapes text (default: True).
 
         Returns:
             str: Markdown link
@@ -267,7 +283,7 @@ class MarkdownConverter(BaseConverter):
         return f"[{text_raw}]({url})"
 
     @staticmethod
-    def markdown_create_diagram_link(diagram_file_name, diagram_caption, escape = True):
+    def markdown_create_diagram_link(diagram_file_name: str, diagram_caption: str, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_image
         """Create a Markdown diagram link.
             The caption will be automatically escaped for Markdown if necessary.
@@ -275,7 +291,7 @@ class MarkdownConverter(BaseConverter):
         Args:
             diagram_file_name (str): Diagram file name
             diagram_caption (str): Diagram caption
-            escape (boolean): Escapes caption (default: True).
+            escape (bool): Escapes caption (default: True).
 
         Returns:
             str: Markdown diagram link

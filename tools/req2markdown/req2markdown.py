@@ -35,12 +35,15 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Functions ********************************************************************
 
 class CustomMarkDownConverter(MarkdownConverter):
-    """Custom Project specific MarkdownConverter Example
+    """Custom Project specific Markdown Converter.
     """
 
     @staticmethod
     def get_description() -> str:
         """ Return converter description.
+
+         Returns:
+            str: Converter description
         """
         return "Convert into project extended markdown format."
 
@@ -48,8 +51,11 @@ class CustomMarkDownConverter(MarkdownConverter):
         """Converts a section to Markdown format.
 
         Args:
-            section (dict): Section to convert
+            section (str): Section to convert
             level (int): Current level of the section
+        
+        Returns:
+            Ret: Status
         """
         markdown_text = self.markdown_create_heading(section, level + 1)
         self._fd.write(markdown_text)
@@ -57,12 +63,15 @@ class CustomMarkDownConverter(MarkdownConverter):
         return Ret.OK
 
     # pylint: disable=unused-argument
-    def convert_record_object(self, record: Record_Object, level: int):
+    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
         """Converts a record object to Markdown format.
 
         Args:
             record (Record_Object): Record object to convert
             level (int): Current level of the record object
+        
+        Returns:
+            Ret: Status
         """
 
         if record.n_typ.name == "SwReqDiagram":
@@ -80,7 +89,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         return Ret.OK
 
-    def _print_table_head(self):
+    def _print_table_head(self) -> None:
         """Prints the table head for software requirements and constraints.
         """
         column_titles = ["Attribute", "Value"]
@@ -89,7 +98,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         self._fd.write(markdown_table_head)
 
     # pylint: disable=unused-argument
-    def _print_diagram(self, diagram, level):
+    def _print_diagram(self, diagram: Record_Object, level: int) -> None:
         """Prints the diagram.
 
         Args:
@@ -139,24 +148,21 @@ class CustomMarkDownConverter(MarkdownConverter):
         markdown_image = self.markdown_create_diagram_link(file_dst_path, caption)
         self._fd.write(markdown_image)
 
-    def _print_sw_req(self, sw_req, level):
+    def _print_sw_req(self, sw_req: Record_Object, level: int) -> None:
         """Prints the software requirement.
 
         Args:
             sw_req (Record_Object): Software requirement to print
             level (int): Current level of the record object
         """
-        sw_req_id = sw_req.name
         sw_req_attributes = sw_req.to_python_dict()
-        description = sw_req_attributes["description"]
-        verification_proposal = sw_req_attributes["verification_proposal"]
-        info = sw_req_attributes["info"]
-        derived = sw_req_attributes["derived"]
-        derived_info = "N/A"
 
+        info = sw_req_attributes["info"]
         if info is None:
             info = "N/A"
 
+        derived = sw_req_attributes["derived"]
+        derived_info = "N/A"
         if derived is not None:
             derived_info = ""
             for idx, derived_req in enumerate(derived):
@@ -168,14 +174,14 @@ class CustomMarkDownConverter(MarkdownConverter):
 
                 derived_info += self.markdown_create_link(derived_req, anchor_tag)
 
-        markdown_text = self.markdown_create_heading(sw_req_id, level + 1)
+        markdown_text = self.markdown_create_heading(sw_req.name, level + 1)
         self._fd.write(markdown_text)
 
         self._print_table_head()
 
         table = [
-            ["Description", self.markdown_escape(description)],
-            ["Verification Proposal", self.markdown_escape(verification_proposal)],
+            ["Description", self.markdown_escape(sw_req_attributes["description"])],
+            ["Verification Proposal", self.markdown_escape(sw_req_attributes["verification_proposal"])],
             ["Info", self.markdown_escape(info)],
             ["Derived", derived_info]
         ]
@@ -186,7 +192,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         self._fd.write("\n")
 
-    def _print_sw_constraint(self, sw_req, level):
+    def _print_sw_constraint(self, sw_req: Record_Object, level: int) -> None:
         """Prints the software constraint.
 
         Args:

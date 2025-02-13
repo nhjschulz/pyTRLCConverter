@@ -32,9 +32,9 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 class CustomDocxConverter(DocxConverter):
     # lobster-trace: Docx.sw_req_docx_prj_spec
-    """Custom Project specific DocxConverter Example
+    """Custom Project specific Docx format converter. 
     """
-    def __init__(self, args: any):
+    def __init__(self, args: any) -> None:
         super().__init__(args)
 
         self._img_counter = 1
@@ -42,8 +42,11 @@ class CustomDocxConverter(DocxConverter):
     @staticmethod
     def get_description() -> str:
         """ Return converter description.
+
+         Returns:
+            str: Converter description
         """
-        return "Convert into project extended docx format."
+        return "Convert into project specific docx format."
 
     # pylint: disable=unused-argument
     def convert_record_object(self, record: Record_Object, level: int) -> Ret:
@@ -52,6 +55,9 @@ class CustomDocxConverter(DocxConverter):
         Args:
             record (Record_Object): Record object to convert
             level (int): Current level of the record object
+        
+        Returns:
+            Ret: Status
         """
         match record.n_typ.name:
             case "Information":
@@ -67,7 +73,11 @@ class CustomDocxConverter(DocxConverter):
         """Convert an information record object to the destination format.
 
         Args:
-            record_object (Record_Object): The record object to convert.
+            record (Record_Object): The record object to convert.
+            level (int): Current level of the record object
+        
+        Returns:
+            Ret: Status
         """
         attributes = record.to_python_dict()
         if "text" in attributes:
@@ -77,7 +87,15 @@ class CustomDocxConverter(DocxConverter):
 
     def _convert_record_object_sw_diagram(self, record: Record_Object, level: int) -> Ret:
         # lobster-trace: sw_req_docx_image
-        """Convert a software diagram record object to the destination format."""
+        """Convert a software diagram record object to the destination format.
+
+        Args:
+            record (Record_Object): The record object to convert.
+            level (int): Current level of the record object
+        
+        Returns:
+            Ret: Status
+        """
 
         result = Ret.ERROR
 
@@ -110,7 +128,6 @@ class CustomDocxConverter(DocxConverter):
             result = Ret.OK
 
         return result
-
 
 # Functions ********************************************************************
 

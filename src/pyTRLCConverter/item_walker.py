@@ -20,6 +20,7 @@ Author: Norbert Schulz (norbert.schulz@newtec.de)
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
+# Imports **********************************************************************
 import os
 import sys
 from trlc.ast import Symbol_Table
@@ -29,6 +30,9 @@ from pyTRLCConverter.log_verbose import log_verbose
 from pyTRLCConverter.trlc_helper import get_file_dict_from_symbols, is_item_record, is_item_section
 from pyTRLCConverter.ret import Ret
 
+# Variables ********************************************************************
+
+# Classes **********************************************************************
 class ItemWalker: #pylint: disable=too-few-public-methods
     """
     A walker that traverses through the TRLC items in the given symbol table.
@@ -153,4 +157,8 @@ class ItemWalker: #pylint: disable=too-few-public-methods
             result = Ret.ERROR
 
         return result
-# EOF
+
+# Functions ********************************************************************
+
+
+# Main *************************************************************************
