@@ -74,10 +74,16 @@ class CustomMarkDownConverter(MarkdownConverter):
             Ret: Status
         """
 
-        if record.n_typ.name == "SwReqDiagram":
+        if record.n_typ.name == "Diagram":
             self._print_diagram(record, level)
 
+        if record.n_typ.name == "Info":
+            self._print_info(record, level)
+
         elif record.n_typ.name == "SwReq":
+            self._print_sw_req(record, level)
+
+        elif record.n_typ.name == "SwReqNonFunc":
             self._print_sw_req(record, level)
 
         elif record.n_typ.name == "SwConstraint":
@@ -148,6 +154,19 @@ class CustomMarkDownConverter(MarkdownConverter):
         markdown_image = self.markdown_create_diagram_link(file_dst_path, caption)
         self._fd.write(markdown_image)
 
+    def _print_info(self, info: Record_Object, level: int) -> None:
+        """Prints the information.
+
+        Args:
+            info (Record_Object): Information to print
+            level (int): Current level of the record object
+        """
+        info_attributes = info.to_python_dict()
+
+        markdown_info = self.markdown_escape(info_attributes["description"])
+        self._fd.write(markdown_info)
+        self._fd.write("\n")
+
     def _print_sw_req(self, sw_req: Record_Object, level: int) -> None:
         """Prints the software requirement.
 
@@ -157,9 +176,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         sw_req_attributes = sw_req.to_python_dict()
 
-        info = sw_req_attributes["info"]
-        if info is None:
-            info = "N/A"
+        note = sw_req_attributes["note"]
+        if note is None:
+            note = "N/A"
 
         derived = sw_req_attributes["derived"]
         derived_info = "N/A"
@@ -181,8 +200,8 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         table = [
             ["Description", self.markdown_escape(sw_req_attributes["description"])],
-            ["Verification Proposal", self.markdown_escape(sw_req_attributes["verification_proposal"])],
-            ["Info", self.markdown_escape(info)],
+            ["Verification Criteria", self.markdown_escape(sw_req_attributes["verification_criteria"])],
+            ["Note", self.markdown_escape(note)],
             ["Derived", derived_info]
         ]
 
@@ -202,10 +221,10 @@ class CustomMarkDownConverter(MarkdownConverter):
         sw_constraint_id = sw_req.name
         sw_constraint_attributes = sw_req.to_python_dict()
         description = sw_constraint_attributes["description"]
-        info = sw_constraint_attributes["info"]
+        note = sw_constraint_attributes["note"]
 
-        if info is None:
-            info = "N/A"
+        if note is None:
+            note = "N/A"
 
         markdown_text = self.markdown_create_heading(sw_constraint_id, level + 1)
         self._fd.write(markdown_text)
@@ -214,7 +233,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         table = [
             ["Description", description],
-            ["Info", info]
+            ["Note", note]
         ]
 
         for row in table:

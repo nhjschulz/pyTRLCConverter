@@ -30,6 +30,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Variables ********************************************************************
 
 # Classes **********************************************************************
+
 class CustomDocxConverter(DocxConverter):
     # lobster-trace: Docx.sw_req_docx_prj_spec
     """Custom Project specific Docx format converter. 
@@ -60,10 +61,10 @@ class CustomDocxConverter(DocxConverter):
             Ret: Status
         """
         match record.n_typ.name:
-            case "Information":
+            case "Info":
                 ret = self._convert_record_object_info(record, level)
-            case "SwReqDiagram":
-                ret = self._convert_record_object_sw_diagram(record, level)
+            case "Diagram":
+                ret = self._convert_record_object_diagram(record, level)
             case _:
                 ret = super().convert_record_object(record, level)
 
@@ -81,11 +82,11 @@ class CustomDocxConverter(DocxConverter):
         """
         attributes = record.to_python_dict()
         if "text" in attributes:
-            self._docx.add_paragraph(attributes.get("text", "N/A"))
+            self._docx.add_paragraph(attributes.get("description", "N/A"))
 
         return Ret.OK
 
-    def _convert_record_object_sw_diagram(self, record: Record_Object, level: int) -> Ret:
+    def _convert_record_object_diagram(self, record: Record_Object, level: int) -> Ret:
         # lobster-trace: sw_req_docx_image
         """Convert a software diagram record object to the destination format.
 
