@@ -35,7 +35,7 @@ if not exist %SW_TEST_OUT_DIR% (
 )
 
 echo Generate software tests ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% -p=test2markdown %SW_TEST_OUT_FORMAT%
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% --verbose --project=test2markdown %SW_TEST_OUT_FORMAT%
 
 if errorlevel 1 (
     pause

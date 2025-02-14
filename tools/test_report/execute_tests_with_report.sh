@@ -16,28 +16,8 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-cd ../plantuml
-chmod +x get_plantuml.sh
-. ./get_plantuml.sh
-cd ../test2markdown
-
 if [ ! -d "out" ]; then
     mkdir out
 fi
 
-# ****************************************************************************************************
-# Software Tests
-# ****************************************************************************************************
-SW_TEST_OUT_FORMAT="markdown"
-SW_TEST_OUT_DIR="./out/sw-tests/$SW_TEST_OUT_FORMAT"
-
-if [ ! -d "$SW_TEST_OUT_DIR" ]; then
-    mkdir -p "$SW_TEST_OUT_DIR"
-fi
-
-echo "Generate software test cases ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --exclude=../../doc/sw-requirements --source=../../doc/models -o="$SW_TEST_OUT_DIR" --verbose --project=test2markdown "$SW_TEST_OUT_FORMAT"
-
-if [ $? -ne 0 ]; then
-    read -p "Press any key to continue..."
-fi
+pytest ../../tests --cov=../../src/ --cov-report=term-missing --cov-report=html:out/coverage.html --junit-xml=out/test_report.xml
