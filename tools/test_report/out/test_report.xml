@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="1.683" timestamp="2025-02-05T23:36:03.455135+01:00" hostname="amerkle-Latitude-E6420"><testcase classname="tests.test_empty" name="test_do_nothing" time="0.004" /><testcase classname="tests.test_plantuml" name="test_make_server_url" time="0.021"><properties><property name="lobster-trace" value="tc1" /></properties></testcase><testcase classname="tests.test_plantuml" name="test_tc1" time="0.003"><properties><property name="lobster-trace" value="tc1" /></properties><failure message="assert False">record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x7ecf064c2de0&gt;
-
-    def test_tc1(record_property):
-        record_property("lobster-trace", "tc1")
-&gt;       assert False
-E       assert False
-
-../../tests/test_plantuml.py:89: AssertionError</failure></testcase></testsuite></testsuites>
