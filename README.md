@@ -108,6 +108,7 @@ Used 3rd party libraries which are not part of the standard Python package:
 | Library | Description | License |
 | ------- | ----------- | ------- |
 | [PlantUML](https://github.com/plantuml/plantuml) | Generate UML diagrams. | GPL-3.0 |
+| [python-docx](https://github.com/python-openxml/python-docx) | Creation of Microsoft Word 2007+ (.docx) files. | MIT |
 | [requests](https://github.com/psf/requests) | HTTP processing | Apache-2.0 |
 | [sphinx](https://github.com/sphinx-doc/sphinx) | Using Sphinx for documentation deployment. | BSD |
 | [toml](https://github.com/uiri/toml) | Parsing [TOML](https://en.wikipedia.org/wiki/TOML) | MIT |
