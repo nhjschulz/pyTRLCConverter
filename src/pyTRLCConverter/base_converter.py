@@ -26,6 +26,9 @@ from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
 
+# Variables ********************************************************************
+
+# Classes **********************************************************************
 class BaseConverter(AbstractConverter):
     """
     Base converter with empty method implementations and helper functions 
@@ -138,3 +141,8 @@ class BaseConverter(AbstractConverter):
                         break
 
         return calculated_path
+
+# Functions ********************************************************************
+
+
+# Main *************************************************************************
