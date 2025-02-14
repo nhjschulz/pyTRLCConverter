@@ -32,7 +32,6 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 
-# Functions ********************************************************************
 
 class CustomMarkDownConverter(MarkdownConverter):
     """Custom Project specific Markdown Converter.
@@ -53,7 +52,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Args:
             section (str): Section to convert
             level (int): Current level of the section
-        
+
         Returns:
             Ret: Status
         """
@@ -69,7 +68,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Args:
             record (Record_Object): Record object to convert
             level (int): Current level of the record object
-        
+
         Returns:
             Ret: Status
         """
@@ -129,7 +128,8 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         if plantuml_generator.is_plantuml_file(file_path):
 
-            plantuml_generator.generate(image_format, full_file_path, self._args.out)
+            plantuml_generator.generate(
+                image_format, full_file_path, self._args.out)
 
             file_dst_path = os.path.basename(full_file_path)
             file_dst_path = os.path.splitext(file_dst_path)[0]
@@ -143,7 +143,7 @@ class CustomMarkDownConverter(MarkdownConverter):
             if os.path.isfile(expected_dst_path) is False:
                 raise FileNotFoundError(
                     f"{file_path} diagram name ('@startuml <name>') may differ from file name,"
-                     " expected {expected_dst_path}."
+                    " expected {expected_dst_path}."
                 )
 
         else:
@@ -151,7 +151,8 @@ class CustomMarkDownConverter(MarkdownConverter):
             shutil.copy(full_file_path, self._args.out)
             file_dst_path = os.path.basename(full_file_path)
 
-        markdown_image = self.markdown_create_diagram_link(file_dst_path, caption)
+        markdown_image = self.markdown_create_diagram_link(
+            file_dst_path, caption)
         self._fd.write(markdown_image)
 
     def _print_info(self, info: Record_Object, level: int) -> None:
@@ -188,10 +189,12 @@ class CustomMarkDownConverter(MarkdownConverter):
                 if 0 < idx:
                     derived_info += ", "
 
-                anchor_tag = "#" + derived_req.replace("SwRequirements.", "").lower()
+                anchor_tag = "#" + \
+                    derived_req.replace("SwRequirements.", "").lower()
                 anchor_tag = anchor_tag.replace(" ", "-")
 
-                derived_info += self.markdown_create_link(derived_req, anchor_tag)
+                derived_info += self.markdown_create_link(
+                    derived_req, anchor_tag)
 
         markdown_text = self.markdown_create_heading(sw_req.name, level + 1)
         self._fd.write(markdown_text)
@@ -199,8 +202,10 @@ class CustomMarkDownConverter(MarkdownConverter):
         self._print_table_head()
 
         table = [
-            ["Description", self.markdown_escape(sw_req_attributes["description"])],
-            ["Verification Criteria", self.markdown_escape(sw_req_attributes["verification_criteria"])],
+            ["Description", self.markdown_escape(
+                sw_req_attributes["description"])],
+            ["Verification Criteria", self.markdown_escape(
+                sw_req_attributes["verification_criteria"])],
             ["Note", self.markdown_escape(note)],
             ["Derived", derived_info]
         ]
@@ -226,7 +231,8 @@ class CustomMarkDownConverter(MarkdownConverter):
         if note is None:
             note = "N/A"
 
-        markdown_text = self.markdown_create_heading(sw_constraint_id, level + 1)
+        markdown_text = self.markdown_create_heading(
+            sw_constraint_id, level + 1)
         self._fd.write(markdown_text)
 
         self._print_table_head()
@@ -241,5 +247,7 @@ class CustomMarkDownConverter(MarkdownConverter):
             self._fd.write(markdown_table_row)
 
         self._fd.write("\n")
+
+# Functions ********************************************************************
 
 # Main *************************************************************************
