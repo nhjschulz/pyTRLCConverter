@@ -162,9 +162,9 @@ class CustomMarkDownConverter(MarkdownConverter):
             info (Record_Object): Information to print
             level (int): Current level of the record object
         """
-        info_attributes = info.to_python_dict()
+        description = self._get_attribute(info, "description")
 
-        markdown_info = self.markdown_escape(info_attributes["description"])
+        markdown_info = self.markdown_escape(description)
         self._fd.write(markdown_info)
         self._fd.write("\n")
 
@@ -177,24 +177,22 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         sw_req_attributes = sw_req.to_python_dict()
 
-        note = sw_req_attributes["note"]
-        if note is None:
-            note = "N/A"
+        description = self._get_attribute(sw_req, "description")
+        note = self._get_attribute(sw_req, "note")
+        verification_criteria = self._get_attribute(sw_req, "verification_criteria")
 
-        derived = sw_req_attributes["derived"]
-        derived_info = "N/A"
-        if derived is not None:
-            derived_info = ""
-            for idx, derived_req in enumerate(derived):
+        derived = "N/A"
+        if sw_req_attributes["derived"] is not None:
+            derived = ""
+            for idx, derived_req in enumerate(sw_req_attributes["derived"]):
                 if 0 < idx:
-                    derived_info += ", "
+                    derived += ", "
 
                 anchor_tag = "#" + \
                     derived_req.replace("SwRequirements.", "").lower()
                 anchor_tag = anchor_tag.replace(" ", "-")
 
-                derived_info += self.markdown_create_link(
-                    derived_req, anchor_tag)
+                derived += self.markdown_create_link(derived_req, anchor_tag)
 
         markdown_text = self.markdown_create_heading(sw_req.name, level + 1)
         self._fd.write(markdown_text)
@@ -202,12 +200,10 @@ class CustomMarkDownConverter(MarkdownConverter):
         self._print_table_head()
 
         table = [
-            ["Description", self.markdown_escape(
-                sw_req_attributes["description"])],
-            ["Verification Criteria", self.markdown_escape(
-                sw_req_attributes["verification_criteria"])],
+            ["Description", self.markdown_escape(description)],
+            ["Verification Criteria", self.markdown_escape(verification_criteria)],
             ["Note", self.markdown_escape(note)],
-            ["Derived", derived_info]
+            ["Derived", derived]
         ]
 
         for row in table:
@@ -216,23 +212,18 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         self._fd.write("\n")
 
-    def _print_sw_constraint(self, sw_req: Record_Object, level: int) -> None:
+    def _print_sw_constraint(self, sw_constraint: Record_Object, level: int) -> None:
         """Prints the software constraint.
 
         Args:
-            sw_req (Record_Object): Software constraint to print
+            sw_constraint (Record_Object): Software constraint to print
             level (int): Current level of the record object
         """
-        sw_constraint_id = sw_req.name
-        sw_constraint_attributes = sw_req.to_python_dict()
-        description = sw_constraint_attributes["description"]
-        note = sw_constraint_attributes["note"]
+        sw_constraint_id = sw_constraint.name
+        description = self._get_attribute(sw_constraint, "description")
+        note = self._get_attribute(sw_constraint, "note")
 
-        if note is None:
-            note = "N/A"
-
-        markdown_text = self.markdown_create_heading(
-            sw_constraint_id, level + 1)
+        markdown_text = self.markdown_create_heading(sw_constraint_id, level + 1)
         self._fd.write(markdown_text)
 
         self._print_table_head()

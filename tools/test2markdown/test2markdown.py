@@ -156,9 +156,9 @@ class CustomMarkDownConverter(MarkdownConverter):
             info (Record_Object): Information to print
             level (int): Current level of the record object
         """
-        info_attributes = info.to_python_dict()
+        description = self._get_attribute(info, "description")
 
-        markdown_info = self.markdown_escape(info_attributes["description"])
+        markdown_info = self.markdown_escape(description)
         self._fd.write(markdown_info)
         self._fd.write("\n")
 
@@ -171,20 +171,20 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         sw_test_case_attributes = sw_test_case.to_python_dict()
 
-        derived = sw_test_case_attributes["derived"]
-        derived_info = "N/A"
-        if derived is not None:
-            derived_info = ""
-            for idx, derived_req in enumerate(derived):
+        description = self._get_attribute(sw_test_case, "description")
+
+        derived = "N/A"
+        if sw_test_case_attributes["derived"] is not None:
+            derived = ""
+            for idx, derived_req in enumerate(sw_test_case_attributes["derived"]):
                 if 0 < idx:
-                    derived_info += ", "
+                    derived += ", "
 
                 anchor_tag = "#" + \
                     derived_req.replace("SwRequirements.", "").lower()
                 anchor_tag = anchor_tag.replace(" ", "-")
 
-                derived_info += self.markdown_create_link(
-                    derived_req, anchor_tag)
+                derived += self.markdown_create_link(derived_req, anchor_tag)
 
         markdown_text = self.markdown_create_heading(
             sw_test_case.name, level + 1)
@@ -193,9 +193,8 @@ class CustomMarkDownConverter(MarkdownConverter):
         self._print_table_head()
 
         table = [
-            ["Description", self.markdown_escape(
-                sw_test_case_attributes["description"])],
-            ["Derived", derived_info]
+            ["Description", self.markdown_escape(description)],
+            ["Derived", derived]
         ]
 
         for row in table:

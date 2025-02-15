@@ -29,6 +29,8 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Variables ********************************************************************
 
 # Classes **********************************************************************
+
+
 class BaseConverter(AbstractConverter):
     """
     Base converter with empty method implementations and helper functions 
@@ -47,7 +49,7 @@ class BaseConverter(AbstractConverter):
         self._args = args
 
     @staticmethod
-    def register(args_parser, cls : type) -> None:
+    def register(args_parser, cls: type) -> None:
         """Register converter specific argument parser.
 
         Args:
@@ -76,7 +78,7 @@ class BaseConverter(AbstractConverter):
 
         Args:
             file_name (str): File name
-        
+
         Returns:
             Ret: Status
         """
@@ -88,7 +90,7 @@ class BaseConverter(AbstractConverter):
         Args:
             section (str): The section name
             level (int): The section indentation level
-        
+
         Returns:
             Ret: Status
         """
@@ -100,7 +102,7 @@ class BaseConverter(AbstractConverter):
         Args:
             record (Record_Object): The record object
             level (int): The record level
-        
+
         Returns:
             Ret: Status
         """
@@ -141,6 +143,26 @@ class BaseConverter(AbstractConverter):
                         break
 
         return calculated_path
+
+    def _get_attribute(self, record: Record_Object, attribute_name: str, default_value: str = "N/A") -> str:
+        """Get the attribute value from the record object.
+            If the attribute is not found, return the default value.
+
+        Args:
+            record (Record_Object): The record object
+            attribute_name (str): The attribute name to get the value from.
+            default_value (str): The default value if the attribute is not found. Default is "N/A".
+
+        Returns:
+            str: The attribute value
+        """
+        record_dict = record.to_python_dict()
+        attribute_value = record_dict[attribute_name]
+
+        if attribute_value is None:
+            attribute_value = default_value
+
+        return attribute_value
 
 # Functions ********************************************************************
 
