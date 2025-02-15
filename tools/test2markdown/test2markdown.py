@@ -44,7 +44,7 @@ class CustomMarkDownConverter(MarkdownConverter):
          Returns:
             str: Converter description
         """
-        return "Convert into project extended markdown format."
+        return "Convert test case definitions into project extended markdown format."
 
     def convert_section(self, section: str, level: int) -> Ret:
         """Converts a section to Markdown format.
