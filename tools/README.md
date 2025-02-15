@@ -12,6 +12,12 @@ Used to download on demand the PlantUML java jar file, which is required by othe
 
 [Details](./plantuml/README.md)
 
+## req2docx
+
+Used to convert the requirements written with TRLC to the docx format.
+
+[Details](./req2docx/README.md)
+
 ## req2markdown
 
 Used to convert the requirements written with TRLC to the Markdown format.
@@ -26,6 +32,6 @@ Used to generate static HTML files, which will be deployed on Github pages.
 
 ## test2markdown
 
-Used to convert the tests written with TRLC to the Markdown format.
+Used to convert the test cases written with TRLC to the Markdown format.
 
 [Details](./test2markdown/README.md)

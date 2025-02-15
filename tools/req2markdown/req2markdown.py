@@ -32,7 +32,6 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 
-# Functions ********************************************************************
 
 class CustomMarkDownConverter(MarkdownConverter):
     """Custom Project specific Markdown Converter.
@@ -53,7 +52,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Args:
             section (str): Section to convert
             level (int): Current level of the section
-        
+
         Returns:
             Ret: Status
         """
@@ -69,15 +68,21 @@ class CustomMarkDownConverter(MarkdownConverter):
         Args:
             record (Record_Object): Record object to convert
             level (int): Current level of the record object
-        
+
         Returns:
             Ret: Status
         """
 
-        if record.n_typ.name == "SwReqDiagram":
+        if record.n_typ.name == "Diagram":
             self._print_diagram(record, level)
 
+        if record.n_typ.name == "Info":
+            self._print_info(record, level)
+
         elif record.n_typ.name == "SwReq":
+            self._print_sw_req(record, level)
+
+        elif record.n_typ.name == "SwReqNonFunc":
             self._print_sw_req(record, level)
 
         elif record.n_typ.name == "SwConstraint":
@@ -123,7 +128,8 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         if plantuml_generator.is_plantuml_file(file_path):
 
-            plantuml_generator.generate(image_format, full_file_path, self._args.out)
+            plantuml_generator.generate(
+                image_format, full_file_path, self._args.out)
 
             file_dst_path = os.path.basename(full_file_path)
             file_dst_path = os.path.splitext(file_dst_path)[0]
@@ -137,7 +143,7 @@ class CustomMarkDownConverter(MarkdownConverter):
             if os.path.isfile(expected_dst_path) is False:
                 raise FileNotFoundError(
                     f"{file_path} diagram name ('@startuml <name>') may differ from file name,"
-                     " expected {expected_dst_path}."
+                    f" expected {expected_dst_path}."
                 )
 
         else:
@@ -145,8 +151,22 @@ class CustomMarkDownConverter(MarkdownConverter):
             shutil.copy(full_file_path, self._args.out)
             file_dst_path = os.path.basename(full_file_path)
 
-        markdown_image = self.markdown_create_diagram_link(file_dst_path, caption)
+        markdown_image = self.markdown_create_diagram_link(
+            file_dst_path, caption)
         self._fd.write(markdown_image)
+
+    def _print_info(self, info: Record_Object, level: int) -> None:
+        """Prints the information.
+
+        Args:
+            info (Record_Object): Information to print
+            level (int): Current level of the record object
+        """
+        description = self._get_attribute(info, "description")
+
+        markdown_info = self.markdown_escape(description)
+        self._fd.write(markdown_info)
+        self._fd.write("\n")
 
     def _print_sw_req(self, sw_req: Record_Object, level: int) -> None:
         """Prints the software requirement.
@@ -157,22 +177,22 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         sw_req_attributes = sw_req.to_python_dict()
 
-        info = sw_req_attributes["info"]
-        if info is None:
-            info = "N/A"
+        description = self._get_attribute(sw_req, "description")
+        note = self._get_attribute(sw_req, "note")
+        verification_criteria = self._get_attribute(sw_req, "verification_criteria")
 
-        derived = sw_req_attributes["derived"]
-        derived_info = "N/A"
-        if derived is not None:
-            derived_info = ""
-            for idx, derived_req in enumerate(derived):
+        derived = "N/A"
+        if sw_req_attributes["derived"] is not None:
+            derived = ""
+            for idx, derived_req in enumerate(sw_req_attributes["derived"]):
                 if 0 < idx:
-                    derived_info += ", "
+                    derived += ", "
 
-                anchor_tag = "#" + derived_req.replace("SwRequirements.", "").lower()
+                anchor_tag = "#" + \
+                    derived_req.replace("SwRequirements.", "").lower()
                 anchor_tag = anchor_tag.replace(" ", "-")
 
-                derived_info += self.markdown_create_link(derived_req, anchor_tag)
+                derived += self.markdown_create_link(derived_req, anchor_tag)
 
         markdown_text = self.markdown_create_heading(sw_req.name, level + 1)
         self._fd.write(markdown_text)
@@ -180,10 +200,10 @@ class CustomMarkDownConverter(MarkdownConverter):
         self._print_table_head()
 
         table = [
-            ["Description", self.markdown_escape(sw_req_attributes["description"])],
-            ["Verification Proposal", self.markdown_escape(sw_req_attributes["verification_proposal"])],
-            ["Info", self.markdown_escape(info)],
-            ["Derived", derived_info]
+            ["Description", self.markdown_escape(description)],
+            ["Verification Criteria", self.markdown_escape(verification_criteria)],
+            ["Note", self.markdown_escape(note)],
+            ["Derived", derived]
         ]
 
         for row in table:
@@ -192,20 +212,16 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         self._fd.write("\n")
 
-    def _print_sw_constraint(self, sw_req: Record_Object, level: int) -> None:
+    def _print_sw_constraint(self, sw_constraint: Record_Object, level: int) -> None:
         """Prints the software constraint.
 
         Args:
-            sw_req (Record_Object): Software constraint to print
+            sw_constraint (Record_Object): Software constraint to print
             level (int): Current level of the record object
         """
-        sw_constraint_id = sw_req.name
-        sw_constraint_attributes = sw_req.to_python_dict()
-        description = sw_constraint_attributes["description"]
-        info = sw_constraint_attributes["info"]
-
-        if info is None:
-            info = "N/A"
+        sw_constraint_id = sw_constraint.name
+        description = self._get_attribute(sw_constraint, "description")
+        note = self._get_attribute(sw_constraint, "note")
 
         markdown_text = self.markdown_create_heading(sw_constraint_id, level + 1)
         self._fd.write(markdown_text)
@@ -214,7 +230,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         table = [
             ["Description", description],
-            ["Info", info]
+            ["Note", note]
         ]
 
         for row in table:
@@ -222,5 +238,7 @@ class CustomMarkDownConverter(MarkdownConverter):
             self._fd.write(markdown_table_row)
 
         self._fd.write("\n")
+
+# Functions ********************************************************************
 
 # Main *************************************************************************

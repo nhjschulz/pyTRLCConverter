@@ -33,7 +33,9 @@ from pyTRLCConverter.ret import Ret
 # Variables ********************************************************************
 
 # Classes **********************************************************************
-class ItemWalker: #pylint: disable=too-few-public-methods
+
+
+class ItemWalker:  # pylint: disable=too-few-public-methods
     """
     A walker that traverses through the TRLC items in the given symbol table.
 
@@ -42,7 +44,7 @@ class ItemWalker: #pylint: disable=too-few-public-methods
         _exclude_files (list): List of file paths to exclude from processing.
     """
 
-    def __init__(self, args : any, converter : AbstractConverter) -> None:
+    def __init__(self, args: any, converter: AbstractConverter) -> None:
         """
         Initializes the TrlcWalker with the given arguments and converter.
 
@@ -64,10 +66,11 @@ class ItemWalker: #pylint: disable=too-few-public-methods
             Ret: Status of the walk operation.
         """
         result = Ret.OK
-        skip_it = False
 
         files_dict = get_file_dict_from_symbols(symbol_table)
         for file_name, item_list in files_dict.items():
+            skip_it = False
+
             if self._exclude_files is not None:
                 for excluded_path in self._exclude_files:
                     if os.path.commonpath([excluded_path, file_name]) == excluded_path:
@@ -76,6 +79,7 @@ class ItemWalker: #pylint: disable=too-few-public-methods
 
             if skip_it is True:
                 log_verbose(f"Skipping file {file_name}.")
+
             else:
                 log_verbose(f"Processing file {file_name}.")
                 result = self._walk_file(file_name, item_list)
@@ -106,7 +110,7 @@ class ItemWalker: #pylint: disable=too-few-public-methods
                     if Ret.OK == self._converter.leave_file(file_name):
                         result = Ret.OK
 
-        except Exception as e: # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             print(f"Error processing file {file_name}: {e}", file=sys.stderr)
 
         return result
@@ -130,7 +134,7 @@ class ItemWalker: #pylint: disable=too-few-public-methods
 
                 if result != Ret.OK:
                     break
-        except Exception as e: # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             print(f"Error processing item {item}: {e}", file=sys.stderr)
             result = Ret.ERROR
 

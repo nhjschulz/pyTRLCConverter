@@ -1,18 +1,21 @@
 package SwRequirements
 
-type SwReqDiagram {
-    file_path	String
-    caption		String
+// Abstract requirement which contains the generic attributes for all types.
+abstract type Requirement {
+    description 			String
+    note 		optional	String
+    derived		optional	Requirement [0 .. *]
 }
 
-type SwReq {
-    description 			String
-    verification_proposal   String
-    info 		optional	String
-    derived		optional	SwReq [0 .. *]
+// Functional Software Requirement
+type SwReq extends Requirement {
+    verification_criteria   String
 }
 
-type SwConstraint {
-    description 			String
-    info 		optional	String
+// Non-Functional Software Requirement
+type SwReqNonFunc extends Requirement {
+}
+
+// Software Constraint
+type SwConstraint extends Requirement {
 }

@@ -35,8 +35,8 @@ if [ ! -d "$SW_TEST_OUT_DIR" ]; then
     mkdir -p "$SW_TEST_OUT_DIR"
 fi
 
-echo "Generate software tests ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --exclude=../../doc/sw-requirements --source=../../doc/models -o="$SW_TEST_OUT_DIR" -p=test2markdown "$SW_TEST_OUT_FORMAT"
+echo "Generate software test cases ..."
+pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --exclude=../../doc/sw-requirements --source=../../doc/models -o="$SW_TEST_OUT_DIR" --project=test2markdown "$SW_TEST_OUT_FORMAT"
 
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."
