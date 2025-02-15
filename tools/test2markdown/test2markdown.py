@@ -137,7 +137,7 @@ class CustomMarkDownConverter(MarkdownConverter):
             if os.path.isfile(expected_dst_path) is False:
                 raise FileNotFoundError(
                     f"{file_path} diagram name ('@startuml <name>') may differ from file name,"
-                    " expected {expected_dst_path}."
+                    f" expected {expected_dst_path}."
                 )
 
         else:
