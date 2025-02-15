@@ -2,11 +2,11 @@ package Generic
 
 // Diagram type to be used for PlantUML or any other image format.
 type Diagram {
-    file_path	String
-    caption		String
+    file_path   String
+    caption     String
 }
 
 // Generic information without requirements character, which can be used e.g. for brief chapter descriptions.
 type Info {
-    description String
+    description     String
 }
