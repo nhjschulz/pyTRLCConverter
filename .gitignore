@@ -177,5 +177,6 @@ dev/
 # Requirement conversion output files
 tools/plantuml/plantuml.jar
 tools/lobster/out/
+tools/req2docx/out/
 tools/req2markdown/out/
 tools/test2markdown/out/

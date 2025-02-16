@@ -30,6 +30,7 @@ _VERBOSE_ENABLED = False
 # Functions ********************************************************************
 
 def is_verbose_enabled():
+    # lobster-trace: SwRequirements.sw_req_verbose_mode
     """Check if verbose mode is enabled.
     
     Returns:
@@ -38,6 +39,7 @@ def is_verbose_enabled():
     return _VERBOSE_ENABLED
 
 def enable_verbose(enable):
+    # lobster-trace: SwRequirements.sw_req_verbose_mode
     """Enable or disable verbose mode.
     
     Args:
@@ -47,6 +49,7 @@ def enable_verbose(enable):
     _VERBOSE_ENABLED = enable
 
 def log_verbose(message):
+    # lobster-trace: SwRequirements.sw_req_verbose_mode
     """Print a message if verbose mode is enabled.
     
     Args:

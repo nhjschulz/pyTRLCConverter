@@ -26,6 +26,11 @@ section "pyTRLCConverter" {
                 description = "The software shall convert the TRLC files to the required destination format."
                 verification_criteria = "Verify by converting to one or more destination formats. Depended on the available formats."
             }
+
+            SwReq sw_req_verbose_mode {
+                description = "The software shall show additional conversion information in verbose mode."
+                verification_criteria = "Verify by converting one or more TRLC files with the verbose mode enabled."
+            }
         }
 
         section "Project Specific Conversion" {
@@ -35,13 +40,8 @@ section "pyTRLCConverter" {
                 derived = [sw_req_prj_spec]
             }
 
-            SwReq sw_req_prj_spec_func {
-                description = "The project specific conversion shall be able to import functions from the appropriate conversion file."
-                verification_criteria = "Verify by converting one or more TRLC files with a project specific conversion file."
-            }
-
-            SwReq sw_req_prj_exec {
-                description = "The software shall execute the interface functions from the project specific conversion file."
+            SwReq sw_req_prj_spec_interface {
+                description = "The project specific conversion interface shall be realized by a abstract interface."
                 verification_criteria = "Verify by converting one or more TRLC files with a project specific conversion file."
             }
         }
@@ -108,11 +108,6 @@ section "pyTRLCConverter" {
                 verification_criteria = "Verify by converting consecutive TRLC records into a Markdown table."
             }
 
-            SwReq sw_req_markdown_prj_spec {
-                description = "If a project specific conversion file is available, the software shall use the conversion rules defined in the file."
-                verification_criteria = "Verify by converting one or more TRLC files with a project specific conversion file."
-            }
-
             SwReq sw_req_markdown_heading {
                 description = "The software shall support the conversion of TRLC sections into Markdown headings."
                 verification_criteria = "Verify by converting one or more TRLC sections into a Markdown heading."
@@ -173,11 +168,6 @@ section "pyTRLCConverter" {
             SwReq sw_req_docx_record {
                 description = "If no project specific conversion file is available, consecutive TRLC records shall be converted into a docx heading with depth+1 and a table listing the attributes."
                 verification_criteria = "Verify by converting consecutive TRLC records into a docx file."
-            }
-
-            SwReq sw_req_docx_prj_spec {
-                description = "If a project specific conversion file is available, the software shall use the conversion rules defined in the file."
-                verification_criteria = "Verify by converting one or more TRLC files with a project specific conversion file."
             }
 
             SwReq sw_req_docx_image {

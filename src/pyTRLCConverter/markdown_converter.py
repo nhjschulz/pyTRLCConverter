@@ -36,6 +36,7 @@ class MarkdownConverter(BaseConverter):
     """
 
     def __init__(self, args: any) -> None:
+        # lobster-trace: SwRequirements.sw_req_no_prj_spec
         # lobster-trace: SwRequirements.sw_req_markdown
         """Initializes the converter.
         """
@@ -46,6 +47,7 @@ class MarkdownConverter(BaseConverter):
 
     @staticmethod
     def get_subcommand() -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown
         """ Return subcommand token for this converter.
 
         Returns:
@@ -55,6 +57,7 @@ class MarkdownConverter(BaseConverter):
 
     @staticmethod
     def get_description() -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown
         """ Return converter description.
 
         Returns:
@@ -63,6 +66,7 @@ class MarkdownConverter(BaseConverter):
         return "Convert into markdown format."
 
     def enter_file(self, file_name: str) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_markdown_file
         """Enter a file.
 
         Args:
@@ -75,6 +79,7 @@ class MarkdownConverter(BaseConverter):
         return self._generate_out_file(file_name)
 
     def leave_file(self, file_name: str) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_markdown_file
         """Leave a file.
 
         Args:
@@ -90,6 +95,7 @@ class MarkdownConverter(BaseConverter):
         return Ret.OK
 
     def convert_section(self, section: str, level: int) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_markdown_section
         """Process the given section item.
 
         Args:
@@ -104,6 +110,7 @@ class MarkdownConverter(BaseConverter):
         return Ret.OK
 
     def convert_record_object(self, record: Record_Object, level: int) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
         """Process the given record object.
 
         Args:
@@ -115,14 +122,6 @@ class MarkdownConverter(BaseConverter):
         """
         self._fd.write(f"{record.name}\n")
         self._fd.write(f"{record.to_python_dict()}\n\n")
-        return Ret.OK
-
-    def finish(self) -> Ret:
-        """Finish the conversion process.
-
-        Returns:
-            Ret: Status
-        """
         return Ret.OK
 
     def _generate_out_file(self, file_name: str) -> Ret:
@@ -302,5 +301,7 @@ class MarkdownConverter(BaseConverter):
             diagram_caption_raw = MarkdownConverter.markdown_escape(diagram_caption)
 
         return f"![{diagram_caption_raw}](./{diagram_file_name})\n"
+
+# Functions ********************************************************************
 
 # Main *************************************************************************
