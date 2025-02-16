@@ -28,7 +28,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 class DumpConverter(BaseConverter):
     #lobster-trace: Dump.sw_req_ascii_conversion
-    """Simple converter implemention that just dumps all items.
+    """Simple converter implementation that just dumps all items.
     """
 
     @staticmethod
