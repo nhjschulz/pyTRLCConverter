@@ -35,7 +35,7 @@ if not exist %SWE_REQ_OUT_DIR% (
 )
 
 echo Generate software requirements ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% -p=req2markdown %SWE_REQ_OUT_FORMAT%
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% --verbose -p=req2markdown %SWE_REQ_OUT_FORMAT%
 
 if errorlevel 1 (
     pause

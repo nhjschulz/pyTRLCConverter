@@ -160,7 +160,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         markdown_info = self.markdown_escape(description)
         self._fd.write(markdown_info)
-        self._fd.write("\n")
+        self._fd.write("\n\n")
 
     def _print_sw_test_case(self, sw_test_case: Record_Object, level: int) -> None:
         """Prints the software test case.
