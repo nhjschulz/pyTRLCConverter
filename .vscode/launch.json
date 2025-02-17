@@ -20,7 +20,6 @@
                 "-o=./out/sw-requirements/markdown",
                 "--verbose",
                 "--project=req2markdown",
-                "--help",
                 "markdown",
             ]
         },

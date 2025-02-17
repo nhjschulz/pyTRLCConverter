@@ -35,7 +35,7 @@ if not exist %SWE_REQ_OUT_DIR% (
 )
 
 echo Generate software requirements ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% %SWE_REQ_OUT_FORMAT%
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models --verbose -o=%SWE_REQ_OUT_DIR% --project=custom_docx %SWE_REQ_OUT_FORMAT% --template ACME.docx
 
 if errorlevel 1 (
     pause

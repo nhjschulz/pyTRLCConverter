@@ -166,7 +166,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         markdown_info = self.markdown_escape(description)
         self._fd.write(markdown_info)
-        self._fd.write("\n")
+        self._fd.write("\n\n")
 
     def _print_sw_req(self, sw_req: Record_Object, level: int) -> None:
         """Prints the software requirement.

@@ -80,7 +80,7 @@ class CustomDocxConverter(DocxConverter):
             Ret: Status
         """
         attributes = record.to_python_dict()
-        if "text" in attributes:
+        if "description" in attributes:
             self._docx.add_paragraph(self._get_attribute(record, "description"))
 
         return Ret.OK
@@ -122,7 +122,7 @@ class CustomDocxConverter(DocxConverter):
             p.paragraph_format.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
             run = p.add_run()
             run.add_picture(expected_dst_path, width=docx.shared.Inches(6))
-            run.add_text(f"Figure {self._img_counter} {self._get_attribute(record, "caption")}")
+            run.add_text(f"Figure {self._img_counter} {self._get_attribute(record, 'caption')}")
 
             result = Ret.OK
 
