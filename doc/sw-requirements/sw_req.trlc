@@ -47,7 +47,7 @@ section "pyTRLCConverter" {
             }
 
             SwReq sw_req_prj_spec_interface {
-                description = "The project specific conversion interface shall be realized by a abstract interface."
+                description = "The project specific conversion interface shall be realized by an abstract interface."
                 verification_criteria = "Verify by converting one or more TRLC files with a project specific conversion file."
             }
         }
