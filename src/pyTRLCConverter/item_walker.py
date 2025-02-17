@@ -138,7 +138,7 @@ class ItemWalker:  # pylint: disable=too-few-public-methods
             print(f"Error processing item {item}: {e}", file=sys.stderr)
             result = Ret.ERROR
 
-        return Ret.OK
+        return result
 
     def _visit_item(self, item: any) -> Ret:
         """
