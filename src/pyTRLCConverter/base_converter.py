@@ -32,6 +32,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 
 class BaseConverter(AbstractConverter):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """
     Base converter with empty method implementations and helper functions 
     for subclassing converters.
@@ -129,7 +130,7 @@ class BaseConverter(AbstractConverter):
 
         calculated_path = None
 
-        # Is the path to the diagram invalid?
+        # Is the path to the file invalid?
         if os.path.isfile(file_path) is False:
             # Maybe the path is relative to one of the source paths.
             for src_item in self._args.source:

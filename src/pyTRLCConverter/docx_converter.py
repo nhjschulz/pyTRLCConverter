@@ -31,12 +31,12 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 class DocxConverter(BaseConverter):
-    # lobster-trace: SwRequirements.sw_req_docx
     """
     Converter to docx format.
     """
     def __init__(self, args: any) -> None:
         # lobster-trace: SwRequirements.sw_req_docx
+        # lobster-trace: SwRequirements.sw_req_docx_template
         """
         Initialize the docx converter.
         """
@@ -45,11 +45,11 @@ class DocxConverter(BaseConverter):
         if args.template is not None:
             log_verbose(f"Loading template file {args.template}.")
 
-        # lobster-trace: SwRequirements.sw_req_docx_template
         self._docx = docx.Document(docx=args.template)
 
     @staticmethod
     def get_subcommand() -> str:
+        # lobster-trace: SwRequirements.sw_req_destination_format
         """ Return subcommand token for this converter.
 
         Returns:
@@ -59,6 +59,7 @@ class DocxConverter(BaseConverter):
 
     @staticmethod
     def get_description() -> str:
+        # lobster-trace: SwRequirements.sw_req_destination_format
         """ Return converter description.
         
         Returns:
@@ -68,6 +69,7 @@ class DocxConverter(BaseConverter):
 
     @staticmethod
     def register(args_parser, cls : type) -> None:
+        # lobster-trace: SwRequirements.sw_req_destination_format
         """Register converter specific argument parser.
 
         Args:
@@ -91,28 +93,6 @@ class DocxConverter(BaseConverter):
             required=False,
             help="Name of the generated output file inside the output folder (default = output.docx)."
         )
-
-    def enter_file(self, file_name: str) -> Ret:
-        """Enter a file.
-
-        Args:
-            file_name (str): File name
-        
-        Returns:
-            Ret: Status
-        """
-        return Ret.OK
-
-    def leave_file(self, file_name: str) -> Ret:
-        """Leave a file.
-
-        Args:
-            file_name (str): File name
-
-        Returns:
-            Ret: Status
-        """
-        return Ret.OK
 
     def convert_section(self, section: str, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_docx_section
