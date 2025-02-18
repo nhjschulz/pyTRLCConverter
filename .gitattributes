@@ -18,6 +18,11 @@
 *.toml 		    text eol=crlf
 *.cfg 		    text eol=crlf
 
+# Linux shell scripts should be auto, to be LF on linux host
+*.bash          text eol=auto
+*.sh            text eol=auto
+*.zsh           text eol=auto
+
 # Images should be treated as binary
 *.png           binary
 *.jpg           binary
