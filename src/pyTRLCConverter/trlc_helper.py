@@ -33,6 +33,7 @@ from pyTRLCConverter.log_verbose import log_verbose
 # Functions ********************************************************************
 
 def get_trlc_symbols(source_items, includes):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Get the TRLC symbol table by parsing the given folder.
 
     Args:
@@ -72,6 +73,7 @@ def get_trlc_symbols(source_items, includes):
     return symbol_table
 
 def is_item_file_name(item):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Check if the item is a file name.
 
     Args:
@@ -83,6 +85,7 @@ def is_item_file_name(item):
     return isinstance(item, str)
 
 def is_item_section(item):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Check if the item is a section.
 
     Args:
@@ -97,6 +100,7 @@ def is_item_section(item):
             isinstance(item[1], int)
 
 def is_item_record(item):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Check if the item is a record.
 
     Args:
@@ -110,40 +114,8 @@ def is_item_record(item):
             isinstance(item[0], Record_Object) and \
             isinstance(item[1], int)
 
-def dump(symbols):
-    """Dump the TRLC symbols to the console.
-
-    Args:
-        symbols (Symbol_Table): The TRLC symbols to dump.
-    """
-    if symbols is None:
-        print("No symbol found.")
-    else:
-        for item in symbols.iter_record_objects_by_section():
-            # Is item a file name?
-            if is_item_file_name(item):
-                print(f"File name: {item}")
-
-            # Is item a section or a record?
-            elif is_item_section(item):
-                print(f"Section: {item[0]} at level {item[1]}")
-
-            # Is item a record?
-            elif is_item_record(item):
-                print(f"Record: {item[0].name} at level {item[1]}")
-                print(item[0].dump())
-
-            # Unknown tuple?
-            elif isinstance(item, tuple):
-                print("item tuple not supported.")
-                for item in item:
-                    print(f"    item type {type(item)} not supported.")
-
-            # Unknown item type?
-            else:
-                print(f"item type {type(item)} not supported.")
-
 def get_file_dict_from_symbols(symbols):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Get a dictionary with the file names and their content.
 
     Args:

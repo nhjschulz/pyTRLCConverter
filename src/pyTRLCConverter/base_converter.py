@@ -32,6 +32,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 
 class BaseConverter(AbstractConverter):
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """
     Base converter with empty method implementations and helper functions 
     for subclassing converters.
@@ -165,6 +166,5 @@ class BaseConverter(AbstractConverter):
         return attribute_value
 
 # Functions ********************************************************************
-
 
 # Main *************************************************************************

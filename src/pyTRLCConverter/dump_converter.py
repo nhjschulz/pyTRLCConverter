@@ -24,10 +24,13 @@ from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
 
+# Variables ********************************************************************
+
 # Classes **********************************************************************
 
 class DumpConverter(BaseConverter):
-    #lobster-trace: Dump.sw_req_ascii_conversion
+    # lobster-trace: SwRequirements.sw_req_no_prj_spec
+    # lobster-trace: SwRequirements.sw_req_ascii_conversion
     """Simple converter implementation that just dumps all items.
     """
 
@@ -109,6 +112,7 @@ class DumpConverter(BaseConverter):
         print("Finishing conversion process.")
         return Ret.OK
 
+# Functions ********************************************************************
 
 def _blanks(count: int) -> str:
     """ Create a string with 'count' blanks.
@@ -118,3 +122,5 @@ def _blanks(count: int) -> str:
             str: string with count blanks.
     """
     return ' ' * count
+
+# Main *************************************************************************

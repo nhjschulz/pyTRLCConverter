@@ -23,6 +23,41 @@ jobs:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "The name of the branch is ${{ github.ref }} and the repository is ${{ github.repository }}."
 
+  trace:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Analysing the requirements with TRLC
+        run: |
+          trlc ./doc/models ./doc/sw-requirements
+
+      - name: Build tracing report
+        run: |
+            cd ./tools/lobster
+            chmod +x create_tracing_online_report.sh
+            ./create_tracing_online_report.sh ${{ github.sha }}
+            rm -f ./out/*.lobster
+            cd ../..
+  
+      - name: Upload tracing report
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./tools/lobster/out/*.html
+
   lint:
     # The type of runner that the job will run on.
     runs-on: ubuntu-latest
@@ -45,7 +80,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint toml
+          pip install -r requirements-dev.txt
           pip install .
 
       - name: Analysing the code with pylint
@@ -73,7 +108,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov toml
+          pip install -r requirements-dev.txt
           pip install .
 
       - name: Test and create coverage report
