@@ -28,6 +28,11 @@ section "pyTRLCConverter" {
                 verification_criteria = "Verify by requesting the version information and use the format '<program-name> <major>.<minor>.<patch>'."
             }
 
+            SwReq sw_req_process_trlc_symbols {
+                description = "The software shall process all TRLC symbols from the TRLC files."
+                verification_criteria = "Verify DumpConverter output against a known good reference."
+            }
+
             SwReq sw_req_destination_format {
                 description = "The software shall convert the TRLC files to the required destination format."
                 verification_criteria = "Verify by converting to one or more destination formats. Depended on the available formats."
@@ -174,11 +179,6 @@ section "pyTRLCConverter" {
             SwReq sw_req_docx_record {
                 description = "If no project specific conversion file is available, consecutive TRLC records shall be converted into a docx heading with depth+1 and a table listing the attributes."
                 verification_criteria = "Verify by converting consecutive TRLC records into a docx file."
-            }
-
-            SwReq sw_req_docx_image {
-                description = "The software shall support the creation of a plantuml image."
-                verification_criteria = "Verify by converting one or more TRLC records with images into a docx file."
             }
         }
 

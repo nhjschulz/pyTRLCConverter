@@ -159,6 +159,7 @@ def main() -> int:
         project_converter_cmd = project_converter.get_subcommand()
 
     # Load the built-in converters unless a project converter is replacing built-in.
+    # lobster-trace: SwRequirements.sw_req_no_prj_spec
     for converter in BUILD_IN_CONVERTER_LIST:
         if converter.get_subcommand() != project_converter_cmd:
             converter.register(args_sub_parser, converter)
@@ -180,6 +181,7 @@ def main() -> int:
                 log_verbose(f"* {arg} = {vars(args)[arg]}")
             log_verbose("\n")
 
+        # lobster-trace: SwRequirements.sw_req_process_trlc_symbols
         symbols = get_trlc_symbols(args.source, args.include)
 
         if symbols is None:
@@ -235,6 +237,7 @@ def _get_project_converter() -> Optional[AbstractConverter]:
         classes = inspect.getmembers(module, inspect.isclass)
         classes = {name: cls for name, cls in classes if cls.__module__ == project_module_name}
 
+        # lobster-trace: SwRequirements.sw_req_prj_spec_interface
         for class_name, class_def in classes.items():
             if issubclass(class_def, AbstractConverter):
                 log_verbose(f"Found project specific converter type: {class_name}")
