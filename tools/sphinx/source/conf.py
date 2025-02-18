@@ -4,6 +4,9 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
 
+from urllib.parse import urlparse
+from sphinx.errors import ConfigError
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -46,4 +49,21 @@ html_favicon = '../../../doc/images/favicon.ico'
 html_logo = '../../../doc/images/NewTec_Logo.png'
 
 # PlantUML is called OS depended and the java jar file is provided by environment variable.
-plantuml = ['java', '-jar', os.getenv('PLANTUML')]
+plantuml_env = os.getenv('PLANTUML')
+plantuml = []
+
+if plantuml_env is None:
+    raise ConfigError(
+        "The environment variable PLANTUML is not defined to either the location "
+        "of plantuml.jar or server URL.\n"
+        "Set plantuml to either <path>/plantuml.jar or a server URL.")
+
+if  urlparse(plantuml_env).scheme in ['http', 'https']:
+    plantuml = [plantuml_env]
+else:
+    if os.path.isfile(plantuml_env):
+        plantuml = ['java', '-jar', plantuml_env]
+    else:
+        raise ConfigError(
+            f"The environment variable PLANTUML points to a not existing file {plantuml_env}."
+        )
