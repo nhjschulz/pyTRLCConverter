@@ -29,7 +29,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 
 class AbstractConverter(ABC):
-    # lobster-trace: SwRequirements.sw_req_destination_format
+    # lobster-trace: SwRequirements.sw_req_prj_spec_interface
     """Abstract converter interface.
     """
     @staticmethod

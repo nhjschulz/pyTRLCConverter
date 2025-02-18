@@ -32,7 +32,6 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 
 class CustomDocxConverter(DocxConverter):
-    # lobster-trace: Docx.sw_req_docx_prj_spec
     """Custom Project specific Docx format converter. 
     """
     def __init__(self, args: any) -> None:
@@ -87,7 +86,6 @@ class CustomDocxConverter(DocxConverter):
         return Ret.OK
 
     def _convert_record_object_diagram(self, record: Record_Object, level: int) -> Ret:
-        # lobster-trace: sw_req_docx_image
         """Convert a software diagram record object to the destination format.
 
         Args:

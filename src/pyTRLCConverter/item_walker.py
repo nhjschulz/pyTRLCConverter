@@ -36,6 +36,7 @@ from pyTRLCConverter.ret import Ret
 
 
 class ItemWalker:  # pylint: disable=too-few-public-methods
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """
     A walker that traverses through the TRLC items in the given symbol table.
 

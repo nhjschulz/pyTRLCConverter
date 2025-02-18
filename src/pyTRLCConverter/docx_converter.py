@@ -31,11 +31,11 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Classes **********************************************************************
 class DocxConverter(BaseConverter):
-    # lobster-trace: SwRequirements.sw_req_docx
     """
     Converter to docx format.
     """
     def __init__(self, args: any) -> None:
+        # lobster-trace: SwRequirements.sw_req_no_prj_spec
         # lobster-trace: SwRequirements.sw_req_docx
         """
         Initialize the docx converter.
@@ -186,6 +186,5 @@ class DocxConverter(BaseConverter):
         return result
 
 # Functions ********************************************************************
-
 
 # Main *************************************************************************

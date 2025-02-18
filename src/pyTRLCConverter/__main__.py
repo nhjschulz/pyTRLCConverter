@@ -203,6 +203,7 @@ def main() -> int:
     return ret_status
 
 def _get_project_converter() -> Optional[AbstractConverter]:
+    # lobster-trace: SwRequirements.sw_req_prj_spec
     # lobster-trace: SwRequirements.sw_req_prj_spec_file
     """Get the project specific converter class from a --project or -p argument.
 
@@ -223,7 +224,6 @@ def _get_project_converter() -> Optional[AbstractConverter]:
 
         if project_module_name is not None:
             break
-
 
     if project_module_name is not None:
         # Dynamically load the module and search for an AbstractConverter class definition
@@ -247,6 +247,9 @@ def _get_project_converter() -> Optional[AbstractConverter]:
 def _create_out_folder(path: str) -> None:
     # lobster-trace: SwRequirements.sw_req_markdown_out_folder
     """Create output folder if it doesn't exist.
+
+    Args:
+        path (str): The output folder path which to create.
     """
     if 0 < len(path):
         if not os.path.exists(path):
