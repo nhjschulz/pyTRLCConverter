@@ -86,7 +86,7 @@ class DumpConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        print(f"{_blanks(level)}Section: {section} at level: {level}")
+        print(f"{' ' * level}Section: {section} at level: {level}")
         return Ret.OK
 
     def convert_record_object(self, record: Record_Object, level: int) -> Ret:
@@ -99,7 +99,7 @@ class DumpConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        print(f"{_blanks(level)}Record {record.name}, Level: {level}")
+        print(f"{' ' * level}Record {record.name}, Level: {level}")
         print(f"{record.dump(indent=level+1)}")
         return Ret.OK
 
@@ -111,16 +111,3 @@ class DumpConverter(BaseConverter):
         """
         print("Finishing conversion process.")
         return Ret.OK
-
-# Functions ********************************************************************
-
-def _blanks(count: int) -> str:
-    """ Create a string with 'count' blanks.
-     Args:
-            count (int): number of blanks for string creation.
-    Returns:
-            str: string with count blanks.
-    """
-    return ' ' * count
-
-# Main *************************************************************************
