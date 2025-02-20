@@ -211,7 +211,7 @@ class PlantUML():
             if sys.platform.startswith("linux"):
                 plantuml_cmd.append("-Djava.awt.headless=true")
 
-            plantuml_cmd.append(
+            plantuml_cmd.extend(
                 [
                     "-jar", f"{self._plantuml_jar}",
                     f"{diagram_path}",
