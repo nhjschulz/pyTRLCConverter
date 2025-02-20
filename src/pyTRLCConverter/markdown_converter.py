@@ -120,8 +120,27 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        self._fd.write(f"{record.name}\n")
-        self._fd.write(f"{record.to_python_dict()}\n\n")
+        record_attributes = record.to_python_dict()
+
+        markdown_heading = self.markdown_create_heading(record.name, level + 1)
+        self._fd.write(markdown_heading)
+
+        column_titles = ["Attribute Name", "Attribute Value"]
+        markdown_table_head = self.markdown_create_table_head(column_titles)
+        self._fd.write(markdown_table_head)
+
+        for key, value in record_attributes.items():
+            if value is None:
+                value = "N/A"
+
+            elif isinstance(value, list):
+                value = ", ".join(value)
+
+            markdown_table_row = self.markdown_append_table_row([key, value])
+            self._fd.write(markdown_table_row)
+
+        self._fd.write("\n")
+
         return Ret.OK
 
     def _generate_out_file(self, file_name: str) -> Ret:
