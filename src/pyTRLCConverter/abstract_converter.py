@@ -32,13 +32,12 @@ class AbstractConverter(ABC):
     # lobster-trace: SwRequirements.sw_req_prj_spec_interface
     """Abstract converter interface.
     """
-    @staticmethod
-    def register(args_parser, cls: type) -> None:
+    @classmethod
+    def register(cls, args_parser) -> None:
         """Register converter specific argument parser.
 
         Args:
             args_parser (object): Argument parser
-            cls (type):  The class type to use
         """
         raise NotImplementedError
 
