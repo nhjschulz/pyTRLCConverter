@@ -3,6 +3,7 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
+import shutil
 
 from urllib.parse import urlparse
 from sphinx.errors import ConfigError
@@ -68,13 +69,20 @@ else:
             f"The environment variable PLANTUML points to a not existing file {plantuml_env}."
         )
 
-import os
-import shutil
+def setup(app: any) -> None:
+    """Setup sphinx.
 
-def setup(app):
+    Args:
+        app (any): The sphinx application.
+    """
     app.connect('builder-inited', copy_coverage_files)
 
-def copy_coverage_files(app):
+def copy_coverage_files(app: any) -> None:
+    """Copy coverage files to the output directory.
+
+    Args:
+        app (any): The sphinx application.
+    """
     source_dir = os.path.abspath('../createTestReport/out/coverage')
     target_dir = os.path.join(app.outdir, 'coverage')
     if not os.path.exists(target_dir):
