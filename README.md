@@ -63,13 +63,13 @@ pip install -e .
 
 ### Conversion to Markdown format
 
-The tool requires two kinds of TRLC input sources for the conversion. These are the requirements (*.trlc) files and the model (*.tls) files. These input files are specified using one or more --source  or -s options followed by a file name or directory path. If a path is given, all files with a .trlc or .tls extension are read by the tool.
+The tool requires two kinds of TRLC input sources for the conversion. These are the requirements (\*.trlc) files and the model (\*.tls) files. These input files are specified using one or more --source  or -s options followed by a file name or directory path. If a path is given, all files with a .trlc or .tls extension are read by the tool.
 
 ```bash
 pyTRLCConverter --source doc/models --source doc/sw-requirement markdown
 ```
 
-It will create a Markdown file with the same name as the requirements file (*.trlc) in the current directory, but with the Markdown extension (.md).
+It will create a Markdown file with the same name as the requirements file (\*.trlc) in the current directory, but with the Markdown extension (.md).
 
 If the requirements are split into several files, a Markdown file will be created for each.
 
@@ -79,7 +79,7 @@ More examples are shown in the [examples folder](./examples/).
 
 ### Conversion to docx format
 
-Similar to the Markdown conversion, minimal required are the requirements (*.trlc) and the model (*.tls). Both can be added by file name or just the path where they are located.
+Similar to the Markdown conversion, minimal required are the requirements (\*.trlc) and the model (\*.tls). Both can be added by file name or just the path where they are located.
 
 ```bash
 pyTRLCConverter --source doc/models --source doc/sw-requirement docx
