@@ -66,11 +66,18 @@ jobs:
           ./req2markdown.sh
           cd ../..
 
-      - name: Generate tests in Markdown
+      - name: Generate test cases in Markdown
         run: |
-          cd ./tools/test2markdown
-          chmod +x test2markdown.sh
-          ./test2markdown.sh
+          cd ./tools/tc2markdown
+          chmod +x tc2markdown.sh
+          ./tc2markdown.sh
+          cd ../..
+
+      - name: Create test report
+        run: |
+          cd ./tools/createTestReport
+          chmod +x create_test_report.sh
+          ./create_test_report.sh
           cd ../..
 
       - name: Build tracing report
