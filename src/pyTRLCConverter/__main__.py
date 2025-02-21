@@ -155,7 +155,6 @@ def main() -> int:
     project_converter = _get_project_converter()
 
     if project_converter is not None:
-        print(project_converter)
         project_converter.register(args_sub_parser)
         project_converter_cmd = project_converter.get_subcommand()
 
