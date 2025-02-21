@@ -321,6 +321,28 @@ class MarkdownConverter(BaseConverter):
 
         return f"![{diagram_caption_raw}](./{diagram_file_name})\n"
 
+    @staticmethod
+    def markdown_text_color(text: str, color: str, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_link
+        """Create colored text in Markdown.
+            The text will be automatically escaped for Markdown if necessary.
+            There will be no newline appended at the end.
+
+        Args:
+            text (str): Text
+            color (str): HTML color
+            escape (bool): Escapes text (default: True).
+
+        Returns:
+            str: Colored text
+        """
+        text_raw = text
+
+        if escape is True:
+            text_raw = MarkdownConverter.markdown_escape(text)
+
+        return f"<span style=\"{color}\">{text_raw}</span>"
+
 # Functions ********************************************************************
 
 # Main *************************************************************************
