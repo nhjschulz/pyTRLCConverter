@@ -6,7 +6,8 @@
 pyTRLCConverter documentation
 =============================
 
-pyTRLCConverter is a command-line tool to convert TRLC files to different output formats, e.g. Markdown. Because the definition of TRLC types is project specific, it supports to inject project specific conversion functions for sections and record objects.
+pyTRLCConverter is a command-line tool to convert TRLC files to different output formats, e.g. Markdown or docx.
+Since the definition of TRLC types is project-specific, the built-in converters can be extended in an object-oriented manner.
 
 .. uml:: ../../../doc/architecture/context_diagram.puml
 
