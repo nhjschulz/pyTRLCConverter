@@ -3,8 +3,8 @@
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/NewTec-GmbH/pyTRLCConverter/blob/main/LICENSE) [![Repo Status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![CI](https://github.com/NewTec-GmbH/pyTRLCConverter/actions/workflows/test.yml/badge.svg)](https://github.com/NewTec-GmbH/pyTRLCConverter/actions/workflows/test.yml)
 [![Repo Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-pyTRLCConverter is a command-line tool to convert TRLC files to different output formats, e.g. Markdown.
-Because the definition of TRLC types is project specific, it supports to inject project specific conversion functions for sections and record objects.
+pyTRLCConverter is a command-line tool to convert TRLC files to different output formats, e.g. Markdown or docx.
+Since the definition of TRLC types is project-specific, the built-in converters can be extended in an object-oriented manner.
 
 - [Overview](#overview)
 - [Installation](#installation)
@@ -12,7 +12,9 @@ Because the definition of TRLC types is project specific, it supports to inject 
   - [Setup a virtual Python Environment](#setup-a-virtual-python-environment)
   - [Tool Installation](#tool-installation)
 - [Usage](#usage)
-  - [Convert to required format](#convert-to-required-format)
+  - [Conversion to Markdown format](#conversion-to-markdown-format)
+  - [Conversion to docx format](#conversion-to-docx-format)
+  - [Dump TRLC item list to console](#dump-trlc-item-list-to-console)
   - [Show tool version](#show-tool-version)
   - [PlantUML](#plantuml)
 - [Examples](#examples)
@@ -59,9 +61,55 @@ pip install -e .
 
 ## Usage
 
-### Convert to required format
+### Conversion to Markdown format
 
-TODO
+The tool requires two kinds of TRLC input sources for the conversion. These are the requirements (*.trlc) files and the model (*.tls) files. These input files are specified using one or more --source  or -s options followed by a file name or directory path. If a path is given, all files with a .trlc or .tls extension are read by the tool.
+
+```bash
+pyTRLCConverter --source doc/models --source doc/sw-requirement markdown
+```
+
+It will create a Markdown file with the same name as the requirements file (*.trlc) in the current directory, but with the Markdown extension (.md).
+
+If the requirements are split into several files, a Markdown file will be created for each.
+
+No additional Markdown converter specific arguments are supported yet.
+
+More examples are shown in the [examples folder](./examples/).
+
+### Conversion to docx format
+
+Similar to the Markdown conversion, minimal required are the requirements (*.trlc) and the model (*.tls). Both can be added by file name or just the path where they are located.
+
+```bash
+pyTRLCConverter --source doc/models --source doc/sw-requirement docx
+```
+
+It will create a docx file with default name ```output.docx``` in the current directory.
+
+If the requirements are split in several files, they will be all part of a single docx file.
+
+The docx converter supports additional arguments that are shown by adding the --help option after the docx subcommand.
+
+```bash
+pyTRLCConverter docx --help
+
+usage: pyTRLCConverter docx [-h] [-t TEMPLATE] [-n NAME]
+
+options:
+  -h, --help            show this help message and exit
+  -t TEMPLATE, --template TEMPLATE
+                        Load the given docx file as a template to append to.
+  -n NAME, --name NAME  Name of the generated output file inside the output folder (default = output.docx).
+```
+
+### Dump TRLC item list to console
+
+Mainly for development all TRLC items can be dumped to the console.
+
+```bash
+pyTRLCConverter --source doc/models --source doc/sw-requirement dump
+```
 
 ### Show tool version
 

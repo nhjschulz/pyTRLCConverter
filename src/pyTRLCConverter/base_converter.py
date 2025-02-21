@@ -37,7 +37,7 @@ class BaseConverter(AbstractConverter):
     Base converter with empty method implementations and helper functions 
     for subclassing converters.
     """
-    # converter specific sub parser
+    # Converter specific sub parser
     _parser = None
 
     def __init__(self, args: any) -> None:
