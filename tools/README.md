@@ -1,5 +1,11 @@
 # Tools
 
+## createTestReport
+
+Used to execute the tests and creating a test report including the coverage and test results.
+
+[Details](./createTestReport/README.md)
+
 ## lobster
 
 Used to create the traceability report on code and requirements base.
@@ -30,8 +36,8 @@ Used to generate static HTML files, which will be deployed on Github pages.
 
 [Details](./sphinx/README.md)
 
-## test2markdown
+## tc2markdown
 
 Used to convert the test cases written with TRLC to the Markdown format.
 
-[Details](./test2markdown/README.md)
+[Details](./tc2markdown/README.md)

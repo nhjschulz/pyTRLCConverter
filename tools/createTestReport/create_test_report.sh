@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# Copyright (c) 2024 - 2025 NewTec GmbH
+#
+# This file is part of pyTRLCConverter program.
+#
+# The pyTRLCConverter program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# The pyTRLCConverter program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with pyTRLCConverter.
+# If not, see <https://www.gnu.org/licenses/>.
+
+OUT_DIR="out"
+SRC_PATH="../../src"
+TESTS_PATH="../../tests"
+COVERAGE_REPORT="coverage.html"
+TEST_RESULT_REPORT_XML="test_result_report.xml"
+TEST_RESULT_REPORT_TRLC="test_result_report.trlc"
+
+if [ ! -d "$OUT_DIR" ]; then
+    mkdir -p "$OUT_DIR"
+fi
+
+# Create the test report and the coverage analysis.
+pytest "$TESTS_PATH" -v --cov="$SRC_PATH" --cov-report=term-missing --cov-report=html:"$OUT_DIR/$COVERAGE_REPORT" --junitxml="$OUT_DIR/$TEST_RESULT_REPORT_XML"
+
+# Convert XML test report to TRLC.
+python test_result_xml2trlc.py "./$OUT_DIR/$TEST_RESULT_REPORT_XML" "./$OUT_DIR/$TEST_RESULT_REPORT_TRLC"

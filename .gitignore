@@ -175,8 +175,9 @@ cython_debug/
 dev/
 
 # Requirement conversion output files
-tools/plantuml/plantuml.jar
+tools/createTestReport/out/
 tools/lobster/out/
+tools/plantuml/plantuml.jar
 tools/req2docx/out/
 tools/req2markdown/out/
 tools/test2markdown/out/

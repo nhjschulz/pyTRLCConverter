@@ -6,6 +6,13 @@ type SwTestCase {
     derived     SwRequirements.SwReq [0 .. *]
 }
 
-type SwTestSuite {
-    contains    SwTestCase [0 .. *]
+enum SwTestResult {
+    FAILED
+    PASSED
+}
+
+type SwTestCaseResult {
+    name    String
+    result  SwTestResult
+    relates SwTestCase
 }
