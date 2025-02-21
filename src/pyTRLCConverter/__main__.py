@@ -155,14 +155,14 @@ def main() -> int:
     project_converter = _get_project_converter()
 
     if project_converter is not None:
-        project_converter.register(args_sub_parser, project_converter)
+        project_converter.register(args_sub_parser)
         project_converter_cmd = project_converter.get_subcommand()
 
     # Load the built-in converters unless a project converter is replacing built-in.
     # lobster-trace: SwRequirements.sw_req_no_prj_spec
     for converter in BUILD_IN_CONVERTER_LIST:
         if converter.get_subcommand() != project_converter_cmd:
-            converter.register(args_sub_parser, converter)
+            converter.register(args_sub_parser)
 
 
     args = args_parser.parse_args()
