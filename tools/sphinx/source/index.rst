@@ -11,7 +11,7 @@ pyTRLCConverter is a command-line tool to convert TRLC files to different output
 .. uml:: ../../../doc/architecture/context_diagram.puml
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    sw_requirements
