@@ -36,6 +36,15 @@ def _test_report_write_header(fd):
         fd (TextIOWrapper[_WrappedBuffer]): File descriptor
     """
     fd.write('package SwTests\n\n')
+    fd.write('section "SW Test Results" {\n\n')
+
+def _test_report_write_footer(fd):
+    """Write test report footer.
+
+    Args:
+        fd (TextIOWrapper[_WrappedBuffer]): File descriptor
+    """
+    fd.write('}\n')
 
 def _test_report_write_test_case_result(fd, test_case_name, test_case_result, lobster_trace):
     """Write test case result to test report.
@@ -47,14 +56,14 @@ def _test_report_write_test_case_result(fd, test_case_name, test_case_result, lo
         lobster_trace (str|None): Test case id which is relates to the result.
     """
     test_case_id = test_case_name + "_result"
-    fd.write(f'SwTestCaseResult {test_case_id} {{\n')
-    fd.write(f'    name = "{test_case_name}"\n')
-    fd.write(f'    result = {test_case_result}\n')
+    fd.write(f'    SwTestCaseResult {test_case_id} {{\n')
+    fd.write(f'        name = "{test_case_name}"\n')
+    fd.write(f'        result = {test_case_result}\n')
 
     if lobster_trace is not None:
-        fd.write(f'    relates = {lobster_trace}\n')
+        fd.write(f'        relates = {lobster_trace}\n')
 
-    fd.write('}\n\n')
+    fd.write('    }\n\n')
 
 def convert_test_report(xml_file, output_file):
     """Convert test report from XML format to corresponding TRLC format
@@ -85,6 +94,8 @@ def convert_test_report(xml_file, output_file):
                         lobster_trace = prop.get('value')
 
             _test_report_write_test_case_result(fd, test_case_name, test_case_result, lobster_trace)
+
+        _test_report_write_footer(fd)
 
 # Main *************************************************************************
 

@@ -19,7 +19,7 @@
 OUT_DIR="out"
 SRC_PATH="../../src"
 TESTS_PATH="../../tests"
-COVERAGE_REPORT="coverage.html"
+COVERAGE_REPORT="coverage"
 TEST_RESULT_REPORT_XML="test_result_report.xml"
 TEST_RESULT_REPORT_TRLC="test_result_report.trlc"
 
@@ -32,3 +32,6 @@ pytest "$TESTS_PATH" -v --cov="$SRC_PATH" --cov-report=term-missing --cov-report
 
 # Convert XML test report to TRLC.
 python test_result_xml2trlc.py "./$OUT_DIR/$TEST_RESULT_REPORT_XML" "./$OUT_DIR/$TEST_RESULT_REPORT_TRLC"
+
+# Convert TRLC test report to Markdown.
+pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --source=../../doc/models --exclude=../../doc/sw-requirements --exclude=../../doc/sw-test --source=$OUT_DIR/$TEST_RESULT_REPORT_TRLC -o=$OUT_DIR --project=create_test_report.py --verbose markdown

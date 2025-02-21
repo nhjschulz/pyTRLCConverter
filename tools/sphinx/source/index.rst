@@ -18,6 +18,8 @@ pyTRLCConverter is a command-line tool to convert TRLC files to different output
    sw_tests
    sw_req_tracing_report
    sw_test_tracing_report
+   coverage_resport
+   sw_test_result_report
 
 License information
 -------------------

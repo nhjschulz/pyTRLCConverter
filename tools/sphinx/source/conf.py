@@ -67,3 +67,19 @@ else:
         raise ConfigError(
             f"The environment variable PLANTUML points to a not existing file {plantuml_env}."
         )
+
+import os
+import shutil
+
+def setup(app):
+    app.connect('builder-inited', copy_coverage_files)
+
+def copy_coverage_files(app):
+    source_dir = os.path.abspath('../createTestReport/out/coverage')
+    target_dir = os.path.join(app.outdir, 'coverage')
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+    for filename in os.listdir(source_dir):
+        full_file_name = os.path.join(source_dir, filename)
+        if os.path.isfile(full_file_name):
+            shutil.copy(full_file_name, target_dir)
