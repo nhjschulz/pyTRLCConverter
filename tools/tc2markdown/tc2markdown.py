@@ -56,7 +56,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, level + 1)
+        markdown_text = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_text)
 
         return Ret.OK
@@ -169,39 +169,12 @@ class CustomMarkDownConverter(MarkdownConverter):
             sw_test_case (Record_Object): Software test case to print
             level (int): Current level of the record object
         """
-        sw_test_case_attributes = sw_test_case.to_python_dict()
+        attribute_translation = {
+            "description": "Description",
+            "derived": "Derived"
+        }
 
-        description = self._get_attribute(sw_test_case, "description")
-
-        derived = "N/A"
-        if sw_test_case_attributes["derived"] is not None:
-            derived = ""
-            for idx, derived_req in enumerate(sw_test_case_attributes["derived"]):
-                if 0 < idx:
-                    derived += ", "
-
-                anchor_tag = "#" + \
-                    derived_req.replace("SwRequirements.", "").lower()
-                anchor_tag = anchor_tag.replace(" ", "-")
-
-                derived += self.markdown_create_link(derived_req, anchor_tag)
-
-        markdown_text = self.markdown_create_heading(
-            sw_test_case.name, level + 1)
-        self._fd.write(markdown_text)
-
-        self._print_table_head()
-
-        table = [
-            ["Description", self.markdown_escape(description)],
-            ["Derived", derived]
-        ]
-
-        for row in table:
-            markdown_table_row = self.markdown_append_table_row(row, False)
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        self._convert_record_object(sw_test_case, level, attribute_translation)
 
 # Functions ********************************************************************
 

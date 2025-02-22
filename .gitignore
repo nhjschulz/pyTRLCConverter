@@ -175,6 +175,11 @@ cython_debug/
 dev/
 
 # Requirement conversion output files
+examples/plantuml/out/
+examples/simple_req/out/
+examples/simple_req_multi/out/
+examples/simple_req_multi_single_out/out/
+examples/simple_req_proj_spec/out/
 tools/createTestReport/out/
 tools/lobster/out/
 tools/plantuml/plantuml.jar

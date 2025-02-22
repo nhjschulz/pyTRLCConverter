@@ -34,6 +34,9 @@ class DocxConverter(BaseConverter):
     """
     Converter to docx format.
     """
+
+    OUTPUT_FILE_NAME_DEFAULT = "output.docx"
+
     def __init__(self, args: any) -> None:
         # lobster-trace: SwRequirements.sw_req_no_prj_spec
         # lobster-trace: SwRequirements.sw_req_docx
@@ -90,9 +93,10 @@ class DocxConverter(BaseConverter):
             "-n",
             "--name",
             type=str,
-            default="output.docx",
+            default=DocxConverter.OUTPUT_FILE_NAME_DEFAULT,
             required=False,
-            help="Name of the generated output file inside the output folder (default = output.docx)."
+            help="Name of the generated output file inside the output folder " \
+                f"(default = {DocxConverter.OUTPUT_FILE_NAME_DEFAULT})."
         )
 
     def convert_section(self, section: str, level: int) -> Ret:

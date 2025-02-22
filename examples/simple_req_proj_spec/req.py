@@ -56,7 +56,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, level + 1)
+        markdown_text = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_text)
 
         return Ret.OK
@@ -97,23 +97,11 @@ class CustomMarkDownConverter(MarkdownConverter):
             req (Record_Object): Requirement to print
             level (int): Current level of the record object
         """
-        req_attributes = req.to_python_dict()
-        description = self._get_attribute(req, "description")
+        attribute_translation = {
+            "description": "Description"
+        }
 
-        markdown_text = self.markdown_create_heading(req.name, level + 1)
-        self._fd.write(markdown_text)
-
-        self._print_table_head()
-
-        table = [
-            ["Description", self.markdown_escape(description)]
-        ]
-
-        for row in table:
-            markdown_table_row = self.markdown_append_table_row(row, False)
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        self._convert_record_object(req, level, attribute_translation)
 
 # Functions ********************************************************************
 

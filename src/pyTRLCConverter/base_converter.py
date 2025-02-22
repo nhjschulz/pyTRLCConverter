@@ -40,6 +40,9 @@ class BaseConverter(AbstractConverter):
     # Converter specific sub parser
     _parser = None
 
+    # Default empty value
+    EMPTY_DEFAULT = "N/A"
+
     def __init__(self, args: any) -> None:
         """
         Initializes the converter with the given arguments.
@@ -48,6 +51,7 @@ class BaseConverter(AbstractConverter):
             args: The parsed program arguments.
         """
         self._args = args
+        self._empty = BaseConverter.EMPTY_DEFAULT
 
     @staticmethod
     def register(args_parser, cls: type) -> None:
@@ -62,6 +66,14 @@ class BaseConverter(AbstractConverter):
             help=cls.get_description()
         )
         BaseConverter._parser.set_defaults(converter_class=cls)
+
+    def begin(self) -> Ret:
+        """ Begin the conversion process.
+
+        Returns:
+            Ret: Status
+        """
+        return Ret.OK
 
     def enter_file(self, file_name: str) -> Ret:
         """Enter a file.
@@ -145,14 +157,13 @@ class BaseConverter(AbstractConverter):
 
         return calculated_path
 
-    def _get_attribute(self, record: Record_Object, attribute_name: str, default_value: str = "N/A") -> str:
+    def _get_attribute(self, record: Record_Object, attribute_name: str) -> str:
         """Get the attribute value from the record object.
-            If the attribute is not found, return the default value.
+            If the attribute is not found or empty, return the default value.
 
         Args:
             record (Record_Object): The record object
             attribute_name (str): The attribute name to get the value from.
-            default_value (str): The default value if the attribute is not found. Default is "N/A".
 
         Returns:
             str: The attribute value
@@ -161,7 +172,9 @@ class BaseConverter(AbstractConverter):
         attribute_value = record_dict[attribute_name]
 
         if attribute_value is None:
-            attribute_value = default_value
+            attribute_value = self._empty
+        elif attribute_value == "":
+            attribute_value = self._empty
 
         return attribute_value
 

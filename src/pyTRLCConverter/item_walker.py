@@ -68,6 +68,8 @@ class ItemWalker:  # pylint: disable=too-few-public-methods
         """
         result = Ret.OK
 
+        self._converter.begin()
+
         files_dict = get_file_dict_from_symbols(symbol_table)
         for file_name, item_list in files_dict.items():
             skip_it = False

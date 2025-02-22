@@ -22,10 +22,12 @@
 # Imports **********************************************************************
 import os
 import sys
-from typing import List
+from typing import List, Optional
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
+from pyTRLCConverter.log_verbose import log_verbose
+from trlc import trlc
 
 # Variables ********************************************************************
 
@@ -34,6 +36,9 @@ from pyTRLCConverter.trlc_helper import Record_Object
 class MarkdownConverter(BaseConverter):
     """MarkdownConverter provides functionality for converting to a markdown format.
     """
+
+    OUTPUT_FILE_NAME_DEFAULT = "output.md"
+    TOP_LEVEL_DEFAULT = "Specification"
 
     def __init__(self, args: any) -> None:
         # lobster-trace: SwRequirements.sw_req_no_prj_spec
@@ -44,6 +49,7 @@ class MarkdownConverter(BaseConverter):
 
         self._out_path = args.out
         self._fd = None
+        self._base_level = 1
 
     @staticmethod
     def get_subcommand() -> str:
@@ -65,6 +71,91 @@ class MarkdownConverter(BaseConverter):
         """
         return "Convert into markdown format."
 
+    @staticmethod
+    def register(args_parser, cls : type) -> None:
+        # lobster-trace: SwRequirements.sw_req_destination_format
+        """Register converter specific argument parser.
+
+        Args:
+            args_parser (object): Argument parser
+            cls (type): The class type to register
+        """
+        BaseConverter.register(args_parser, cls)
+
+        BaseConverter._parser.add_argument(
+            "-e",
+            "--empty",
+            type=str,
+            default=BaseConverter.EMPTY_DEFAULT,
+            required=False,
+            help="Every attribute value which is empty will output the string." \
+                f"(default = {BaseConverter.EMPTY_DEFAULT})."
+        )
+
+        BaseConverter._parser.add_argument(
+            "-n",
+            "--name",
+            type=str,
+            default=MarkdownConverter.OUTPUT_FILE_NAME_DEFAULT,
+            required=False,
+            help="Name of the generated output file inside the output folder " \
+                f"(default = {MarkdownConverter.OUTPUT_FILE_NAME_DEFAULT}) in " \
+                "case a single document is generated."
+        )
+
+        BaseConverter._parser.add_argument(
+            "-sd",
+            "--single-document",
+            action="store_true",
+            required=False,
+            default=False,
+            help="Generate a single document instead of multiple files. The default is to generate multiple files."
+        )
+
+        BaseConverter._parser.add_argument(
+            "-tl",
+            "--top-level",
+            type=str,
+            default=MarkdownConverter.TOP_LEVEL_DEFAULT,
+            required=False,
+            help="Name of the top level heading, required in single document mode. " \
+                f"(default = {MarkdownConverter.TOP_LEVEL_DEFAULT})"
+        )
+
+    def begin(self) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_markdown_file
+        """ Begin the conversion process.
+
+        Returns:
+            Ret: Status
+        """
+        result = Ret.OK
+
+        # Single document mode?
+        if self._args.single_document is True:
+            log_verbose("Single document mode.")
+        else:
+            log_verbose("Multiple document mode.")
+
+        # Set the value for empty attributes.
+        self._empty = self._args.empty
+
+        log_verbose(f"Empty value: {self._empty}")
+
+        assert self._fd is None
+
+        # Single document mode?
+        if self._args.single_document is True:
+            result = self._generate_out_file(self._args.name)
+
+            if self._fd is not None:
+                self._fd.write(MarkdownConverter.markdown_create_heading(self._args.top_level, 1))
+
+                # All headings will be shifted by one level.
+                self._base_level = self._base_level + 1
+
+        return result
+
     def enter_file(self, file_name: str) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_file
         """Enter a file.
@@ -75,8 +166,16 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        result = Ret.OK
 
-        return self._generate_out_file(file_name)
+        # Multiple document mode?
+        if self._args.single_document is False:
+            assert self._fd is None
+
+            file_name_md = self._file_name_trlc_to_md(file_name)
+            result = self._generate_out_file(file_name_md)
+
+        return result
 
     def leave_file(self, file_name: str) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_file
@@ -88,7 +187,10 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        if self._fd is not None:
+
+        # Multiple document mode?
+        if self._args.single_document is False:
+            assert self._fd is not None
             self._fd.close()
             self._fd = None
 
@@ -105,7 +207,7 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        self._fd.write(f"{'#' * (level + 1)} {section}\n\n")
+        self._fd.write(f"{'#' * (self._get_markdown_heading_level(level))} {section}\n\n")
 
         return Ret.OK
 
@@ -120,55 +222,222 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        record_attributes = record.to_python_dict()
+        return self._convert_record_object(record, level, None)
 
-        markdown_heading = self.markdown_create_heading(record.name, level + 1)
-        self._fd.write(markdown_heading)
+    def finish(self):
+        """Finish the conversion process.
+        """
 
-        column_titles = ["Attribute Name", "Attribute Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-        self._fd.write(markdown_table_head)
-
-        for key, value in record_attributes.items():
-            if value is None:
-                value = "N/A"
-
-            elif isinstance(value, list):
-                value = ", ".join(value)
-
-            markdown_table_row = self.markdown_append_table_row([key, value])
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        # Single document mode?
+        if self._args.single_document is True:
+            assert self._fd is not None
+            self._fd.close()
+            self._fd = None
 
         return Ret.OK
+
+    def _get_markdown_heading_level(self, level: int) -> int:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Get the Markdown heading level from the TRLC object level.
+            Its mandatory to use this method to calculate the Markdown heading level.
+            Otherwise in single document mode the top level heading will be wrong.
+
+        Args:
+            level (int): The TRLC object level.
+        
+        Returns:
+            int: Markdown heading level
+        """
+        return self._base_level + level
+
+    def _file_name_trlc_to_md(self, file_name_trlc: str) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_file
+        """Convert a TRLC file name to a Markdown file name.
+
+        Args:
+            file_name_trlc (str): TRLC file name
+        
+        Returns:
+            str: Markdown file name
+        """
+        file_name = os.path.basename(file_name_trlc)
+        file_name = os.path.splitext(file_name)[0] + ".md"
+
+        return file_name
 
     def _generate_out_file(self, file_name: str) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_out_folder
         """Generate the output file.
 
         Args:
-            file_name (str): File name of the input file.
+            file_name (str): File name which to use, without path.
             item_list ([Element]): List of elements.
 
         Returns:
             Ret: Status
         """
         result = Ret.OK
-        input_file_name = os.path.basename(file_name)
-        output_file_name = os.path.splitext(input_file_name)[0] + ".md"
+        file_name_with_path = file_name
 
         # Add path to the output file name.
         if 0 < len(self._out_path):
-            output_file_name = os.path.join(self._out_path, output_file_name)
+            file_name_with_path = os.path.join(self._out_path, file_name)
 
         try:
-            self._fd = open(output_file_name, "w", encoding="utf-8") #pylint: disable=consider-using-with
+            self._fd = open(file_name_with_path, "w", encoding="utf-8") #pylint: disable=consider-using-with
         except IOError as e:
-            print(f"Failed to open file {output_file_name}: {e}", file=sys.stderr)
+            print(f"Failed to open file {file_name_with_path}: {e}", file=sys.stderr)
             result = Ret.ERROR
 
         return result
+
+    def _on_implict_null(self, _) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Process the given implicit null value.
+        
+        Returns:
+            str: The implicit null value
+        """
+        return self._empty
+
+    def _on_array_aggregate(self, value: trlc.ast.Array_Aggregate) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Process the given array aggregate value.
+            It will process the array elements recursively.
+            Each element will be separated by a comma.
+
+        Args:
+            value (trlc.ast.Array_Aggregate): The array aggregate value.
+        
+        Returns:
+            str: A comma separated list of array element names or Markdown links.
+        """
+        result = ""
+
+        dispatcher_map = {
+            trlc.ast.Implicit_Null: self._on_implict_null,
+            trlc.ast.Array_Aggregate: self._on_array_aggregate,
+            trlc.ast.Record_Reference: self._on_record_reference
+        }
+
+        if len(value.value) > 0:
+            type_name = type(value.value[0])
+            if type_name in dispatcher_map:
+                for idx, item in enumerate(value.value):
+                    if idx > 0:
+                        result += ", "
+
+                    result += dispatcher_map[type_name](item)
+            else:
+                result = self.markdown_escape(value.to_python_object())
+
+        return result
+
+    def _on_record_reference(self, value: trlc.ast.Record_Reference) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Process the given record reference value and return a markdown link.
+
+        Args:
+            value (trlc.ast.Record_Reference): The record reference value.
+        
+        Returns:
+            str: Markdown link to the record reference.
+        """
+        return self._create_markdown_link_from_record_object_reference(value)
+
+    def _on_field(self, value: trlc.ast.Expression) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Process the given field value and return it as a string.
+            The main purpose is to handle arrays and record references explicitly.
+            A record reference will be converted into a markdown link.
+
+        Args:
+            value (trlc.ast.Expression): The field value
+        
+        Returns:
+            str: The field value
+        """
+        result = ""
+
+        dispatcher_map = {
+            trlc.ast.Implicit_Null: self._on_implict_null,
+            trlc.ast.Array_Aggregate: self._on_array_aggregate,
+            trlc.ast.Record_Reference: self._on_record_reference
+        }
+
+        type_name = type(value)
+        if type_name in dispatcher_map:
+            result = dispatcher_map[type_name](value)
+        else:
+            result = self.markdown_escape(value.to_python_object())
+
+        return result
+
+    def _create_markdown_link_from_record_object_reference(self, record_reference: trlc.ast.Record_Reference) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Create a Markdown link from a record reference.
+            It considers the file name, the package name, and the record name.
+
+        Args:
+            record_reference (trlc.ast.Record_Reference): Record reference
+
+        Returns:
+            str: Markdown link
+        """
+        file_name = ""
+
+        # Single document mode?
+        if self._args.single_document is True:
+            file_name = self._args.name
+
+        # Multiple document mode
+        else:
+            file_name = self._file_name_trlc_to_md(record_reference.location.file_name)
+
+        record_name = record_reference.target.name
+
+        anchor_tag = file_name + "#" + record_name.lower().replace(" ", "-")
+
+        return MarkdownConverter.markdown_create_link(record_reference.to_python_object(), anchor_tag)
+
+    def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """Process the given record object.
+
+        Args:
+            record (Record_Object): The record object.
+            level (int): The record level.
+            attribute_translation (Optional[dict]): Attribute translation (attribute name -> user friendly name).
+        
+        Returns:
+            Ret: Status
+        """
+        markdown_heading = self.markdown_create_heading(record.name, self._get_markdown_heading_level(level + 1))
+        self._fd.write(markdown_heading)
+
+        column_titles = ["Attribute Name", "Attribute Value"]
+        markdown_table_head = self.markdown_create_table_head(column_titles)
+        self._fd.write(markdown_table_head)
+
+        for name, value in record.field.items():
+            # Translate the attribute name if available.
+            attribute_name = name
+            if attribute_translation is not None:
+                if name in attribute_translation:
+                    attribute_name = attribute_translation[name]
+
+            attribute_name = self.markdown_escape(attribute_name)
+
+            # Retrieve the attribute value by processing the field value.
+            attribute_value = self._on_field(value)
+
+            # Write the attribute name and value to the Markdown table as row.
+            markdown_table_row = self.markdown_append_table_row([attribute_name, attribute_value], False)
+            self._fd.write(markdown_table_row)
+
+        self._fd.write("\n")
+
+        return Ret.OK
 
     @staticmethod
     def markdown_escape(text: str) -> str:
@@ -234,7 +503,7 @@ class MarkdownConverter(BaseConverter):
 
         table_head += "\n"
 
-        table_head += "|"
+        table_head += "| "
 
         for column_title in column_titles:
             column_title_raw = column_title

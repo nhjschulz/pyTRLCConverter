@@ -43,6 +43,15 @@ class AbstractConverter(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def begin(self) -> Ret:
+        """ Begin the conversion process.
+
+        Returns:
+            Ret: Status
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def enter_file(self, file_name : str) -> None:
         """Enter a file.
 
