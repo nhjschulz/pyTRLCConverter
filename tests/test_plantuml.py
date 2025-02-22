@@ -56,18 +56,22 @@ def plantuml_instance():
         return PlantUML()
 
 
-def test_make_server_url(plantuml_instance: PlantUML):
+def test_make_server_url(record_property: any, plantuml_instance: PlantUML):
+    # lobster-trace: SwTests.tc1
     """
     Test the _make_server_url method of the PlantUML instance.
     This test verifies that the _make_server_url method correctly generates
     the server URL for a given diagram type and path. It mocks the content
     of the diagram file and checks if the generated URL matches the expected URL.
     Args:
+        record_property (Any): Used to inject the test case reference into the test results.
         plantuml (PlantUML): An instance of the PlantUML class.
     Asserts:
         The generated URL starts with the expected base URL.
         The generated URL matches the expected URL.
     """
+    record_property("lobster-trace", "SwTests.tc1")
+    
     diagram_type = "svg"
     diagram_path = "test_diagram.puml"
     expected_url = "http://plantuml.com/plantuml/svg/SoWkIImgAStDuNBCoKnELT2rKt3AJx9Iy4ZDoSddSaZDIm7A0G0%3D"

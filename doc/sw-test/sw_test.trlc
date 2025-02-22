@@ -10,7 +10,12 @@ section "SW-Test" {
     }
 
     SwTestCase tc1 {
-        description = "Test"
+        description = "This test case ..."
         derived = [SwRequirements.sw_req_cli]
+    }
+
+    SwTestCase tc2 {
+        description = "This test case ..."
+        derived = [SwRequirements.sw_req_prj_spec]
     }
 }

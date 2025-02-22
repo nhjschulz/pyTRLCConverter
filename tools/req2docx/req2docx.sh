@@ -19,8 +19,6 @@
 cd ../plantuml
 chmod +x get_plantuml.sh
 . ./get_plantuml.sh
-PLANTUML="$(dirname "$0")/../plantuml/plantuml.jar"
-export PLANTUML
 cd ../req2docx
 
 if [ ! -d "out" ]; then

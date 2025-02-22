@@ -1,11 +1,35 @@
-# Configuration file for the Sphinx documentation builder.
+"""Configuration file for the Sphinx documentation builder.
+
+    For the full list of built-in configuration values, see the documentation:
+    https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""
+
+# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# Copyright (c) 2024 - 2025 NewTec GmbH
 #
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+# This file is part of pyTRLCConverter program.
+#
+# The pyTRLCConverter program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# The pyTRLCConverter program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with pyTRLCConverter.
+# If not, see <https://www.gnu.org/licenses/>.
+
+# Imports **********************************************************************
 import os
+import shutil
 
 from urllib.parse import urlparse
 from sphinx.errors import ConfigError
+
+# pylint: skip-file
+
+# Variables ********************************************************************
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -51,6 +75,36 @@ html_logo = '../../../doc/images/NewTec_Logo.png'
 # PlantUML is called OS depended and the java jar file is provided by environment variable.
 plantuml_env = os.getenv('PLANTUML')
 plantuml = []
+
+# Classes **********************************************************************
+
+# Functions ********************************************************************
+
+def setup(app: any) -> None:
+    """Setup sphinx.
+
+    Args:
+        app (any): The sphinx application.
+    """
+    app.connect('builder-inited', copy_coverage_files)
+
+def copy_coverage_files(app: any) -> None:
+    """Copy coverage files to the output directory.
+
+    Args:
+        app (any): The sphinx application.
+    """
+    source_dir = os.path.abspath('../createTestReport/out/coverage')
+    target_dir = os.path.join(app.outdir, 'coverage')
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+    for filename in os.listdir(source_dir):
+        full_file_name = os.path.join(source_dir, filename)
+        if os.path.isfile(full_file_name):
+            print(f'Copy {full_file_name} to {target_dir}\n')
+            shutil.copy(full_file_name, target_dir)
+
+# Main *************************************************************************
 
 if plantuml_env is None:
     raise ConfigError(

@@ -16,7 +16,8 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-PLANTUML="$(dirname "$0")/plantuml.jar"
+DIR=$(dirname `realpath "$_"`)
+PLANTUML="$DIR/plantuml.jar"
 export PLANTUML
 
 if [ ! -f "$PLANTUML" ]; then

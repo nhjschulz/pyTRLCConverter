@@ -41,9 +41,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Analysing the requirements with TRLC
+      - name: Analysing the requirements and test cases with TRLC
         run: |
-          trlc ./doc/models ./doc/sw-requirements
+          trlc ./doc/models ./doc/sw-requirements ./doc/sw-test
 
       - name: Build tracing report
         run: |

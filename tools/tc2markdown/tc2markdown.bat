@@ -18,7 +18,7 @@ rem If not, see <https://www.gnu.org/licenses/>.
 
 cd ..\plantuml
 call get_plantuml.bat
-cd ..\test2markdown
+cd ..\tc2markdown
 
 if not exist "out" (
     md out
@@ -35,8 +35,4 @@ if not exist %SW_TEST_OUT_DIR% (
 )
 
 echo Generate software tests ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% --verbose --project=test2markdown %SW_TEST_OUT_FORMAT%
-
-if errorlevel 1 (
-    pause
-)
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% --verbose --project=tc2markdown %SW_TEST_OUT_FORMAT%
