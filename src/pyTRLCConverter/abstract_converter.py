@@ -33,11 +33,11 @@ class AbstractConverter(ABC):
     """Abstract converter interface.
     """
     @classmethod
-    def register(cls, args_parser) -> None:
+    def register(cls, args_parser: any) -> None:
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
+            args_parser (any): Argument parser
         """
         raise NotImplementedError
 

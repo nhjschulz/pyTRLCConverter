@@ -44,6 +44,9 @@ class MarkdownConverter(BaseConverter):
         # lobster-trace: SwRequirements.sw_req_no_prj_spec
         # lobster-trace: SwRequirements.sw_req_markdown
         """Initializes the converter.
+
+        Args:
+            args (any): The parsed program arguments.
         """
         super().__init__(args)
 
@@ -71,16 +74,15 @@ class MarkdownConverter(BaseConverter):
         """
         return "Convert into markdown format."
 
-    @staticmethod
-    def register(args_parser, cls : type) -> None:
+    @classmethod
+    def register(cls, args_parser: any) -> None:
         # lobster-trace: SwRequirements.sw_req_destination_format
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
-            cls (type): The class type to register
+            args_parser (any): Argument parser
         """
-        BaseConverter.register(args_parser, cls)
+        super().register(args_parser)
 
         BaseConverter._parser.add_argument(
             "-e",

@@ -43,6 +43,9 @@ class DocxConverter(BaseConverter):
         # lobster-trace: SwRequirements.sw_req_docx_template
         """
         Initialize the docx converter.
+
+        Args:
+            args (any): The parsed program arguments.
         """
         super().__init__(args)
 
@@ -72,12 +75,12 @@ class DocxConverter(BaseConverter):
         return "Convert into docx format."
 
     @classmethod
-    def register(cls, args_parser) -> None:
+    def register(cls, args_parser: any) -> None:
         # lobster-trace: SwRequirements.sw_req_destination_format
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
+            args_parser (any): Argument parser
         """
         super().register(args_parser)
 

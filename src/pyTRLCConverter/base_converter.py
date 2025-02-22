@@ -48,17 +48,17 @@ class BaseConverter(AbstractConverter):
         Initializes the converter with the given arguments.
 
         Args:
-            args: The parsed program arguments.
+            args (any): The parsed program arguments.
         """
         self._args = args
         self._empty = BaseConverter.EMPTY_DEFAULT
 
     @classmethod
-    def register(cls, args_parser) -> None:
+    def register(cls, args_parser: any) -> None:
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
+            args_parser (any): Argument parser
         """
         BaseConverter._parser = args_parser.add_parser(
             cls.get_subcommand(),
