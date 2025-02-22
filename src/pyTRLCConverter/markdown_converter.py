@@ -395,7 +395,7 @@ class MarkdownConverter(BaseConverter):
 
         # Multiple document mode
         else:
-            file_name = self._file_name_trlc_to_md(record_reference.location.file_name)
+            file_name = self._file_name_trlc_to_md(record_reference.target.location.file_name)
 
         record_name = record_reference.target.name
 
