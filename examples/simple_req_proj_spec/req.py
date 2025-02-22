@@ -3,7 +3,7 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -20,10 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-import os
-import shutil
 from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.plantuml import PlantUML
 
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.trlc_helper import Record_Object

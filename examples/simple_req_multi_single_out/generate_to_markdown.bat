@@ -1,6 +1,6 @@
 @echo off
 
-rem pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+rem pyTRLCConverter - A tool to convert TRLC files to specific formats.
 rem Copyright (c) 2024 - 2025 NewTec GmbH
 rem
 rem This file is part of the pyTRLCConverter program.
