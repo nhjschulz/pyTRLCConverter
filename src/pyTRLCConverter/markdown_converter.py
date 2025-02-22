@@ -227,6 +227,7 @@ class MarkdownConverter(BaseConverter):
         return self._convert_record_object(record, level, None)
 
     def finish(self):
+        # lobster-trace: SwRequirements.sw_req_markdown_file
         """Finish the conversion process.
         """
 
