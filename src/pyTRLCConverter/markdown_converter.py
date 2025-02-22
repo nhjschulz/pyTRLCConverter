@@ -209,7 +209,8 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        self._fd.write(f"{'#' * (self._get_markdown_heading_level(level))} {section}\n\n")
+        markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
+        self._fd.write(markdown_heading)
 
         return Ret.OK
 
@@ -506,13 +507,15 @@ class MarkdownConverter(BaseConverter):
 
         table_head += "\n"
 
-        table_head += "| "
+        table_head += "|"
 
         for column_title in column_titles:
             column_title_raw = column_title
 
             if escape is True:
                 column_title_raw = MarkdownConverter.markdown_escape(column_title)
+
+            table_head += " "
 
             for _ in range(len(column_title_raw)):
                 table_head += "-"

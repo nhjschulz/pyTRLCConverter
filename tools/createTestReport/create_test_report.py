@@ -61,8 +61,8 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
-        self._fd.write(markdown_text)
+        markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
+        self._fd.write(markdown_heading)
 
         return Ret.OK
 
