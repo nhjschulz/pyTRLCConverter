@@ -53,13 +53,12 @@ class BaseConverter(AbstractConverter):
         self._args = args
         self._empty = BaseConverter.EMPTY_DEFAULT
 
-    @staticmethod
-    def register(args_parser, cls: type) -> None:
+    @classmethod
+    def register(cls, args_parser) -> None:
         """Register converter specific argument parser.
 
         Args:
             args_parser (object): Argument parser
-            cls (type): The class type to register
         """
         BaseConverter._parser = args_parser.add_parser(
             cls.get_subcommand(),

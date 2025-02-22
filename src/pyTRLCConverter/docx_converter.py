@@ -71,16 +71,16 @@ class DocxConverter(BaseConverter):
         """
         return "Convert into docx format."
 
-    @staticmethod
-    def register(args_parser, cls : type) -> None:
+    @classmethod
+    def register(cls, args_parser) -> None:
         # lobster-trace: SwRequirements.sw_req_destination_format
         """Register converter specific argument parser.
 
         Args:
             args_parser (object): Argument parser
-            cls (type): The class type to register
         """
-        BaseConverter.register(args_parser, cls)
+        super().register(args_parser)
+
         BaseConverter._parser.add_argument(
             "-t",
             "--template",
