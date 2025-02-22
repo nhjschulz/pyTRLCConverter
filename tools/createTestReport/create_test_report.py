@@ -20,10 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-import os
-import shutil
 from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.plantuml import PlantUML
 
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -34,7 +31,8 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 
 class CustomMarkDownConverter(MarkdownConverter):
-    """Custom Project specific Markdown Converter.
+    """Custom Project specific Markdown Converter responsible for converting the
+        SW test case results into Markdown format.
     """
 
     def __init__(self, args: any) -> None:
@@ -51,7 +49,7 @@ class CustomMarkDownConverter(MarkdownConverter):
          Returns:
             str: Converter description
         """
-        return "Convert into project extended markdown format."
+        return "Convert SW test case results to Markdown format."
 
     def convert_section(self, section: str, level: int) -> Ret:
         """Converts a section to Markdown format.

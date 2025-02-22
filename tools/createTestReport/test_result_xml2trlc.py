@@ -22,6 +22,7 @@
 # Imports **********************************************************************
 import sys
 import xml.etree.ElementTree as ET
+from typing import IO, Optional
 
 # Variables ********************************************************************
 
@@ -29,31 +30,32 @@ import xml.etree.ElementTree as ET
 
 # Functions ********************************************************************
 
-def _test_report_write_header(fd):
+def _test_report_write_header(fd: IO) -> None:
     """Write test report header.
 
     Args:
-        fd (TextIOWrapper[_WrappedBuffer]): File descriptor
+        fd (IO): File descriptor
     """
     fd.write('package SwTests\n\n')
     fd.write('section "SW Test Results" {\n\n')
 
-def _test_report_write_footer(fd):
+def _test_report_write_footer(fd: IO) -> None:
     """Write test report footer.
 
     Args:
-        fd (TextIOWrapper[_WrappedBuffer]): File descriptor
+        fd (IO): File descriptor
     """
     fd.write('}\n')
 
-def _test_report_write_test_case_result(fd, test_case_name, test_case_result, lobster_trace):
+# pylint: disable=line-too-long
+def _test_report_write_test_case_result(fd: IO, test_case_name: str, test_case_result: str, lobster_trace: Optional[str]) -> None:
     """Write test case result to test report.
 
     Args:
-        fd (TextIOWrapper[_WrappedBuffer]): File descriptor
+        fd (IO): File descriptor
         test_case_name (str): Name of the test case.
         test_case_result (str): Result of the test case (passed/failed).
-        lobster_trace (str|None): Test case id which is relates to the result.
+        lobster_trace (Optional[str]): Test case id which is relates to the result.
     """
     test_case_id = test_case_name + "_result"
     fd.write(f'    SwTestCaseResult {test_case_id} {{\n')
@@ -65,13 +67,13 @@ def _test_report_write_test_case_result(fd, test_case_name, test_case_result, lo
 
     fd.write('    }\n\n')
 
-def convert_test_report(xml_file, output_file):
+def convert_test_report(xml_file: str, output_file: str) -> None:
     """Convert test report from XML format to corresponding TRLC format
         by considering the project specific defined TRLC model.
 
     Args:
-        xml_file (_type_): The test report in XML format.
-        output_file (_type_): The test report in TRLC format.
+        xml_file (str): The test report in XML format.
+        output_file (str): The test report in TRLC format.
     """
     tree = ET.parse(xml_file)
     root = tree.getroot()
