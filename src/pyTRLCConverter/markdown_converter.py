@@ -23,11 +23,11 @@
 import os
 import sys
 from typing import List, Optional
+from trlc import trlc
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
 from pyTRLCConverter.log_verbose import log_verbose
-from trlc import trlc
 
 # Variables ********************************************************************
 
