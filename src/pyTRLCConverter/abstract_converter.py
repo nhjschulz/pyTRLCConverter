@@ -3,7 +3,7 @@
 Author: Norbert Schulz (norbert.schulz@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -33,11 +33,20 @@ class AbstractConverter(ABC):
     """Abstract converter interface.
     """
     @classmethod
-    def register(cls, args_parser) -> None:
+    def register(cls, args_parser: any) -> None:
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
+            args_parser (any): Argument parser
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def begin(self) -> Ret:
+        """ Begin the conversion process.
+
+        Returns:
+            Ret: Status
         """
         raise NotImplementedError
 

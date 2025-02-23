@@ -3,7 +3,7 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -61,8 +61,12 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, level + 1)
-        self._fd.write(markdown_text)
+        assert len(section) > 0
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
+        markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
+        self._fd.write(markdown_heading)
 
         return Ret.OK
 
@@ -77,6 +81,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
 
         if record.n_typ.name == "SwTestCaseResult":
             self._print_test_case_result(record, level)

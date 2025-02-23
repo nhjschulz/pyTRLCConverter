@@ -5,7 +5,7 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -139,6 +139,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     # lobster-trace: SwRequirements.sw_req_cli
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Main program entry point.
 
     Returns:

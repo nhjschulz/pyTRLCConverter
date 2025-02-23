@@ -3,7 +3,7 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -56,8 +56,12 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, level + 1)
-        self._fd.write(markdown_text)
+        assert len(section) > 0
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
+        markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
+        self._fd.write(markdown_heading)
 
         return Ret.OK
 
@@ -72,6 +76,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
 
         if record.n_typ.name == "Diagram":
             self._print_diagram(record, level)
@@ -87,14 +94,6 @@ class CustomMarkDownConverter(MarkdownConverter):
             pass
 
         return Ret.OK
-
-    def _print_table_head(self) -> None:
-        """Prints the table head for software requirements and constraints.
-        """
-        column_titles = ["Attribute", "Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-
-        self._fd.write(markdown_table_head)
 
     # pylint: disable=unused-argument
     def _print_diagram(self, diagram: Record_Object, level: int) -> None:
@@ -160,7 +159,7 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         markdown_info = self.markdown_escape(description)
         self._fd.write(markdown_info)
-        self._fd.write("\n\n")
+        self._fd.write("\n")
 
     def _print_sw_test_case(self, sw_test_case: Record_Object, level: int) -> None:
         """Prints the software test case.
@@ -169,39 +168,12 @@ class CustomMarkDownConverter(MarkdownConverter):
             sw_test_case (Record_Object): Software test case to print
             level (int): Current level of the record object
         """
-        sw_test_case_attributes = sw_test_case.to_python_dict()
+        attribute_translation = {
+            "description": "Description",
+            "derived": "Derived"
+        }
 
-        description = self._get_attribute(sw_test_case, "description")
-
-        derived = "N/A"
-        if sw_test_case_attributes["derived"] is not None:
-            derived = ""
-            for idx, derived_req in enumerate(sw_test_case_attributes["derived"]):
-                if 0 < idx:
-                    derived += ", "
-
-                anchor_tag = "#" + \
-                    derived_req.replace("SwRequirements.", "").lower()
-                anchor_tag = anchor_tag.replace(" ", "-")
-
-                derived += self.markdown_create_link(derived_req, anchor_tag)
-
-        markdown_text = self.markdown_create_heading(
-            sw_test_case.name, level + 1)
-        self._fd.write(markdown_text)
-
-        self._print_table_head()
-
-        table = [
-            ["Description", self.markdown_escape(description)],
-            ["Derived", derived]
-        ]
-
-        for row in table:
-            markdown_table_row = self.markdown_append_table_row(row, False)
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        self._convert_record_object(sw_test_case, level, attribute_translation)
 
 # Functions ********************************************************************
 

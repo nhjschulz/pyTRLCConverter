@@ -71,9 +71,23 @@ pyTRLCConverter --source doc/models --source doc/sw-requirement markdown
 
 It will create a Markdown file with the same name as the requirements file (\*.trlc) in the current directory, but with the Markdown extension (.md).
 
-If the requirements are split into several files, a Markdown file will be created for each.
+If the requirements are split into several files, a Markdown file will be created for each. To generate a single Markdown file the argument --single-document can be used, which will create an ```output.md``` file by default.
 
-No additional Markdown converter specific arguments are supported yet.
+The converter supports additional arguments that are shown by adding the --help option after the markdown subcommand.
+
+```bash
+pyTRLCConverter markdown --help
+
+usage: pyTRLCConverter markdown [-h] [-n NAME] [-sd] [-tl TOP_LEVEL]
+
+options:
+  -h, --help            show this help message and exit
+  -n NAME, --name NAME  Name of the generated output file inside the output folder (default = output.md) in case a single document is generated.
+  -sd, --single-document
+                        Generate a single document instead of multiple files. The default is to generate multiple files.
+  -tl TOP_LEVEL, --top-level TOP_LEVEL
+                        Name of the top level heading, required in single document mode. (default = Specification)
+```
 
 More examples are shown in the [examples folder](./examples/).
 
@@ -89,7 +103,7 @@ It will create a docx file with default name ```output.docx``` in the current di
 
 If the requirements are split in several files, they will be all part of a single docx file.
 
-The docx converter supports additional arguments that are shown by adding the --help option after the docx subcommand.
+The converter supports additional arguments that are shown by adding the --help option after the docx subcommand.
 
 ```bash
 pyTRLCConverter docx --help

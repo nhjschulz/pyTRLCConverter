@@ -3,7 +3,7 @@
     Author: Norbert Schulz (norbert.schulz@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -34,12 +34,18 @@ class DocxConverter(BaseConverter):
     """
     Converter to docx format.
     """
+
+    OUTPUT_FILE_NAME_DEFAULT = "output.docx"
+
     def __init__(self, args: any) -> None:
         # lobster-trace: SwRequirements.sw_req_no_prj_spec
         # lobster-trace: SwRequirements.sw_req_docx
         # lobster-trace: SwRequirements.sw_req_docx_template
         """
         Initialize the docx converter.
+
+        Args:
+            args (any): The parsed program arguments.
         """
         super().__init__(args)
 
@@ -50,7 +56,7 @@ class DocxConverter(BaseConverter):
 
     @staticmethod
     def get_subcommand() -> str:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+        # lobster-trace: SwRequirements.sw_req_docx
         """ Return subcommand token for this converter.
 
         Returns:
@@ -60,7 +66,7 @@ class DocxConverter(BaseConverter):
 
     @staticmethod
     def get_description() -> str:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+        # lobster-trace: SwRequirements.sw_req_docx
         """ Return converter description.
         
         Returns:
@@ -69,12 +75,12 @@ class DocxConverter(BaseConverter):
         return "Convert into docx format."
 
     @classmethod
-    def register(cls, args_parser) -> None:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+    def register(cls, args_parser: any) -> None:
+        # lobster-trace: SwRequirements.sw_req_docx
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
+            args_parser (any): Argument parser
         """
         super().register(args_parser)
 
@@ -90,9 +96,10 @@ class DocxConverter(BaseConverter):
             "-n",
             "--name",
             type=str,
-            default="output.docx",
+            default=DocxConverter.OUTPUT_FILE_NAME_DEFAULT,
             required=False,
-            help="Name of the generated output file inside the output folder (default = output.docx)."
+            help="Name of the generated output file inside the output folder " \
+                f"(default = {DocxConverter.OUTPUT_FILE_NAME_DEFAULT})."
         )
 
     def convert_section(self, section: str, level: int) -> Ret:

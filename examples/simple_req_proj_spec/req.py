@@ -3,7 +3,7 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -20,10 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-import os
-import shutil
 from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.plantuml import PlantUML
 
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -56,7 +53,11 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, level + 1)
+        assert len(section) > 0
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
+        markdown_text = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_text)
 
         return Ret.OK
@@ -72,6 +73,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
 
         if record.n_typ.name == "Requirement":
             self._print_req(record, level)
@@ -82,14 +86,6 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         return Ret.OK
 
-    def _print_table_head(self) -> None:
-        """Prints the table head for software requirements and constraints.
-        """
-        column_titles = ["Attribute", "Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-
-        self._fd.write(markdown_table_head)
-
     def _print_req(self, req: Record_Object, level: int) -> None:
         """Prints the requirement.
 
@@ -97,23 +93,11 @@ class CustomMarkDownConverter(MarkdownConverter):
             req (Record_Object): Requirement to print
             level (int): Current level of the record object
         """
-        req_attributes = req.to_python_dict()
-        description = self._get_attribute(req, "description")
+        attribute_translation = {
+            "description": "Description"
+        }
 
-        markdown_text = self.markdown_create_heading(req.name, level + 1)
-        self._fd.write(markdown_text)
-
-        self._print_table_head()
-
-        table = [
-            ["Description", self.markdown_escape(description)]
-        ]
-
-        for row in table:
-            markdown_table_row = self.markdown_append_table_row(row, False)
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        self._convert_record_object(req, level, attribute_translation)
 
 # Functions ********************************************************************
 

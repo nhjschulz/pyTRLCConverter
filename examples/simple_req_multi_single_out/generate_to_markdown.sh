@@ -16,27 +16,9 @@
 # You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 # If not, see <https://www.gnu.org/licenses/>.
 
-cd ../plantuml
-chmod +x get_plantuml.sh
-. ./get_plantuml.sh
-cd ../req2docx
+OUT_PATH=./out
 
-if [ ! -d "out" ]; then
-    mkdir out
-fi
-
-# ****************************************************************************************************
-# Software Requirements
-# ****************************************************************************************************
-SWE_REQ_OUT_FORMAT="docx"
-SWE_REQ_OUT_DIR="./out/sw-requirements/$SWE_REQ_OUT_FORMAT"
-
-if [ ! -d "$SWE_REQ_OUT_DIR" ]; then
-    mkdir -p "$SWE_REQ_OUT_DIR"
-fi
-
-echo "Generate software requirements ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/models --verbose -o="$SWE_REQ_OUT_DIR"  --project=custom_docx  "$SWE_REQ_OUT_FORMAT" --template ACME.docx
+pyTRLCConverter --source=. --out=$OUT_PATH markdown --single-document
 
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."

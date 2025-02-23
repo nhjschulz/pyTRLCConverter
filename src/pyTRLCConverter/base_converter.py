@@ -3,7 +3,7 @@
     Author: Norbert Schulz (norbert.schulz@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -40,27 +40,43 @@ class BaseConverter(AbstractConverter):
     # Converter specific sub parser
     _parser = None
 
+    # Default value used to replace empty attribute values.
+    EMPTY_ATTRIBUTE_DEFAULT = "N/A"
+
     def __init__(self, args: any) -> None:
         """
         Initializes the converter with the given arguments.
 
         Args:
-            args: The parsed program arguments.
+            args (any): The parsed program arguments.
         """
+
+        # Store the command line arguments.
         self._args = args
 
+        # Set the default value for empty attributes.
+        self._empty_attribute_value = BaseConverter.EMPTY_ATTRIBUTE_DEFAULT
+
     @classmethod
-    def register(cls, args_parser) -> None:
+    def register(cls, args_parser: any) -> None:
         """Register converter specific argument parser.
 
         Args:
-            args_parser (object): Argument parser
+            args_parser (any): Argument parser
         """
         BaseConverter._parser = args_parser.add_parser(
             cls.get_subcommand(),
             help=cls.get_description()
         )
         BaseConverter._parser.set_defaults(converter_class=cls)
+
+    def begin(self) -> Ret:
+        """ Begin the conversion process.
+
+        Returns:
+            Ret: Status
+        """
+        return Ret.OK
 
     def enter_file(self, file_name: str) -> Ret:
         """Enter a file.
@@ -144,14 +160,13 @@ class BaseConverter(AbstractConverter):
 
         return calculated_path
 
-    def _get_attribute(self, record: Record_Object, attribute_name: str, default_value: str = "N/A") -> str:
+    def _get_attribute(self, record: Record_Object, attribute_name: str) -> str:
         """Get the attribute value from the record object.
-            If the attribute is not found, return the default value.
+            If the attribute is not found or empty, return the default value.
 
         Args:
             record (Record_Object): The record object
             attribute_name (str): The attribute name to get the value from.
-            default_value (str): The default value if the attribute is not found. Default is "N/A".
 
         Returns:
             str: The attribute value
@@ -160,7 +175,9 @@ class BaseConverter(AbstractConverter):
         attribute_value = record_dict[attribute_name]
 
         if attribute_value is None:
-            attribute_value = default_value
+            attribute_value = self._empty_attribute_value
+        elif attribute_value == "":
+            attribute_value = self._empty_attribute_value
 
         return attribute_value
 

@@ -3,7 +3,7 @@
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
 
-# pyTRLCConverter - A tool to convert PlantUML diagrams to image files.
+# pyTRLCConverter - A tool to convert TRLC files to specific formats.
 # Copyright (c) 2024 - 2025 NewTec GmbH
 #
 # This file is part of pyTRLCConverter program.
@@ -56,8 +56,12 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
-        markdown_text = self.markdown_create_heading(section, level + 1)
-        self._fd.write(markdown_text)
+        assert len(section) > 0
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
+        markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
+        self._fd.write(markdown_heading)
 
         return Ret.OK
 
@@ -72,6 +76,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
 
         if record.n_typ.name == "Diagram":
             self._print_diagram(record, level)
@@ -93,14 +100,6 @@ class CustomMarkDownConverter(MarkdownConverter):
             pass
 
         return Ret.OK
-
-    def _print_table_head(self) -> None:
-        """Prints the table head for software requirements and constraints.
-        """
-        column_titles = ["Attribute", "Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-
-        self._fd.write(markdown_table_head)
 
     # pylint: disable=unused-argument
     def _print_diagram(self, diagram: Record_Object, level: int) -> None:
@@ -175,42 +174,14 @@ class CustomMarkDownConverter(MarkdownConverter):
             sw_req (Record_Object): Software requirement to print
             level (int): Current level of the record object
         """
-        sw_req_attributes = sw_req.to_python_dict()
+        attribute_translation = {
+            "description": "Description",
+            "note": "Note",
+            "verification_criteria": "Verification Criteria",
+            "derived": "Derived"
+        }
 
-        description = self._get_attribute(sw_req, "description")
-        note = self._get_attribute(sw_req, "note")
-        verification_criteria = self._get_attribute(sw_req, "verification_criteria")
-
-        derived = "N/A"
-        if sw_req_attributes["derived"] is not None:
-            derived = ""
-            for idx, derived_req in enumerate(sw_req_attributes["derived"]):
-                if 0 < idx:
-                    derived += ", "
-
-                anchor_tag = "#" + \
-                    derived_req.replace("SwRequirements.", "").lower()
-                anchor_tag = anchor_tag.replace(" ", "-")
-
-                derived += self.markdown_create_link(derived_req, anchor_tag)
-
-        markdown_text = self.markdown_create_heading(sw_req.name, level + 1)
-        self._fd.write(markdown_text)
-
-        self._print_table_head()
-
-        table = [
-            ["Description", self.markdown_escape(description)],
-            ["Verification Criteria", self.markdown_escape(verification_criteria)],
-            ["Note", self.markdown_escape(note)],
-            ["Derived", derived]
-        ]
-
-        for row in table:
-            markdown_table_row = self.markdown_append_table_row(row, False)
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        self._convert_record_object(sw_req, level, attribute_translation)
 
     def _print_sw_constraint(self, sw_constraint: Record_Object, level: int) -> None:
         """Prints the software constraint.
@@ -219,25 +190,13 @@ class CustomMarkDownConverter(MarkdownConverter):
             sw_constraint (Record_Object): Software constraint to print
             level (int): Current level of the record object
         """
-        sw_constraint_id = sw_constraint.name
-        description = self._get_attribute(sw_constraint, "description")
-        note = self._get_attribute(sw_constraint, "note")
+        attribute_translation = {
+            "description": "Description",
+            "note": "Note",
+            "derived": "Derived"
+        }
 
-        markdown_text = self.markdown_create_heading(sw_constraint_id, level + 1)
-        self._fd.write(markdown_text)
-
-        self._print_table_head()
-
-        table = [
-            ["Description", description],
-            ["Note", note]
-        ]
-
-        for row in table:
-            markdown_table_row = self.markdown_append_table_row(row)
-            self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
+        self._convert_record_object(sw_constraint, level, attribute_translation)
 
 # Functions ********************************************************************
 
