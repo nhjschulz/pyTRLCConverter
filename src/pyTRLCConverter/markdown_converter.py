@@ -109,10 +109,10 @@ class MarkdownConverter(BaseConverter):
             "-e",
             "--empty",
             type=str,
-            default=BaseConverter.EMPTY_DEFAULT,
+            default=BaseConverter.EMPTY_ATTRIBUTE_DEFAULT,
             required=False,
             help="Every attribute value which is empty will output the string." \
-                f"(default = {BaseConverter.EMPTY_DEFAULT})."
+                f"(default = {BaseConverter.EMPTY_ATTRIBUTE_DEFAULT})."
         )
 
         BaseConverter._parser.add_argument(
@@ -165,9 +165,9 @@ class MarkdownConverter(BaseConverter):
             log_verbose("Multiple document mode.")
 
         # Set the value for empty attributes.
-        self._empty = self._args.empty
+        self._empty_attribute_value = self._args.empty
 
-        log_verbose(f"Empty value: {self._empty}")
+        log_verbose(f"Empty attribute value: {self._empty_attribute_value}")
 
         # Single document mode?
         if self._args.single_document is True:
@@ -354,7 +354,7 @@ class MarkdownConverter(BaseConverter):
         Returns:
             str: The implicit null value
         """
-        return self._empty
+        return self._empty_attribute_value
 
     def _on_array_aggregate(self, value: trlc.ast.Array_Aggregate) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_record

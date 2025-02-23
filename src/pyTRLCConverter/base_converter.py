@@ -40,8 +40,8 @@ class BaseConverter(AbstractConverter):
     # Converter specific sub parser
     _parser = None
 
-    # Default empty value
-    EMPTY_DEFAULT = "N/A"
+    # Default value used to replace empty attribute values.
+    EMPTY_ATTRIBUTE_DEFAULT = "N/A"
 
     def __init__(self, args: any) -> None:
         """
@@ -50,8 +50,12 @@ class BaseConverter(AbstractConverter):
         Args:
             args (any): The parsed program arguments.
         """
+
+        # Store the command line arguments.
         self._args = args
-        self._empty = BaseConverter.EMPTY_DEFAULT
+
+        # Set the default value for empty attributes.
+        self._empty_attribute_value = BaseConverter.EMPTY_ATTRIBUTE_DEFAULT
 
     @classmethod
     def register(cls, args_parser: any) -> None:
@@ -171,9 +175,9 @@ class BaseConverter(AbstractConverter):
         attribute_value = record_dict[attribute_name]
 
         if attribute_value is None:
-            attribute_value = self._empty
+            attribute_value = self._empty_attribute_value
         elif attribute_value == "":
-            attribute_value = self._empty
+            attribute_value = self._empty_attribute_value
 
         return attribute_value
 
