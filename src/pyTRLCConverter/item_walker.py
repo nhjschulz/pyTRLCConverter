@@ -66,31 +66,31 @@ class ItemWalker:  # pylint: disable=too-few-public-methods
         Returns:
             Ret: Status of the walk operation.
         """
-        result = Ret.OK
+        result = self._converter.begin()
 
-        self._converter.begin()
+        if result == Ret.OK:
+            files_dict = get_file_dict_from_symbols(symbol_table)
+            for file_name, item_list in files_dict.items():
+                skip_it = False
 
-        files_dict = get_file_dict_from_symbols(symbol_table)
-        for file_name, item_list in files_dict.items():
-            skip_it = False
+                if self._exclude_files is not None:
+                    for excluded_path in self._exclude_files:
+                        if os.path.commonpath([excluded_path, file_name]) == excluded_path:
+                            skip_it = True
+                            break
 
-            if self._exclude_files is not None:
-                for excluded_path in self._exclude_files:
-                    if os.path.commonpath([excluded_path, file_name]) == excluded_path:
-                        skip_it = True
-                        break
+                if skip_it is True:
+                    log_verbose(f"Skipping file {file_name}.")
 
-            if skip_it is True:
-                log_verbose(f"Skipping file {file_name}.")
+                else:
+                    log_verbose(f"Processing file {file_name}.")
+                    result = self._walk_file(file_name, item_list)
 
-            else:
-                log_verbose(f"Processing file {file_name}.")
-                result = self._walk_file(file_name, item_list)
+                if result != Ret.OK:
+                    break
 
-            if result != Ret.OK:
-                break
-
-        self._converter.finish()
+        if result == Ret.OK:
+            result = self._converter.finish()
 
         return result
 
