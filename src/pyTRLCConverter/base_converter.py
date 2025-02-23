@@ -182,13 +182,13 @@ class BaseConverter(AbstractConverter):
         """
         self._record_handler_dict[record_type] = handler
 
-    def _set_project_record_handlers(self, handler: List[tuple[str, callable]]) -> None:
+    def _set_project_record_handlers(self, handlers: List[tuple[str, callable]]) -> None:
         """Set project specific record handlers.
 
         Args:
             handler (List[tuple[str, callable]]): List of record type and handler function tuples
         """
-        for record_type, handler in handler:
+        for record_type, handler in handlers:
             self._set_project_record_handler(record_type, handler)
 
     def _locate_file(self, file_path: str) -> Optional[str]:
