@@ -55,6 +55,7 @@ class GenericRslMarkdownConverter(MarkdownConverter):
         description = self._get_attribute(info, "description")
 
         markdown_info = self.markdown_escape(description)
+        markdown_info = self.markdown_lf2soft_return(markdown_info)
         self._fd.write(markdown_info)
         self._fd.write("\n")
         return Ret.OK
