@@ -52,9 +52,19 @@ class MarkdownConverter(BaseConverter):
         """
         super().__init__(args)
 
+        # The path to the given output folder.
         self._out_path = args.out
+
+        # The file descriptor for the output file. Used in single and multiple document mode.
         self._fd = None
+
+        # The base level for the headings. Its the minimum level for the headings which depends
+        # on the single/multiple document mode.
         self._base_level = 1
+
+        # For proper Markdown formatting, the first written Markdown part shall not have an empty line before.
+        # But all following parts (heading, table, paragraph, image, etc.) shall have an empty line before.
+        # And at the document bottom, there shall be just one empty line.
         self._empty_line_required = False
 
     @staticmethod
@@ -315,7 +325,7 @@ class MarkdownConverter(BaseConverter):
         Generate the output file.
 
         Args:
-            file_name (str): File name which to use, without path.
+            file_name (str): The output file name without path.
             item_list ([Element]): List of elements.
 
         Returns:
