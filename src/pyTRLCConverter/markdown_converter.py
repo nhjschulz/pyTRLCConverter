@@ -34,7 +34,8 @@ from pyTRLCConverter.log_verbose import log_verbose
 # Classes **********************************************************************
 
 class MarkdownConverter(BaseConverter):
-    """MarkdownConverter provides functionality for converting to a markdown format.
+    """
+    MarkdownConverter provides functionality for converting to a markdown format.
     """
 
     OUTPUT_FILE_NAME_DEFAULT = "output.md"
@@ -43,7 +44,8 @@ class MarkdownConverter(BaseConverter):
     def __init__(self, args: any) -> None:
         # lobster-trace: SwRequirements.sw_req_no_prj_spec
         # lobster-trace: SwRequirements.sw_req_markdown
-        """Initializes the converter.
+        """
+        Initializes the converter.
 
         Args:
             args (any): The parsed program arguments.
@@ -58,7 +60,8 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def get_subcommand() -> str:
         # lobster-trace: SwRequirements.sw_req_markdown
-        """ Return subcommand token for this converter.
+        """
+        Return subcommand token for this converter.
 
         Returns:
             str: Parser subcommand token
@@ -68,7 +71,8 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def get_description() -> str:
         # lobster-trace: SwRequirements.sw_req_markdown
-        """ Return converter description.
+        """
+        Return converter description.
 
         Returns:
             str: Converter description
@@ -83,7 +87,8 @@ class MarkdownConverter(BaseConverter):
         # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level_custom
         # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_default
         # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_custom
-        """Register converter specific argument parser.
+        """
+        Register converter specific argument parser.
 
         Args:
             args_parser (any): Argument parser
@@ -133,7 +138,8 @@ class MarkdownConverter(BaseConverter):
     def begin(self) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
         # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level
-        """ Begin the conversion process.
+        """
+        Begin the conversion process.
 
         Returns:
             Ret: Status
@@ -167,7 +173,8 @@ class MarkdownConverter(BaseConverter):
 
     def enter_file(self, file_name: str) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
-        """Enter a file.
+        """
+        Enter a file.
 
         Args:
             file_name (str): File name
@@ -191,7 +198,8 @@ class MarkdownConverter(BaseConverter):
 
     def leave_file(self, file_name: str) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
-        """Leave a file.
+        """
+        Leave a file.
 
         Args:
             file_name (str): File name
@@ -210,8 +218,9 @@ class MarkdownConverter(BaseConverter):
 
     def convert_section(self, section: str, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_section
-        """Process the given section item.
-            It will create a Markdown heading with the given section name and level.
+        """
+        Process the given section item.
+        It will create a Markdown heading with the given section name and level.
 
         Args:
             section (str): The section name
@@ -231,7 +240,8 @@ class MarkdownConverter(BaseConverter):
 
     def convert_record_object(self, record: Record_Object, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Process the given record object.
+        """
+        Process the given record object.
 
         Args:
             record (Record_Object): The record object
@@ -247,7 +257,8 @@ class MarkdownConverter(BaseConverter):
 
     def finish(self):
         # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
-        """Finish the conversion process.
+        """
+        Finish the conversion process.
         """
 
         # Single document mode?
@@ -260,7 +271,8 @@ class MarkdownConverter(BaseConverter):
 
     def _write_empty_line_on_demand(self) -> None:
         # lobster-trace: SwRequirements.sw_req_markdown
-        """Write an empty line if necessary.
+        """
+        Write an empty line if necessary.
         """
         if self._empty_line_required is False:
             self._empty_line_required = True
@@ -283,7 +295,8 @@ class MarkdownConverter(BaseConverter):
 
     def _file_name_trlc_to_md(self, file_name_trlc: str) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
-        """Convert a TRLC file name to a Markdown file name.
+        """
+        Convert a TRLC file name to a Markdown file name.
 
         Args:
             file_name_trlc (str): TRLC file name
@@ -298,7 +311,8 @@ class MarkdownConverter(BaseConverter):
 
     def _generate_out_file(self, file_name: str) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_out_folder
-        """Generate the output file.
+        """
+        Generate the output file.
 
         Args:
             file_name (str): File name which to use, without path.
@@ -324,7 +338,8 @@ class MarkdownConverter(BaseConverter):
 
     def _on_implict_null(self, _) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Process the given implicit null value.
+        """
+        Process the given implicit null value.
         
         Returns:
             str: The implicit null value
@@ -333,9 +348,10 @@ class MarkdownConverter(BaseConverter):
 
     def _on_array_aggregate(self, value: trlc.ast.Array_Aggregate) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Process the given array aggregate value.
-            It will process the array elements recursively.
-            Each element will be separated by a comma.
+        """
+        Process the given array aggregate value.
+        It will process the array elements recursively.
+        Each element will be separated by a comma.
 
         Args:
             value (trlc.ast.Array_Aggregate): The array aggregate value.
@@ -366,7 +382,8 @@ class MarkdownConverter(BaseConverter):
 
     def _on_record_reference(self, value: trlc.ast.Record_Reference) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Process the given record reference value and return a markdown link.
+        """
+        Process the given record reference value and return a markdown link.
 
         Args:
             value (trlc.ast.Record_Reference): The record reference value.
@@ -378,9 +395,10 @@ class MarkdownConverter(BaseConverter):
 
     def _on_field(self, value: trlc.ast.Expression) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Process the given field value and return it as a string.
-            The main purpose is to handle arrays and record references explicitly.
-            A record reference will be converted into a markdown link.
+        """
+        Process the given field value and return it as a string.
+        The main purpose is to handle arrays and record references explicitly.
+        A record reference will be converted into a markdown link.
 
         Args:
             value (trlc.ast.Expression): The field value
@@ -406,8 +424,9 @@ class MarkdownConverter(BaseConverter):
 
     def _create_markdown_link_from_record_object_reference(self, record_reference: trlc.ast.Record_Reference) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Create a Markdown link from a record reference.
-            It considers the file name, the package name, and the record name.
+        """
+        Create a Markdown link from a record reference.
+        It considers the file name, the package name, and the record name.
 
         Args:
             record_reference (trlc.ast.Record_Reference): Record reference
@@ -433,7 +452,8 @@ class MarkdownConverter(BaseConverter):
 
     def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Process the given record object.
+        """
+        Process the given record object.
 
         Args:
             record (Record_Object): The record object.
@@ -472,7 +492,8 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_escape(text: str) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_escape
-        """Escapes the text to be used in a Markdown document.
+        """
+        Escapes the text to be used in a Markdown document.
 
         Args:
             text (str): Text to escape
@@ -490,8 +511,9 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_create_heading(text: str, level: int, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_heading
-        """Create a Markdown heading.
-            The text will be automatically escaped for Markdown if necessary.
+        """
+        Create a Markdown heading.
+        The text will be automatically escaped for Markdown if necessary.
 
         Args:
             text (str): Heading text
@@ -511,8 +533,9 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_create_table_head(column_titles : List[str], escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_table
-        """Create the table head for a Markdown table.
-            The titles will be automatically escaped for Markdown if necessary.
+        """
+        Create the table head for a Markdown table.
+        The titles will be automatically escaped for Markdown if necessary.
 
         Args:
             column_titles ([str]): List of column titles.
@@ -555,8 +578,9 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_append_table_row(row_values: List[str], escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_table
-        """Append a row to a Markdown table.
-            The values will be automatically escaped for Markdown if necessary.
+        """
+        Append a row to a Markdown table.
+        The values will be automatically escaped for Markdown if necessary.
 
         Args:
             row_values ([str]): List of row values.
@@ -582,9 +606,10 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_create_link(text: str, url: str, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_link
-        """Create a Markdown link.
-            The text will be automatically escaped for Markdown if necessary.
-            There will be no newline appended at the end.
+        """
+        Create a Markdown link.
+        The text will be automatically escaped for Markdown if necessary.
+        There will be no newline appended at the end.
 
         Args:
             text (str): Link text
@@ -604,8 +629,9 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_create_diagram_link(diagram_file_name: str, diagram_caption: str, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_image
-        """Create a Markdown diagram link.
-            The caption will be automatically escaped for Markdown if necessary.
+        """
+        Create a Markdown diagram link.
+        The caption will be automatically escaped for Markdown if necessary.
 
         Args:
             diagram_file_name (str): Diagram file name
@@ -625,9 +651,10 @@ class MarkdownConverter(BaseConverter):
     @staticmethod
     def markdown_text_color(text: str, color: str, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_text_color
-        """Create colored text in Markdown.
-            The text will be automatically escaped for Markdown if necessary.
-            There will be no newline appended at the end.
+        """
+        Create colored text in Markdown.
+        The text will be automatically escaped for Markdown if necessary.
+        There will be no newline appended at the end.
 
         Args:
             text (str): Text
