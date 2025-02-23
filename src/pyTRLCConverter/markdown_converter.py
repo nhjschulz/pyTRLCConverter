@@ -77,7 +77,12 @@ class MarkdownConverter(BaseConverter):
 
     @classmethod
     def register(cls, args_parser: any) -> None:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
+        # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level_default
+        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level_custom
+        # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_default
+        # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_custom
         """Register converter specific argument parser.
 
         Args:
@@ -126,7 +131,8 @@ class MarkdownConverter(BaseConverter):
         )
 
     def begin(self) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_file
+        # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level
         """ Begin the conversion process.
 
         Returns:
@@ -160,7 +166,7 @@ class MarkdownConverter(BaseConverter):
         return result
 
     def enter_file(self, file_name: str) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_file
+        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
         """Enter a file.
 
         Args:
@@ -184,7 +190,7 @@ class MarkdownConverter(BaseConverter):
         return result
 
     def leave_file(self, file_name: str) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_file
+        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
         """Leave a file.
 
         Args:
@@ -240,7 +246,7 @@ class MarkdownConverter(BaseConverter):
         return self._convert_record_object(record, level, None)
 
     def finish(self):
-        # lobster-trace: SwRequirements.sw_req_markdown_file
+        # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
         """Finish the conversion process.
         """
 
@@ -253,7 +259,7 @@ class MarkdownConverter(BaseConverter):
         return Ret.OK
 
     def _write_empty_line_on_demand(self) -> None:
-        # lobster-trace: SwRequirements.sw_req_markdown_file
+        # lobster-trace: SwRequirements.sw_req_markdown
         """Write an empty line if necessary.
         """
         if self._empty_line_required is False:
@@ -276,7 +282,7 @@ class MarkdownConverter(BaseConverter):
         return self._base_level + level
 
     def _file_name_trlc_to_md(self, file_name_trlc: str) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_file
+        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
         """Convert a TRLC file name to a Markdown file name.
 
         Args:
@@ -548,7 +554,7 @@ class MarkdownConverter(BaseConverter):
 
     @staticmethod
     def markdown_append_table_row(row_values: List[str], escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_table_row
+        # lobster-trace: SwRequirements.sw_req_markdown_table
         """Append a row to a Markdown table.
             The values will be automatically escaped for Markdown if necessary.
 
@@ -618,7 +624,7 @@ class MarkdownConverter(BaseConverter):
 
     @staticmethod
     def markdown_text_color(text: str, color: str, escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_link
+        # lobster-trace: SwRequirements.sw_req_markdown_text_color
         """Create colored text in Markdown.
             The text will be automatically escaped for Markdown if necessary.
             There will be no newline appended at the end.

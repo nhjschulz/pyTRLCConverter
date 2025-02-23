@@ -104,54 +104,88 @@ section "pyTRLCConverter" {
                 verification_criteria = "Verify by converting one or more TRLC files into Markdown format."
             }
 
-            SwReq sw_req_markdown_file {
-                description = "The software shall create a Markdown file for each TRLC file."
-                verification_criteria = "Verify by converting one or more TRLC files into Markdown format and check if a Markdown file is created for each TRLC file."
-            }
-
             SwReq sw_req_markdown_section {
-                description = "If no project specific conversion file is available, a TRLC section shall be converted into a Markdown heading by considering the depth level."
+                description = "The Markdown converter shall convert a TRLC section into a Markdown heading by considering the depth level."
                 verification_criteria = "Verify by converting a TRLC section into a Markdown heading."
             }
 
             SwReq sw_req_markdown_record {
-                description = "If no project specific conversion file is available, consecutive TRLC records shall be converted into a Markdown table."
+                description = "The Markdown converter shall convert the attributes of a TRLC record into a Markdown table."
                 verification_criteria = "Verify by converting consecutive TRLC records into a Markdown table."
-            }
-
-            SwReq sw_req_markdown_heading {
-                description = "The software shall support the conversion of TRLC sections into Markdown headings."
-                verification_criteria = "Verify by converting one or more TRLC sections into a Markdown heading."
-            }
-
-            SwReq sw_req_markdown_table {
-                description = "The software shall support the conversion of TRLC records into a Markdown table."
-                verification_criteria = "Verify by converting one or more TRLC records into a Markdown table."
-            }
-
-            SwReq sw_req_markdown_table_row {
-                description = "The software shall support the conversion of TRLC records into a Markdown table row."
-                verification_criteria = "Verify by converting one or more TRLC records into a Markdown table row."
-            }
-
-            SwReq sw_req_markdown_link {
-                description = "The software shall support the creation of a Markdown link for references to other TRLC records."
-                verification_criteria = "Verify by converting one or more TRLC records with references into a Markdown link."
-            }
-
-            SwReq sw_req_markdown_image {
-                description = "The software shall support the creation of a Markdown image to embed images."
-                verification_criteria = "Verify by converting one or more TRLC records with images into a Markdown image."
-            }
-
-            SwReq sw_req_markdown_out_folder {
-                description = "The software shall create the converted files in the specified output folder."
-                verification_criteria = "Verify by specifing an output folder, that doesn't exist. It must exist after the conversion."
             }
 
             SwReq sw_req_markdown_escape {
                 description = "The software shall escape all strings according the Markdown format."
                 verification_criteria = "Verify by using strings with characters, which needs escaping."
+            }
+
+            SwReq sw_req_markdown_heading {
+                description = "The Markdown converter shall provide a function to create a Markdown heading."
+                verification_criteria = "Verify by creating a Markdown heading."
+            }
+
+            SwReq sw_req_markdown_table {
+                description = "The Markdown converter shall provide a function to create a Markdown table."
+                verification_criteria = "Verify by creating a Markdown table."
+            }
+
+            SwReq sw_req_markdown_link {
+                description = "The Markdown converter shall provide a function to create a Markdown link."
+                verification_criteria = "Verify by creating a Markdown link."
+            }
+
+            SwReq sw_req_markdown_image {
+                description = "The Markdown converter shall provide a function to create a Markdown image to embed images."
+                verification_criteria = "Verify by creating a Markdown image."
+            }
+
+            SwReq sw_req_markdown_text_color {
+                description = "The Markdown converter shall provide a function to create colored text in Markdown format."
+                verification_criteria = "Verify by creating colored text in Markdown format."
+            }
+
+            SwReq sw_req_markdown_out_folder {
+                description = "The Markdown converter shall create the converted files in the specified output folder."
+                verification_criteria = "Verify by specifing an output folder, that doesn't exist. It must exist after the conversion."
+            }
+
+            section "Multiple Documents Mode" {
+                SwReq sw_req_markdown_multiple_doc_mode {
+                    description = "The software shall create a Markdown file for each TRLC file by default."
+                    verification_criteria = "Verify by converting one or more TRLC files into Markdown format and check if a Markdown file is created for each TRLC file."
+                }
+            }
+
+            section "Single Document Mode" {
+                SwReq sw_req_markdown_single_doc_mode {
+                    description = "The software shall create a single Markdown file which combines all TRLC files if requested by command line arguments."
+                    verification_criteria = "Verify by converting one or more TRLC files into Markdown format and check if a single Markdown file is created."
+                }
+
+                SwReq sw_req_markdown_out_file_name_default {
+                    description = "The output file name shall be 'output.md' by default."
+                    verification_criteria = "Verify by converting one or more TRLC files into Markdown format and check if the output file name is 'output.md'."
+                }
+
+                SwReq sw_req_markdown_out_file_name_custom {
+                    description = "The output file name shall be customizable by command line arguments."
+                    verification_criteria = "Verify by converting one or more TRLC files into Markdown format and check if the output file name is customizable."
+                }
+
+                SwReq sw_req_markdown_sd_top_level {
+                    description = "The software shall add a top level heading to the Markdown file in single doc mode."
+                    verification_criteria = "Verify the top level heading in the Markdown file in single doc mode."
+                }
+
+                SwReq sw_req_markdown_sd_top_level_default {
+                    description = "The top level heading shall be 'Specification' by default."
+                    verification_criteria = "Verify the top level heading in the Markdown file in single doc mode."
+                }
+
+                SwReq sw_req_markdown_sd_top_level_custom {
+                    description = "The top level heading shall be customizable by command line arguments."
+                    verification_criteria = "Verify by specifying a custom top level heading in the Markdown file in single doc mode."
+                }
             }
         }
 

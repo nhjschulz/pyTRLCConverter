@@ -56,7 +56,7 @@ class DocxConverter(BaseConverter):
 
     @staticmethod
     def get_subcommand() -> str:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+        # lobster-trace: SwRequirements.sw_req_docx
         """ Return subcommand token for this converter.
 
         Returns:
@@ -66,7 +66,7 @@ class DocxConverter(BaseConverter):
 
     @staticmethod
     def get_description() -> str:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+        # lobster-trace: SwRequirements.sw_req_docx
         """ Return converter description.
         
         Returns:
@@ -76,7 +76,7 @@ class DocxConverter(BaseConverter):
 
     @classmethod
     def register(cls, args_parser: any) -> None:
-        # lobster-trace: SwRequirements.sw_req_destination_format
+        # lobster-trace: SwRequirements.sw_req_docx
         """Register converter specific argument parser.
 
         Args:

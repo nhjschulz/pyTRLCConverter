@@ -139,6 +139,7 @@ def _create_args_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     # lobster-trace: SwRequirements.sw_req_cli
+    # lobster-trace: SwRequirements.sw_req_destination_format
     """Main program entry point.
 
     Returns:
