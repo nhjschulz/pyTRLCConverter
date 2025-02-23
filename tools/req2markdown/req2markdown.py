@@ -56,6 +56,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        self._write_empty_line_on_demand()
         markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_heading)
 
@@ -72,6 +73,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        self._write_empty_line_on_demand()
 
         if record.n_typ.name == "Diagram":
             self._print_diagram(record, level)
@@ -93,14 +95,6 @@ class CustomMarkDownConverter(MarkdownConverter):
             pass
 
         return Ret.OK
-
-    def _print_table_head(self) -> None:
-        """Prints the table head for software requirements and constraints.
-        """
-        column_titles = ["Attribute", "Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-
-        self._fd.write(markdown_table_head)
 
     # pylint: disable=unused-argument
     def _print_diagram(self, diagram: Record_Object, level: int) -> None:

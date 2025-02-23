@@ -53,6 +53,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        self._write_empty_line_on_demand()
         markdown_text = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_text)
 
@@ -69,6 +70,7 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        self._write_empty_line_on_demand()
 
         if record.n_typ.name == "Requirement":
             self._print_req(record, level)
@@ -78,14 +80,6 @@ class CustomMarkDownConverter(MarkdownConverter):
             pass
 
         return Ret.OK
-
-    def _print_table_head(self) -> None:
-        """Prints the table head for software requirements and constraints.
-        """
-        column_titles = ["Attribute", "Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-
-        self._fd.write(markdown_table_head)
 
     def _print_req(self, req: Record_Object, level: int) -> None:
         """Prints the requirement.

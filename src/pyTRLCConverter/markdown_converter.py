@@ -53,6 +53,7 @@ class MarkdownConverter(BaseConverter):
         self._out_path = args.out
         self._fd = None
         self._base_level = 1
+        self._empty_line_required = False
 
     @staticmethod
     def get_subcommand() -> str:
@@ -177,6 +178,9 @@ class MarkdownConverter(BaseConverter):
             file_name_md = self._file_name_trlc_to_md(file_name)
             result = self._generate_out_file(file_name_md)
 
+            # The very first written Markdown part shall not have a empty line before.
+            self._empty_line_required = False
+
         return result
 
     def leave_file(self, file_name: str) -> Ret:
@@ -209,6 +213,7 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        self._write_empty_line_on_demand()
         markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_heading)
 
@@ -225,6 +230,7 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        self._write_empty_line_on_demand()
         return self._convert_record_object(record, level, None)
 
     def finish(self):
@@ -239,6 +245,15 @@ class MarkdownConverter(BaseConverter):
             self._fd = None
 
         return Ret.OK
+
+    def _write_empty_line_on_demand(self) -> None:
+        # lobster-trace: SwRequirements.sw_req_markdown_file
+        """Write an empty line if necessary.
+        """
+        if self._empty_line_required is False:
+            self._empty_line_required = True
+        else:
+            self._fd.write("\n")
 
     def _get_markdown_heading_level(self, level: int) -> int:
         # lobster-trace: SwRequirements.sw_req_markdown_record
@@ -418,6 +433,7 @@ class MarkdownConverter(BaseConverter):
         """
         markdown_heading = self.markdown_create_heading(record.name, self._get_markdown_heading_level(level + 1))
         self._fd.write(markdown_heading)
+        self._fd.write("\n")
 
         column_titles = ["Attribute Name", "Attribute Value"]
         markdown_table_head = self.markdown_create_table_head(column_titles)
@@ -438,8 +454,6 @@ class MarkdownConverter(BaseConverter):
             # Write the attribute name and value to the Markdown table as row.
             markdown_table_row = self.markdown_append_table_row([attribute_name, attribute_value], False)
             self._fd.write(markdown_table_row)
-
-        self._fd.write("\n")
 
         return Ret.OK
 
@@ -480,7 +494,7 @@ class MarkdownConverter(BaseConverter):
         if escape is True:
             text_raw = MarkdownConverter.markdown_escape(text)
 
-        return f"{'#' * level} {text_raw}\n\n"
+        return f"{'#' * level} {text_raw}\n"
 
     @staticmethod
     def markdown_create_table_head(column_titles : List[str], escape: bool = True) -> str:
