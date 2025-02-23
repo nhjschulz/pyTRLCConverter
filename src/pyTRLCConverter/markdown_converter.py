@@ -132,6 +132,8 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is None
+
         result = Ret.OK
 
         # Single document mode?
@@ -144,8 +146,6 @@ class MarkdownConverter(BaseConverter):
         self._empty = self._args.empty
 
         log_verbose(f"Empty value: {self._empty}")
-
-        assert self._fd is None
 
         # Single document mode?
         if self._args.single_document is True:
@@ -205,6 +205,7 @@ class MarkdownConverter(BaseConverter):
     def convert_section(self, section: str, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_section
         """Process the given section item.
+            It will create a Markdown heading with the given section name and level.
 
         Args:
             section (str): The section name
@@ -213,6 +214,9 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        assert len(section) > 0
+        assert self._fd is not None
+
         self._write_empty_line_on_demand()
         markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_heading)
@@ -230,6 +234,8 @@ class MarkdownConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
         self._write_empty_line_on_demand()
         return self._convert_record_object(record, level, None)
 

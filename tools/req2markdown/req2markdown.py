@@ -56,6 +56,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        assert len(section) > 0
+        assert self._fd is not None
+
         self._write_empty_line_on_demand()
         markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_heading)
@@ -73,6 +76,8 @@ class CustomMarkDownConverter(MarkdownConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
         self._write_empty_line_on_demand()
 
         if record.n_typ.name == "Diagram":
