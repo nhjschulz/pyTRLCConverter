@@ -108,17 +108,13 @@ The converter supports additional arguments that are shown by adding the --help 
 ```bash
 pyTRLCConverter docx --help
 
-usage: pyTRLCConverter markdown [-h] [-e EMPTY] [-n NAME] [-sd] [-tl TOP_LEVEL]
+usage: pyTRLCConverter docx [-h] [-t TEMPLATE] [-n NAME]
 
 options:
   -h, --help            show this help message and exit
-  -e EMPTY, --empty EMPTY
-                        Every attribute value which is empty will output the string.(default = N/A).
-  -n NAME, --name NAME  Name of the generated output file inside the output folder (default = output.md) in case a single document is generated.
-  -sd, --single-document
-                        Generate a single document instead of multiple files. The default is to generate multiple files.
-  -tl TOP_LEVEL, --top-level TOP_LEVEL
-                        Name of the top level heading, required in single document mode. (default = Specification)
+  -t TEMPLATE, --template TEMPLATE
+                        Load the given docx file as a template to append to.
+  -n NAME, --name NAME  Name of the generated output file inside the output folder (default = output.docx).
 ```
 
 ### Dump TRLC item list to console
