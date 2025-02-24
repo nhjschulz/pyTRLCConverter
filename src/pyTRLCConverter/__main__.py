@@ -37,6 +37,7 @@ from pyTRLCConverter.trlc_helper import get_trlc_symbols
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.docx_converter import DocxConverter
 from pyTRLCConverter.log_verbose import enable_verbose, log_verbose, is_verbose_enabled
+from pyTRLCConverter.rst_converter import RstConverter
 
 # Variables ********************************************************************
 
@@ -50,7 +51,8 @@ PROG_EPILOG = PROG_COPYRIGHT + " - " + PROG_GITHUB
 BUILD_IN_CONVERTER_LIST = [
     MarkdownConverter,
     DocxConverter,
-    DumpConverter
+    DumpConverter,
+    RstConverter
 ]
 
 # Classes **********************************************************************
