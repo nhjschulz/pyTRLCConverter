@@ -27,7 +27,7 @@ if not exist "out" (
 rem ****************************************************************************************************
 rem Software Requirements
 rem ****************************************************************************************************
-set SWE_REQ_OUT_FORMAT=markdown
+set SWE_REQ_OUT_FORMAT=rst
 set SWE_REQ_OUT_DIR=.\out\sw-requirements\%SWE_REQ_OUT_FORMAT%
 
 if not exist %SWE_REQ_OUT_DIR% (
@@ -35,7 +35,7 @@ if not exist %SWE_REQ_OUT_DIR% (
 )
 
 echo Generate software requirements ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% --verbose -p=req2markdown %SWE_REQ_OUT_FORMAT%
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% --verbose %SWE_REQ_OUT_FORMAT%
 
 if errorlevel 1 (
     pause
