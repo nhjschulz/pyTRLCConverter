@@ -162,7 +162,7 @@ class RstConverter(BaseConverter):
             result = self._generate_out_file(self._args.name)
 
             if self._fd is not None:
-                self._fd.write(RstConverter.rst_create_heading(self._args.top_level, 1))
+                self._fd.write(RstConverter.rst_create_heading(self._args.top_level, 1, self._args.name))
 
                 # All headings will be shifted by one level.
                 self._base_level = self._base_level + 1
@@ -228,7 +228,7 @@ class RstConverter(BaseConverter):
         assert self._fd is not None
 
         self._write_empty_line_on_demand()
-        rst_heading = self.rst_create_heading(section, self._get_rst_heading_level(level))
+        rst_heading = self.rst_create_heading(section, self._get_rst_heading_level(level), os.path.basename(self._fd.name))
         self._fd.write(rst_heading)
 
         return Ret.OK
@@ -432,7 +432,7 @@ class RstConverter(BaseConverter):
         record_name = record_reference.target.name
 
         # Create a target ID for the record
-        target_id = f"{file_name}#{record_name.lower().replace(' ', '-')}"
+        target_id = f"{file_name}-{record_name.lower().replace(' ', '-')}"
 
         return RstConverter.rst_create_link(record_reference.to_python_object(), target_id)
 
@@ -445,13 +445,14 @@ class RstConverter(BaseConverter):
             level (int): The record level.
             attribute_translation (Optional[dict]): Attribute translation (attribute name -> user friendly name).
         
-        Returns:
+            Returns:
             Ret: Status
         """
         assert self._fd is not None
 
         self._write_empty_line_on_demand()
-        rst_heading = self.rst_create_heading(record.name, self._get_rst_heading_level(level + 1))
+        file_name = os.path.basename(self._fd.name)
+        rst_heading = self.rst_create_heading(record.name, self._get_rst_heading_level(level + 1), file_name)
         self._fd.write(rst_heading)
         self._fd.write("\n")
 
@@ -500,7 +501,7 @@ class RstConverter(BaseConverter):
         return text
 
     @staticmethod
-    def rst_create_heading(text: str, level: int, escape: bool = True) -> str:
+    def rst_create_heading(text: str, level: int, file_name: str, escape: bool = True) -> str:
         """
         Create a reStructuredText heading with a label.
         The text will be automatically escaped for reStructuredText if necessary.
@@ -508,6 +509,7 @@ class RstConverter(BaseConverter):
         Args:
             text (str): Heading text
             level (int): Heading level
+            file_name (str): File name where the heading is found
             escape (bool): Escape the text (default: True).
 
         Returns:
@@ -518,7 +520,7 @@ class RstConverter(BaseConverter):
         if escape is True:
             text_raw = RstConverter.rst_escape(text)
 
-        label = text_raw.lower().replace(" ", "-")
+        label = f"{file_name}-{text_raw.lower().replace(' ', '-')}"
 
         # Ensure the underline characters are not used in the parent file.
         # Otherwise Sphinx may produce the error "Title level inconsistent"
