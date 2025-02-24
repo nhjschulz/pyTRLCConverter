@@ -410,14 +410,14 @@ class RstConverter(BaseConverter):
 
     def _create_rst_link_from_record_object_reference(self, record_reference: trlc.ast.Record_Reference) -> str:
         """
-        Create a reStructuredText link from a record reference.
+        Create a reStructuredText cross-reference from a record reference.
         It considers the file name, the package name, and the record name.
 
         Args:
             record_reference (trlc.ast.Record_Reference): Record reference
 
         Returns:
-            str: reStructuredText link
+            str: reStructuredText cross-reference
         """
         file_name = ""
 
@@ -431,9 +431,10 @@ class RstConverter(BaseConverter):
 
         record_name = record_reference.target.name
 
-        anchor_tag = file_name + "#" + record_name.lower().replace(" ", "-")
+        # Create a target ID for the record
+        target_id = f"{file_name}#{record_name.lower().replace(' ', '-')}"
 
-        return RstConverter.rst_create_link(record_reference.to_python_object(), anchor_tag)
+        return RstConverter.rst_create_link(record_reference.to_python_object(), target_id)
 
     def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
         """
@@ -501,7 +502,7 @@ class RstConverter(BaseConverter):
     @staticmethod
     def rst_create_heading(text: str, level: int, escape: bool = True) -> str:
         """
-        Create a reStructuredText heading.
+        Create a reStructuredText heading with a label.
         The text will be automatically escaped for reStructuredText if necessary.
 
         Args:
@@ -510,17 +511,21 @@ class RstConverter(BaseConverter):
             escape (bool): Escape the text (default: True).
 
         Returns:
-            str: reStructuredText heading
+            str: reStructuredText heading with a label
         """
         text_raw = text
 
         if escape is True:
             text_raw = RstConverter.rst_escape(text)
 
-        underline_char = ["=", "-", "~", "^", "\"", "'"][level - 1]
+        label = text_raw.lower().replace(" ", "-")
+
+        # Ensure the underline characters are not used in the parent file.
+        # Otherwise Sphinx may produce the error "Title level inconsistent"
+        underline_char = ["=", "#", "~", "^", "\"", "+", "'"][level - 1]
         underline = underline_char * len(text_raw)
 
-        return f"{text_raw}\n{underline}\n"
+        return f".. _{label}:\n\n{text_raw}\n{underline}\n"
 
     @staticmethod
     def rst_create_table_head(column_titles: List[str], max_widths: List[int], escape: bool = True) -> str:
@@ -576,26 +581,26 @@ class RstConverter(BaseConverter):
         return table_row + separator_row
 
     @staticmethod
-    def rst_create_link(text: str, url: str, escape: bool = True) -> str:
+    def rst_create_link(text: str, target: str, escape: bool = True) -> str:
         """
-        Create a reStructuredText link.
+        Create a reStructuredText cross-reference.
         The text will be automatically escaped for reStructuredText if necessary.
         There will be no newline appended at the end.
 
         Args:
             text (str): Link text
-            url (str): Link URL
+            target (str): Cross-reference target
             escape (bool): Escapes text (default: True).
 
         Returns:
-            str: reStructuredText link
+            str: reStructuredText cross-reference
         """
         text_raw = text
 
         if escape is True:
             text_raw = RstConverter.rst_escape(text)
 
-        return f"`{text_raw} <{url}>`_"
+        return f":ref:`{text_raw} <{target}>`"
 
     @staticmethod
     def rst_create_diagram_link(diagram_file_name: str, diagram_caption: str, escape: bool = True) -> str:
