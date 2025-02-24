@@ -58,7 +58,7 @@ source_suffix = ['.rst', '.md']
 # -- MyST parser configuration ---------------------------------------------------
 
 # Configure MyST parser to generate GitHub-style anchors
-myst_heading_anchors = 3
+myst_heading_anchors = 6
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
