@@ -65,6 +65,7 @@ myst_heading_anchors = 6
 
 html_theme = 'haiku'
 html_static_path = ['_static']
+html_style = 'custom.css'
 
 # Copy favorite icon to static path.
 html_favicon = '../../../doc/images/favicon.ico'
