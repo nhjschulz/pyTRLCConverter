@@ -518,7 +518,7 @@ class RstConverter(BaseConverter):
     @staticmethod
     def rst_create_table_head(column_titles: List[str], escape: bool = True) -> str:
         """
-        Create the table head for a reStructuredText table.
+        Create the table head for a reStructuredText table in grid format.
         The titles will be automatically escaped for reStructuredText if necessary.
 
         Args:
@@ -528,25 +528,29 @@ class RstConverter(BaseConverter):
         Returns:
             str: Table head
         """
-        table_head = ""
+        if escape:
+            column_titles = [RstConverter.rst_escape(title) for title in column_titles]
 
-        for column_title in column_titles:
-            column_title_raw = column_title
+        # Calculate the maximum width of each column
+        max_widths = [len(title) for title in column_titles]
 
-            if escape is True:
-                column_title_raw = RstConverter.rst_escape(column_title)
+        # Create the top border of the table
+        table_head = "+" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
-            table_head += f"{column_title_raw} | "
+        # Create the title row
+        table_head += "|" + "|".join([f" {title.ljust(max_widths[i])} " for i, title in enumerate(column_titles)]) + "|\n"
 
-        table_head += "\n"
-        table_head += " | ".join(["-" * len(title) for title in column_titles]) + "\n"
+        # Create the separator row
+        table_head += "+" + "+".join(["=" * (width + 2) for width in max_widths]) + "+\n"
+
+        print(table_head)
 
         return table_head
 
     @staticmethod
     def rst_append_table_row(row_values: List[str], escape: bool = True) -> str:
         """
-        Append a row to a reStructuredText table.
+        Append a row to a reStructuredText table in grid format.
         The values will be automatically escaped for reStructuredText if necessary.
 
         Args:
@@ -556,19 +560,21 @@ class RstConverter(BaseConverter):
         Returns:
             str: Table row
         """
-        table_row = ""
+        if escape:
+            row_values = [RstConverter.rst_escape(value) for value in row_values]
 
-        for row_value in row_values:
-            row_value_raw = row_value
+        # Calculate the maximum width of each column
+        max_widths = [len(value) for value in row_values]
 
-            if escape is True:
-                row_value_raw = RstConverter.rst_escape(row_value)
+        # Create the row
+        table_row = "|" + "|".join([f" {value.ljust(max_widths[i])} " for i, value in enumerate(row_values)]) + "|\n"
 
-            table_row += f"{row_value_raw} | "
+        # Create the separator row
+        separator_row = "+" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
-        table_row += "\n"
+        print(table_row + separator_row)
 
-        return table_row
+        return table_row + separator_row
 
     @staticmethod
     def rst_create_link(text: str, url: str, escape: bool = True) -> str:
