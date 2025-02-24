@@ -447,28 +447,35 @@ class RstConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+        assert self._fd is not None
+
+        self._write_empty_line_on_demand()
         rst_heading = self.rst_create_heading(record.name, self._get_rst_heading_level(level + 1))
         self._fd.write(rst_heading)
         self._fd.write("\n")
 
         column_titles = ["Attribute Name", "Attribute Value"]
-        rst_table_head = self.rst_create_table_head(column_titles)
+
+        # Calculate the maximum width of each column based on both headers and row values
+        max_widths = [len(title) for title in column_titles]
+        for name, value in record.field.items():
+            attribute_name = name
+            if attribute_translation is not None and name in attribute_translation:
+                attribute_name = attribute_translation[name]
+            attribute_name = self.rst_escape(attribute_name)
+            attribute_value = self._on_field(value)
+            max_widths = [max(max_widths[i], len(val)) for i, val in enumerate([attribute_name, attribute_value])]
+
+        rst_table_head = self.rst_create_table_head(column_titles, max_widths)
         self._fd.write(rst_table_head)
 
         for name, value in record.field.items():
-            # Translate the attribute name if available.
             attribute_name = name
-            if attribute_translation is not None:
-                if name in attribute_translation:
-                    attribute_name = attribute_translation[name]
-
+            if attribute_translation is not None and name in attribute_translation:
+                attribute_name = attribute_translation[name]
             attribute_name = self.rst_escape(attribute_name)
-
-            # Retrieve the attribute value by processing the field value.
             attribute_value = self._on_field(value)
-
-            # Write the attribute name and value to the reStructuredText table as row.
-            rst_table_row = self.rst_append_table_row([attribute_name, attribute_value], False)
+            rst_table_row = self.rst_append_table_row([attribute_name, attribute_value], max_widths, False)
             self._fd.write(rst_table_row)
 
         return Ret.OK
@@ -516,13 +523,14 @@ class RstConverter(BaseConverter):
         return f"{text_raw}\n{underline}\n"
 
     @staticmethod
-    def rst_create_table_head(column_titles: List[str], escape: bool = True) -> str:
+    def rst_create_table_head(column_titles: List[str], max_widths: List[int], escape: bool = True) -> str:
         """
         Create the table head for a reStructuredText table in grid format.
         The titles will be automatically escaped for reStructuredText if necessary.
 
         Args:
             column_titles ([str]): List of column titles.
+            max_widths ([int]): List of maximum widths for each column.
             escape (bool): Escape the titles (default: True).
 
         Returns:
@@ -530,9 +538,6 @@ class RstConverter(BaseConverter):
         """
         if escape:
             column_titles = [RstConverter.rst_escape(title) for title in column_titles]
-
-        # Calculate the maximum width of each column
-        max_widths = [len(title) for title in column_titles]
 
         # Create the top border of the table
         table_head = "+" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
@@ -543,18 +548,17 @@ class RstConverter(BaseConverter):
         # Create the separator row
         table_head += "+" + "+".join(["=" * (width + 2) for width in max_widths]) + "+\n"
 
-        print(table_head)
-
         return table_head
 
     @staticmethod
-    def rst_append_table_row(row_values: List[str], escape: bool = True) -> str:
+    def rst_append_table_row(row_values: List[str], max_widths: List[int], escape: bool = True) -> str:
         """
         Append a row to a reStructuredText table in grid format.
         The values will be automatically escaped for reStructuredText if necessary.
 
         Args:
             row_values ([str]): List of row values.
+            max_widths ([int]): List of maximum widths for each column.
             escape (bool): Escapes every row value (default: True).
 
         Returns:
@@ -563,16 +567,11 @@ class RstConverter(BaseConverter):
         if escape:
             row_values = [RstConverter.rst_escape(value) for value in row_values]
 
-        # Calculate the maximum width of each column
-        max_widths = [len(value) for value in row_values]
-
         # Create the row
         table_row = "|" + "|".join([f" {value.ljust(max_widths[i])} " for i, value in enumerate(row_values)]) + "|\n"
 
         # Create the separator row
         separator_row = "+" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
-
-        print(table_row + separator_row)
 
         return table_row + separator_row
 
