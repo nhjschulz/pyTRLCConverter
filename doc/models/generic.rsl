@@ -15,7 +15,6 @@ abstract type FileWithCaption {
 type Image extends FileWithCaption {
 }
 
-// Type to import a Plantuml diagram file.
-
+// Type to import a PlantUML diagram file.
 type PlantUML extends FileWithCaption {
 }
