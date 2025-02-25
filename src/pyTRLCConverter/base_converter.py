@@ -20,8 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-import os
-from typing import Optional
+from enum import Enum
 from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -29,6 +28,19 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Variables ********************************************************************
 
 # Classes **********************************************************************
+
+
+class RecordsPolicy(Enum):
+    """
+    Enum class to define policies for handling records during conversion.
+
+    Attributes:
+        RECORD_CONVERT_ALL (int): Convert all records, including undefined ones
+                                  using convert_record_object_generic().
+        RECORD_SKIP_UNDEFINED (int): Skip records types that are not linked to a handler.
+    """
+    RECORD_CONVERT_ALL= 1
+    RECORD_SKIP_UNDEFINED = 2
 
 
 class BaseConverter(AbstractConverter):
@@ -53,6 +65,12 @@ class BaseConverter(AbstractConverter):
 
         # Store the command line arguments.
         self._args = args
+
+        # Record handler dictionary for project specific record handlers.
+        self._record_handler_dict = {}  # type: dict[str, callable]
+
+        # Set the default policy for handling records.
+        self._record_policy = RecordsPolicy.RECORD_CONVERT_ALL
 
         # Set the default value for empty attributes.
         self._empty_attribute_value = BaseConverter.EMPTY_ATTRIBUTE_DEFAULT
@@ -122,7 +140,17 @@ class BaseConverter(AbstractConverter):
         Returns:
             Ret: Status
         """
-        return Ret.OK
+
+        # check for a specific record handler
+        record_handler = self._record_handler_dict.get(record.n_typ.name)
+        if callable(record_handler):
+            result = record_handler(record, level)
+        elif self._record_policy == RecordsPolicy.RECORD_CONVERT_ALL:
+            result = self.convert_record_object_generic(record, level)
+        else:
+            result = Ret.OK
+
+        return result
 
     def finish(self):
         """Finish the conversion process.
@@ -131,34 +159,36 @@ class BaseConverter(AbstractConverter):
 
     # helpers **************************************************************
 
-    def _locate_file(self, file_path: str) -> Optional[str]:
-        """
-        Locate a file by searching through the sources list if it 
-        cannot be accessed by the given file_path.
+    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+        """Convert a record object generically.
 
         Args:
-            file_path (str): The name of the file to locate.
+            record (Record_Object): The record object
+            level (int): The record level
 
         Returns:
-            str: The full path to the located file if found, otherwise None.
+            Ret: Status
         """
 
-        calculated_path = None
+        raise NotImplementedError
 
-        # Is the path to the file invalid?
-        if os.path.isfile(file_path) is False:
-            # Maybe the path is relative to one of the source paths.
-            for src_item in self._args.source:
-                if os.path.isdir(src_item):
-                    full_file_path = os.path.join(src_item, file_path)
+    def _set_project_record_handler(self, record_type: str, handler: callable) -> None:
+        """Set a project specific record handler.
 
-                    if os.path.isfile(full_file_path) is False:
-                        full_file_path = None
-                    else:
-                        calculated_path = full_file_path
-                        break
+        Args:
+            record_type (str): The record type
+            handler (callable): The handler function
+        """
+        self._record_handler_dict[record_type] = handler
 
-        return calculated_path
+    def _set_project_record_handlers(self, handlers: dict[str, callable]) -> None:
+        """Set project specific record handlers.
+
+        Args:
+            handler (dict[str, callable]): List of record type and handler function tuples
+        """
+        for record_type, handler in handlers.items():
+            self._set_project_record_handler(record_type, handler)
 
     def _get_attribute(self, record: Record_Object, attribute_name: str) -> str:
         """Get the attribute value from the record object.
