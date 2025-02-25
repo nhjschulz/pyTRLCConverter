@@ -37,11 +37,12 @@ class RstConverter(BaseConverter):
     """
     RstConverter provides functionality for converting to a reStructuredText format.
     """
-
+    # lobster-trace: SwRequirements.sw_req_rst_out_file_name_default
     OUTPUT_FILE_NAME_DEFAULT = "output.rst"
     TOP_LEVEL_DEFAULT = "Specification"
 
     def __init__(self, args: any) -> None:
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Initializes the converter.
 
@@ -67,6 +68,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def get_subcommand() -> str:
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Return subcommand token for this converter.
 
@@ -77,6 +79,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def get_description() -> str:
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Return converter description.
 
@@ -87,6 +90,12 @@ class RstConverter(BaseConverter):
 
     @classmethod
     def register(cls, args_parser: any) -> None:
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_sd_top_level_default
+        # lobster-trace: SwRequirements.sw_req_rst_sd_top_level_custom
+        # lobster-trace: SwRequirements.sw_req_rst_out_file_name_default
+        # lobster-trace: SwRequirements.sw_req_rst_out_file_name_custom
         """
         Register converter specific argument parser.
 
@@ -136,6 +145,8 @@ class RstConverter(BaseConverter):
         )
 
     def begin(self) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_sd_top_level
         """
         Begin the conversion process.
 
@@ -170,6 +181,7 @@ class RstConverter(BaseConverter):
         return result
 
     def enter_file(self, file_name: str) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
         """
         Enter a file.
 
@@ -194,6 +206,7 @@ class RstConverter(BaseConverter):
         return result
 
     def leave_file(self, file_name: str) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
         """
         Leave a file.
 
@@ -213,6 +226,7 @@ class RstConverter(BaseConverter):
         return Ret.OK
 
     def convert_section(self, section: str, level: int) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_section
         """
         Process the given section item.
         It will create a reStructuredText heading with the given section name and level.
@@ -236,6 +250,7 @@ class RstConverter(BaseConverter):
         return Ret.OK
 
     def convert_record_object(self, record: Record_Object, level: int) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record object.
 
@@ -252,6 +267,7 @@ class RstConverter(BaseConverter):
         return self._convert_record_object(record, level, None)
 
     def finish(self):
+        # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode
         """
         Finish the conversion process.
         """
@@ -265,6 +281,7 @@ class RstConverter(BaseConverter):
         return Ret.OK
 
     def _write_empty_line_on_demand(self) -> None:
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Write an empty line if necessary.
         """
@@ -274,6 +291,7 @@ class RstConverter(BaseConverter):
             self._fd.write("\n")
 
     def _get_rst_heading_level(self, level: int) -> int:
+        # lobster-trace: SwRequirements.sw_req_rst_section
         """
         Get the reStructuredText heading level from the TRLC object level.
         Its mandatory to use this method to calculate the reStructuredText heading level.
@@ -288,6 +306,7 @@ class RstConverter(BaseConverter):
         return self._base_level + level
 
     def _file_name_trlc_to_rst(self, file_name_trlc: str) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
         """
         Convert a TRLC file name to a reStructuredText file name.
 
@@ -303,6 +322,7 @@ class RstConverter(BaseConverter):
         return file_name
 
     def _generate_out_file(self, file_name: str) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_out_folder
         """
         Generate the output file.
 
@@ -329,6 +349,7 @@ class RstConverter(BaseConverter):
         return result
 
     def _on_implict_null(self, _) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given implicit null value.
         
@@ -338,6 +359,7 @@ class RstConverter(BaseConverter):
         return self._empty_attribute_value
 
     def _on_array_aggregate(self, value: trlc.ast.Array_Aggregate) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given array aggregate value.
         It will process the array elements recursively.
@@ -371,6 +393,7 @@ class RstConverter(BaseConverter):
         return result
 
     def _on_record_reference(self, value: trlc.ast.Record_Reference) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record reference value and return a reStructuredText link.
 
@@ -383,6 +406,7 @@ class RstConverter(BaseConverter):
         return self._create_rst_link_from_record_object_reference(value)
 
     def _on_field(self, value: trlc.ast.Expression) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given field value and return it as a string.
         The main purpose is to handle arrays and record references explicitly.
@@ -411,6 +435,7 @@ class RstConverter(BaseConverter):
         return result
 
     def _create_rst_link_from_record_object_reference(self, record_reference: trlc.ast.Record_Reference) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_link
         """
         Create a reStructuredText cross-reference from a record reference.
         It considers the file name, the package name, and the record name.
@@ -439,6 +464,7 @@ class RstConverter(BaseConverter):
         return RstConverter.rst_create_link(record_reference.to_python_object(), target_id)
 
     def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record object.
 
@@ -489,6 +515,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def rst_escape(text: str) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_escape
         """
         Escapes the text to be used in a reStructuredText document.
 
@@ -511,6 +538,7 @@ class RstConverter(BaseConverter):
                            file_name: str,
                            escape: bool = True,
                            is_object_heading: bool = False) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_heading
         """
         Create a reStructuredText heading with a label.
         The text will be automatically escaped for reStructuredText if necessary.
@@ -531,6 +559,7 @@ class RstConverter(BaseConverter):
             text_raw = RstConverter.rst_escape(text)
 
         label = f"{file_name}-{text_raw.lower().replace(' ', '-')}"
+
         underline_char = ["=", "#", "~", "^", "\"", "+", "'"][level - 1]
         underline = underline_char * len(text_raw)
 
@@ -542,6 +571,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def rst_create_table_head(column_titles: List[str], max_widths: List[int], escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_table
         """
         Create the table head for a reStructuredText table in grid format.
         The titles will be automatically escaped for reStructuredText if necessary.
@@ -571,6 +601,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def rst_append_table_row(row_values: List[str], max_widths: List[int], escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_table
         """
         Append a row to a reStructuredText table in grid format.
         The values will be automatically escaped for reStructuredText if necessary.
@@ -597,6 +628,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def rst_create_link(text: str, target: str, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_link
         """
         Create a reStructuredText cross-reference.
         The text will be automatically escaped for reStructuredText if necessary.
@@ -619,6 +651,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def rst_create_diagram_link(diagram_file_name: str, diagram_caption: str, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_image
         """
         Create a reStructuredText diagram link.
         The caption will be automatically escaped for reStructuredText if necessary.
