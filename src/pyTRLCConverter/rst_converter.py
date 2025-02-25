@@ -454,7 +454,10 @@ class RstConverter(BaseConverter):
 
         self._write_empty_line_on_demand()
         file_name = os.path.basename(self._fd.name)
-        rst_heading = self.rst_create_heading(record.name, self._get_rst_heading_level(level + 1), file_name, is_object_heading=True)
+        rst_heading = self.rst_create_heading(record.name,
+                                                    self._get_rst_heading_level(level + 1),
+                                                    file_name,
+                                                    is_object_heading=True)
         self._fd.write(rst_heading)
         self._fd.write("\n")
 
@@ -503,7 +506,11 @@ class RstConverter(BaseConverter):
         return text
 
     @staticmethod
-    def rst_create_heading(text: str, level: int, file_name: str, escape: bool = True, is_object_heading: bool = False) -> str:
+    def rst_create_heading(text: str,
+                           level: int,
+                           file_name: str,
+                           escape: bool = True,
+                           is_object_heading: bool = False) -> str:
         """
         Create a reStructuredText heading with a label.
         The text will be automatically escaped for reStructuredText if necessary.
@@ -530,7 +537,7 @@ class RstConverter(BaseConverter):
         if is_object_heading:
             admonition_label = f".. admonition:: {text_raw}\n\n    "
             return f".. _{label}:\n\n{admonition_label}"
-        
+
         return f".. _{label}:\n\n{text_raw}\n{underline}\n"
 
     @staticmethod
@@ -554,7 +561,8 @@ class RstConverter(BaseConverter):
         table_head = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
         # Create the title row
-        table_head += "    |" + "|".join([f" {title.ljust(max_widths[i])} " for i, title in enumerate(column_titles)]) + "|\n"
+        table_head += "    |"
+        table_head += "|".join([f" {title.ljust(max_widths[i])} " for i, title in enumerate(column_titles)]) + "|\n"
 
         # Create the separator row
         table_head += "    +" + "+".join(["=" * (width + 2) for width in max_widths]) + "+\n"
@@ -579,7 +587,8 @@ class RstConverter(BaseConverter):
             row_values = [RstConverter.rst_escape(value) for value in row_values]
 
         # Create the row
-        table_row = "    |" + "|".join([f" {value.ljust(max_widths[i])} " for i, value in enumerate(row_values)]) + "|\n"
+        table_row = "    |"
+        table_row += "|".join([f" {value.ljust(max_widths[i])} " for i, value in enumerate(row_values)]) + "|\n"
 
         # Create the separator row
         separator_row = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
