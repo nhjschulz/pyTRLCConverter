@@ -5,7 +5,6 @@ type Info {
     description     String
 }
 
-
 // Abstract type for referencing a file with additional caption text.
 abstract type FileWithCaption {
     file_path   String
@@ -16,7 +15,6 @@ abstract type FileWithCaption {
 type Image extends FileWithCaption {
 }
 
-// Type to import a Plantuml diagram file.
-
+// Type to import a PlantUML diagram file.
 type PlantUML extends FileWithCaption {
 }

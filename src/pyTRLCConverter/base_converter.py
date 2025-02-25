@@ -21,8 +21,6 @@
 
 # Imports **********************************************************************
 from enum import Enum
-import os
-from typing import List, Optional
 from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -37,11 +35,12 @@ class RecordsPolicy(Enum):
     Enum class to define policies for handling records during conversion.
 
     Attributes:
-        RECORD_CONVERT_ALL (int): Convert all records, eventually in generic mode.
-        RECORD_SKIP_UNHANDLED (int): Skip unhandled records.
+        RECORD_CONVERT_ALL (int): Convert all records, including undefined ones
+                                  using convert_record_object_generic().
+        RECORD_SKIP_UNDEFINED (int): Skip records types that are not linked to a handler.
     """
     RECORD_CONVERT_ALL= 1
-    RECORD_SKIP_UNHANDLED = 2
+    RECORD_SKIP_UNDEFINED = 2
 
 
 class BaseConverter(AbstractConverter):
@@ -182,43 +181,14 @@ class BaseConverter(AbstractConverter):
         """
         self._record_handler_dict[record_type] = handler
 
-    def _set_project_record_handlers(self, handlers: List[tuple[str, callable]]) -> None:
+    def _set_project_record_handlers(self, handlers: dict[str, callable]) -> None:
         """Set project specific record handlers.
 
         Args:
-            handler (List[tuple[str, callable]]): List of record type and handler function tuples
+            handler (dict[str, callable]): List of record type and handler function tuples
         """
-        for record_type, handler in handlers:
+        for record_type, handler in handlers.items():
             self._set_project_record_handler(record_type, handler)
-
-    def _locate_file(self, file_path: str) -> Optional[str]:
-        """
-        Locate a file by searching through the sources list if it 
-        cannot be accessed by the given file_path.
-
-        Args:
-            file_path (str): The name of the file to locate.
-
-        Returns:
-            str: The full path to the located file if found, otherwise None.
-        """
-
-        calculated_path = None
-
-        # Is the path to the file invalid?
-        if os.path.isfile(file_path) is False:
-            # Maybe the path is relative to one of the source paths.
-            for src_item in self._args.source:
-                if os.path.isdir(src_item):
-                    full_file_path = os.path.join(src_item, file_path)
-
-                    if os.path.isfile(full_file_path) is False:
-                        full_file_path = None
-                    else:
-                        calculated_path = full_file_path
-                        break
-
-        return calculated_path
 
     def _get_attribute(self, record: Record_Object, attribute_name: str) -> str:
         """Get the attribute value from the record object.

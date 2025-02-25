@@ -251,7 +251,10 @@ class MarkdownConverter(BaseConverter):
     def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_record
         """
-        Process the given record object.
+        Process the given record object in a generic way.
+
+        The handler is called by the base converter if no specific handler is
+        defined for the record type.
 
         Args:
             record (Record_Object): The record object

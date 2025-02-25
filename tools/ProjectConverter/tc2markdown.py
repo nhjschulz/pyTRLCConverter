@@ -29,7 +29,6 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # pylint: disable=wrong-import-order
 from generic_rsl_markdown_converter import GenericRslMarkdownConverter
 
-
 # Variables ********************************************************************
 
 # Classes **********************************************************************
@@ -41,20 +40,22 @@ class TestCaseMarkDownConverter(GenericRslMarkdownConverter):
     def __init__(self, args: any) -> None:
         """
         Initialize the custom markdown converter.
+
+        Args:
+            args (any): The parsed program arguments.
         """
         super().__init__(args)
 
         # Set project specific record handlers for the converter.
         self._set_project_record_handlers(
-           [
-                ("Image", self._print_image),
-                ("Info", self._print_info),
-                ("PlantUML", self._print_plantuml),
-                ("SwTestCase", self._print_sw_test_case),
-           ]
+           {
+                "Image": self._print_image,
+                "Info": self._print_info,
+                "PlantUML": self._print_plantuml,
+                "SwTestCase": self._print_sw_test_case,
+           }
         )
-
-        self._record_policy = RecordsPolicy.RECORD_SKIP_UNHANDLED
+        self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
 
     @staticmethod
     def get_description() -> str:
@@ -75,6 +76,9 @@ class TestCaseMarkDownConverter(GenericRslMarkdownConverter):
         Returns:
             Ret: Status
         """
+
+        self._write_empty_line_on_demand()
+
         attribute_translation = {
             "description": "Description",
             "derived": "Derived"

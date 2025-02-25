@@ -31,23 +31,26 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 
 
-class CustomMarkDownConverter(MarkdownConverter):
+class CustomMarkdownConverter(MarkdownConverter):
     """Custom Project specific Markdown Converter.
     """
 
     def __init__(self, args: any) -> None:
         """
         Initialize the custom markdown converter.
+
+        Args:
+            args (any): The parsed program arguments.
         """
         super().__init__(args)
 
         # Set project specific record handlers for the converter.
         self._set_project_record_handlers(
-           [
-                ("Requirement", self._print_req),
-           ]
+           {
+               "Requirement": self._print_req
+           }
         )
-        self._record_policy = RecordsPolicy.RECORD_SKIP_UNHANDLED
+        self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
 
     @staticmethod
     def get_description() -> str:
@@ -64,6 +67,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         Args:
             req (Record_Object): Requirement to print
             level (int): Current level of the record object
+
+        Returns:
+            Ret: Status
         """
 
         self._write_empty_line_on_demand()

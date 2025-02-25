@@ -1,4 +1,8 @@
-"""Project specific Markdown converter functions.
+"""
+Project specific Markdown converter for Generic.rsl types.
+
+This module provides a project specific Markdown converter subclass with
+support for the TRLC record types defined in Generic.rsl.
 
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
@@ -35,7 +39,7 @@ from image_processing import convert_plantuml_to_image, locate_file
 
 
 class GenericRslMarkdownConverter(MarkdownConverter):
-    """Project specific Markdown Converter Baseclass for generic.rsl.
+    """Project specific Markdown converter subclass for generic.rsl types.
     """
 
     # pylint: disable=unused-argument
@@ -52,7 +56,7 @@ class GenericRslMarkdownConverter(MarkdownConverter):
 
         markdown_info = self.markdown_escape(description)
         self._fd.write(markdown_info)
-        self._fd.write("\n\n")
+        self._fd.write("\n")
         return Ret.OK
 
     # pylint: disable=unused-argument
@@ -70,6 +74,7 @@ class GenericRslMarkdownConverter(MarkdownConverter):
         )
 
         if image_file is not None:
+            self._write_empty_line_on_demand()
             markdown_image = self.markdown_create_diagram_link(
                 os.path.basename(image_file),
                 self._get_attribute(diagram, "caption")
@@ -90,6 +95,8 @@ class GenericRslMarkdownConverter(MarkdownConverter):
         if image_file is not None:
             # Copy diagram image file to output folder.
             shutil.copy(image_file, self._args.out)
+
+            self._write_empty_line_on_demand()
 
             markdown_image = self.markdown_create_diagram_link(
                 os.path.basename(image_file),

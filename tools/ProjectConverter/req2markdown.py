@@ -44,17 +44,17 @@ class ProjectMarkDownConverter(GenericRslMarkdownConverter):
 
         # Set project specific record handlers for the converter.
         self._set_project_record_handlers(
-           [
-                ("Image", self._print_image),
-                ("Info", self._print_info),
-                ("PlantUML", self._print_plantuml),
-                ("SwReq", self._print_sw_req),
-                ("SwReqNonFunc", self._print_sw_req),
-                ("SwConstraint", self._print_sw_constraint),
-           ]
+           {
+                "Image":self._print_image,
+                "Info": self._print_info,
+                "PlantUML": self._print_plantuml,
+                "SwReq": self._print_sw_req,
+                "SwReqNonFunc": self._print_sw_req,
+                "SwConstraint": self._print_sw_constraint
+           }
         )
 
-        self._record_policy = RecordsPolicy.RECORD_SKIP_UNHANDLED
+        self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
 
     @staticmethod
     def get_description() -> str:

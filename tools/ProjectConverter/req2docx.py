@@ -39,18 +39,22 @@ class CustomDocxConverter(DocxConverter):
     def __init__(self, args: any) -> None:
         """
         Initialize the custom docx converter.
+
+        Args:
+            args (any): The parsed program arguments.
         """
         super().__init__(args)
 
         # set project specific record handlers for the converter.
         self._set_project_record_handlers(
-           [
-                ("Info", self._convert_record_object_info),
-                ("Image", self._convert_record_object_image),
-                ("PlantUML", self._convert_record_object_plantuml),
-           ]
+            {
+                "Info": self._convert_record_object_info,
+                "Image": self._convert_record_object_image,
+                "PlantUML": self._convert_record_object_plantuml
+            }
         )
         self._record_policy = RecordsPolicy.RECORD_CONVERT_ALL
+
         self._img_counter = 1
 
     @staticmethod
