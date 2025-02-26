@@ -16,7 +16,8 @@ rem
 rem You should have received a copy of the GNU General Public License along with pyTRLCConverter.
 rem If not, see <https://www.gnu.org/licenses/>.
 
-set PLANTUML=%~dp0\plantuml.jar
+set LOCAL_DIR=%~dp0
+set PLANTUML=%LOCAL_DIR%plantuml.jar
 
 if not exist "%PLANTUML%" (
     echo Download PlantUML java program...
