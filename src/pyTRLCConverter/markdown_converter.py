@@ -607,6 +607,9 @@ class MarkdownConverter(BaseConverter):
             if escape is True:
                 row_value_raw = MarkdownConverter.markdown_escape(row_value)
 
+            # Replace every LF with a HTML <br>.
+            row_value_raw = row_value_raw.replace("\n", "<br>")
+
             table_row += f" {row_value_raw} |"
 
         table_row += "\n"
