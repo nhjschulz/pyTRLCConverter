@@ -67,6 +67,11 @@ class MarkdownConverter(BaseConverter):
         # And at the document bottom, there shall be just one empty line.
         self._empty_line_required = False
 
+        # A top level heading is always required to generate a compliant Markdown document.
+        # In single document mode it will always be necessary.
+        # In multiple document mode only if there is no top level section.
+        self._is_top_level_heading_req = True
+
     @staticmethod
     def get_subcommand() -> str:
         # lobster-trace: SwRequirements.sw_req_markdown
@@ -93,8 +98,8 @@ class MarkdownConverter(BaseConverter):
     def register(cls, args_parser: any) -> None:
         # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
         # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
-        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level_default
-        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level_custom
+        # lobster-trace: SwRequirements.sw_req_markdown_top_level_default
+        # lobster-trace: SwRequirements.sw_req_markdown_top_level_custom
         # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_default
         # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_custom
         """
@@ -174,7 +179,7 @@ class MarkdownConverter(BaseConverter):
             result = self._generate_out_file(self._args.name)
 
             if self._fd is not None:
-                self._fd.write(MarkdownConverter.markdown_create_heading(self._args.top_level, 1))
+                self._write_top_level_heading_on_demand()
 
                 # All headings will be shifted by one level.
                 self._base_level = self._base_level + 1
@@ -228,6 +233,7 @@ class MarkdownConverter(BaseConverter):
 
     def convert_section(self, section: str, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_section
+        # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
         """
         Process the given section item.
         It will create a Markdown heading with the given section name and level.
@@ -246,10 +252,14 @@ class MarkdownConverter(BaseConverter):
         markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
         self._fd.write(markdown_heading)
 
+        # If a section heading is written, there is no top level heading required anymore.
+        self._is_top_level_heading_req = False
+
         return Ret.OK
 
     def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_record
+        # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
         """
         Process the given record object in a generic way.
 
@@ -265,7 +275,9 @@ class MarkdownConverter(BaseConverter):
         """
         assert self._fd is not None
 
+        self._write_top_level_heading_on_demand()
         self._write_empty_line_on_demand()
+
         return self._convert_record_object(record, level, None)
 
     def finish(self):
@@ -281,6 +293,15 @@ class MarkdownConverter(BaseConverter):
             self._fd = None
 
         return Ret.OK
+
+    def _write_top_level_heading_on_demand(self) -> None:
+        # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
+        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level
+        """Write the top level heading if necessary.
+        """
+        if self._is_top_level_heading_req is True:
+            self._fd.write(MarkdownConverter.markdown_create_heading(self._args.top_level, 1))
+            self._is_top_level_heading_req = False
 
     def _write_empty_line_on_demand(self) -> None:
         # lobster-trace: SwRequirements.sw_req_markdown
