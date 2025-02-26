@@ -543,6 +543,20 @@ class MarkdownConverter(BaseConverter):
         return text
 
     @staticmethod
+    def markdown_lf2soft_return(text: str) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_soft_return
+        """
+        A single LF will be converted to backslash + LF.
+        Use it for paragraphs, but not for headings or tables.
+
+        Args:
+            text (str): Text
+        Returns:
+            str: Handled text
+        """
+        return text.replace("\n", "\\\n")
+
+    @staticmethod
     def markdown_create_heading(text: str, level: int, escape: bool = True) -> str:
         # lobster-trace: SwRequirements.sw_req_markdown_heading
         """

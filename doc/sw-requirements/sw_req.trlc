@@ -5,7 +5,8 @@ import Generic
 section "pyTRLCConverter" {
 
     Generic.Info sw_req_info_about_sw_req {
-        description = "This file contains the software requirements for the pyTRLCConverter tool."
+        description = '''This file contains the software requirements
+        - for the pyTRLCConverter tool.'''
     }
 
     Generic.PlantUML sw_req_tool_context_diagram {
@@ -147,6 +148,11 @@ section "pyTRLCConverter" {
             SwReq sw_req_markdown_text_color {
                 description = "The Markdown converter shall provide a function to create colored text in Markdown format."
                 verification_criteria = "Verify by creating colored text in Markdown format."
+            }
+
+            SwReq sw_req_markdown_soft_return {
+                description = "The Markdown convert shall provide a function to convert a line feed to Markdown soft return."
+                verification_criteria = "Verify by creating a text with one and more line feeds."
             }
 
             SwReq sw_req_markdown_out_folder {
