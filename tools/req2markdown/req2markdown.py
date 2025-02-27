@@ -164,8 +164,9 @@ class CustomMarkDownConverter(MarkdownConverter):
         description = self._get_attribute(info, "description")
 
         markdown_info = self.markdown_escape(description)
+        markdown_info = self.markdown_lf2soft_return(markdown_info)
         self._fd.write(markdown_info)
-        self._fd.write("\n\n")
+        self._fd.write("\n")
 
     def _print_sw_req(self, sw_req: Record_Object, level: int) -> None:
         """Prints the software requirement.
