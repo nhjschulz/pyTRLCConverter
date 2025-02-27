@@ -234,7 +234,11 @@ def _get_project_converter() -> Optional[AbstractConverter]:
         # Dynamically load the module and search for an AbstractConverter class definition
         sys.path.append(os.path.dirname(project_module_name))
         project_module_name = os.path.basename(project_module_name).replace('.py', '')
-        module = importlib.import_module(project_module_name)
+
+        try:
+            module = importlib.import_module(project_module_name)
+        except ImportError as exc:
+            raise ValueError(f"Failed to import module {project_module_name}: {exc}") from exc
 
         #Filter classes that are defined in the module directly.
         classes = inspect.getmembers(module, inspect.isclass)

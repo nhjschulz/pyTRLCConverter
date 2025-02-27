@@ -1,6 +1,6 @@
 """Converter to reStructuredText format.
 
-    Author: Your Name (your.email@example.com)
+    Author: Gabryel Reyes (gabryel.reyes@newtec.de)
 """
 
 # pyTRLCConverter - A tool to convert TRLC files to specific formats.
@@ -37,7 +37,6 @@ class RstConverter(BaseConverter):
     """
     RstConverter provides functionality for converting to a reStructuredText format.
     """
-    # lobster-trace: SwRequirements.sw_req_rst_out_file_name_default
     OUTPUT_FILE_NAME_DEFAULT = "output.rst"
     TOP_LEVEL_DEFAULT = "Specification"
 

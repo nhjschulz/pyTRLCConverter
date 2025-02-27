@@ -102,7 +102,6 @@ def copy_coverage_files(app: any) -> None:
     for filename in os.listdir(source_dir):
         full_file_name = os.path.join(source_dir, filename)
         if os.path.isfile(full_file_name):
-            print(f'Copy {full_file_name} to {target_dir}\n')
             shutil.copy(full_file_name, target_dir)
 
 # Main *************************************************************************
