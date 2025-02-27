@@ -83,8 +83,6 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         assert self._fd is not None
 
-        self._write_empty_line_on_demand()
-
         if record.n_typ.name == "SwTestCaseResult":
             self._print_test_case_result(record, level)
 
@@ -97,6 +95,8 @@ class CustomMarkDownConverter(MarkdownConverter):
     def _print_table_head(self) -> None:
         """Prints the table head for software test case results.
         """
+        self._write_empty_line_on_demand()
+
         column_titles = ["Test Case", "Test Function", "Test Result"]
         markdown_table_head = self.markdown_create_table_head(column_titles)
 
