@@ -144,6 +144,11 @@ section "pyTRLCConverter" {
                 verification_criteria = "Verify by creating colored text in Markdown format."
             }
 
+            SwReq sw_req_markdown_soft_return {
+                description = "The Markdown convert shall provide a function to convert a line feed to Markdown soft return."
+                verification_criteria = "Verify by creating a text with one and more line feeds."
+            }
+
             SwReq sw_req_markdown_out_folder {
                 description = "The Markdown converter shall create the converted files in the specified output folder."
                 verification_criteria = "Verify by specifing an output folder, that doesn't exist. It must exist after the conversion."
@@ -153,6 +158,11 @@ section "pyTRLCConverter" {
                 SwReq sw_req_markdown_multiple_doc_mode {
                     description = "The software shall create a Markdown file for each TRLC file by default."
                     verification_criteria = "Verify by converting one or more TRLC files into Markdown format and check if a Markdown file is created for each TRLC file."
+                }
+
+                SwReq sw_req_markdown_md_top_level {
+                    description = "The software shall add a top level heading to the Markdown file if there is no top level section."
+                    verification_criteria = "Verify the top level heading in the Markdown file in multiple doc mode."
                 }
             }
 
@@ -177,12 +187,12 @@ section "pyTRLCConverter" {
                     verification_criteria = "Verify the top level heading in the Markdown file in single doc mode."
                 }
 
-                SwReq sw_req_markdown_sd_top_level_default {
+                SwReq sw_req_markdown_top_level_default {
                     description = "The top level heading shall be 'Specification' by default."
                     verification_criteria = "Verify the top level heading in the Markdown file in single doc mode."
                 }
 
-                SwReq sw_req_markdown_sd_top_level_custom {
+                SwReq sw_req_markdown_top_level_custom {
                     description = "The top level heading shall be customizable by command line arguments."
                     verification_criteria = "Verify by specifying a custom top level heading in the Markdown file in single doc mode."
                 }
