@@ -12,3 +12,11 @@ div.admonition {
 p.admonition-title {
     background-color: #93bdff;
 }
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}

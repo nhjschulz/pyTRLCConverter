@@ -55,6 +55,11 @@ exclude_patterns = []
 # Support restructured text and Markdown
 source_suffix = ['.rst', '.md']
 
+rst_prolog = """
+.. include:: <s5defs.txt>
+
+"""
+
 # -- MyST parser configuration ---------------------------------------------------
 
 # Configure MyST parser to generate GitHub-style anchors

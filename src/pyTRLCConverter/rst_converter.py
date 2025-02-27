@@ -496,7 +496,7 @@ class RstConverter(BaseConverter):
                 attribute_name = attribute_translation[name]
             attribute_name = self.rst_escape(attribute_name)
             attribute_value = self._on_field(value)
-            max_widths = [max(max_widths[i], len(val)) for i, val in enumerate([attribute_name, attribute_value])]
+            max_widths = [max(max_widths[idx], len(val)) for idx, val in enumerate([attribute_name, attribute_value])]
 
         rst_table_head = self.rst_create_table_head(column_titles, max_widths)
         self._fd.write(rst_table_head)
@@ -591,7 +591,7 @@ class RstConverter(BaseConverter):
 
         # Create the title row
         table_head += "    |"
-        table_head += "|".join([f" {title.ljust(max_widths[i])} " for i, title in enumerate(column_titles)]) + "|\n"
+        table_head += "|".join([f" {title.ljust(max_widths[idx])} " for idx, title in enumerate(column_titles)]) + "|\n"
 
         # Create the separator row
         table_head += "    +" + "+".join(["=" * (width + 2) for width in max_widths]) + "+\n"
@@ -618,7 +618,7 @@ class RstConverter(BaseConverter):
 
         # Create the row
         table_row = "    |"
-        table_row += "|".join([f" {value.ljust(max_widths[i])} " for i, value in enumerate(row_values)]) + "|\n"
+        table_row += "|".join([f" {value.ljust(max_widths[idx])} " for idx, value in enumerate(row_values)]) + "|\n"
 
         # Create the separator row
         separator_row = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
@@ -669,6 +669,28 @@ class RstConverter(BaseConverter):
             diagram_caption_raw = RstConverter.rst_escape(diagram_caption)
 
         return f".. image:: ./{diagram_file_name}\n   :alt: {diagram_caption_raw}\n"
+
+    @staticmethod
+    def rst_role(text: str, role: str, escape: bool = True) -> str:
+        """
+        Create role text in reStructuredText.
+        The text will be automatically escaped for reStructuredText if necessary.
+        There will be no newline appended at the end.
+
+        Args:
+            text (str): Text
+            color (str): Role
+            escape (bool): Escapes text (default: True).
+
+        Returns:
+            str: Text with role
+        """
+        text_raw = text
+
+        if escape is True:
+            text_raw = RstConverter.rst_escape(text)
+
+        return f":{role}:`{text_raw}`"
 
 # Functions ********************************************************************
 

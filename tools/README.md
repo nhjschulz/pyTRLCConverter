@@ -42,7 +42,7 @@ Used to convert the requirements written with TRLC to the Markdown format.
 
 ## req2rst
 
-Used to convert the requirements written with TRLC to the ReStructuredText format.
+Used to convert the requirements written with TRLC to the reStructuredText format.
 
 [Details](./req2rst/README.md)
 
@@ -60,6 +60,6 @@ Used to convert the test cases written with TRLC to the Markdown format.
 
 ## tc2rst
 
-Used to convert the test cases written with TRLC to the ReStructuredText format.
+Used to convert the test cases written with TRLC to the reStructuredText format.
 
 [Details](./tc2rst/README.md)

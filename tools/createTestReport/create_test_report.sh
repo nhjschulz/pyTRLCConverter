@@ -34,4 +34,7 @@ pytest "$TESTS_PATH" -v --cov="$SRC_PATH" --cov-report=term-missing --cov-report
 python test_result_xml2trlc.py "./$OUT_DIR/$TEST_RESULT_REPORT_XML" "./$OUT_DIR/$TEST_RESULT_REPORT_TRLC"
 
 # Convert TRLC test report to Markdown.
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --source=../../doc/models --exclude=../../doc/sw-requirements --exclude=../../doc/sw-test --source=$OUT_DIR/$TEST_RESULT_REPORT_TRLC -o=$OUT_DIR --project=create_test_report.py --verbose markdown
+pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --source=../../doc/models --exclude=../../doc/sw-requirements --exclude=../../doc/sw-test --source=$OUT_DIR/$TEST_RESULT_REPORT_TRLC -o=$OUT_DIR --project=create_test_report_in_markdown.py --verbose markdown
+
+# Convert TRLC test report to reStructuredText.
+pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --source=../../doc/models --exclude=../../doc/sw-requirements --exclude=../../doc/sw-test --source=$OUT_DIR/$TEST_RESULT_REPORT_TRLC -o=$OUT_DIR --project=create_test_report_in_rst.py --verbose rst
