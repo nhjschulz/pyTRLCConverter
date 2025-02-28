@@ -248,10 +248,13 @@ class RstConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
         # lobster-trace: SwRequirements.sw_req_rst_record
         """
-        Process the given record object.
+        Process the given record object in a generic way.
+
+        The handler is called by the base converter if no specific handler is
+        defined for the record type.
 
         Args:
             record (Record_Object): The record object
@@ -263,6 +266,7 @@ class RstConverter(BaseConverter):
         assert self._fd is not None
 
         self._write_empty_line_on_demand()
+
         return self._convert_record_object(record, level, None)
 
     def finish(self):

@@ -29,10 +29,11 @@ rem Software Tests
 rem ****************************************************************************************************
 set SW_TEST_OUT_FORMAT=rst
 set SW_TEST_OUT_DIR=.\out\sw-tests\%SW_TEST_OUT_FORMAT%
+set SW_TEST_CONVERTER=..\ProjectConverter\tc2rst
 
 if not exist %SW_TEST_OUT_DIR% (
     md %SW_TEST_OUT_DIR%
 )
 
 echo Generate software tests ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% --verbose --project=tc2rst %SW_TEST_OUT_FORMAT%
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% --verbose --project=%SW_TEST_CONVERTER% %SW_TEST_OUT_FORMAT%

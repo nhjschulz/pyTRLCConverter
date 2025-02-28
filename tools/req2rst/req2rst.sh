@@ -30,13 +30,14 @@ fi
 # ****************************************************************************************************
 SWE_REQ_OUT_FORMAT="rst"
 SWE_REQ_OUT_DIR="./out/sw-requirements/$SWE_REQ_OUT_FORMAT"
+SWE_REQ_CONVERTER=../ProjectConverter/req2rst
 
 if [ ! -d "$SWE_REQ_OUT_DIR" ]; then
     mkdir -p "$SWE_REQ_OUT_DIR"
 fi
 
 echo "Generate software requirements ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/models -o="$SWE_REQ_OUT_DIR" --verbose "$SWE_REQ_OUT_FORMAT"
+pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/models -o="$SWE_REQ_OUT_DIR" --verbose --project="$SWE_REQ_CONVERTER" "$SWE_REQ_OUT_FORMAT"
 
 if [ $? -ne 0 ]; then
     read -p "Press any key to continue..."

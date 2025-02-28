@@ -32,7 +32,7 @@ from generic_rsl_markdown_converter import GenericRslMarkdownConverter
 # Classes **********************************************************************
 
 
-class ProjectMarkDownConverter(GenericRslMarkdownConverter):
+class ProjectMarkdownConverter(GenericRslMarkdownConverter):
     """Custom Project specific Markdown Converter.
     """
 
@@ -49,7 +49,7 @@ class ProjectMarkDownConverter(GenericRslMarkdownConverter):
                 "Info": self._print_info,
                 "PlantUML": self._print_plantuml,
                 "SwReq": self._print_sw_req,
-                "SwReqNonFunc": self._print_sw_req,
+                "SwReqNonFunc": self._print_sw_req_non_func,
                 "SwConstraint": self._print_sw_constraint
            }
         )
@@ -79,6 +79,24 @@ class ProjectMarkDownConverter(GenericRslMarkdownConverter):
             "description": "Description",
             "note": "Note",
             "verification_criteria": "Verification Criteria",
+            "derived": "Derived"
+        }
+
+        return self._convert_record_object(sw_req, level, attribute_translation)
+
+    def _print_sw_req_non_func(self, sw_req: Record_Object, level: int) -> Ret:
+        """Prints the software non-functional requirement.
+
+        Args:
+            sw_req (Record_Object): Software non-functional requirement to print
+            level (int): Current level of the record object
+        """
+
+        self._write_empty_line_on_demand()
+
+        attribute_translation = {
+            "description": "Description",
+            "note": "Note",
             "derived": "Derived"
         }
 
