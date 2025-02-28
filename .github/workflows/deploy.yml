@@ -78,6 +78,7 @@ jobs:
           cd ./tools/createTestReport
           chmod +x create_test_report.sh
           ./create_test_report.sh
+          rm -f ./out/coverage/.gitingore
           cd ../..
 
       - name: Build tracing report
