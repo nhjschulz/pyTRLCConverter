@@ -22,6 +22,8 @@
 # Imports **********************************************************************
 import os
 import shutil
+from typing import Optional
+from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.plantuml import PlantUML
 
@@ -33,9 +35,27 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 
 
-class CustomMarkDownConverter(MarkdownConverter):
+class ExamplePlantumlMarkdownConverter(MarkdownConverter):
     """Custom Project specific Markdown Converter.
     """
+
+    def __init__(self, args: any) -> None:
+        """
+        Initialize the custom markdown converter.
+
+        Args:
+            args (any): The parsed program arguments.
+        """
+        super().__init__(args)
+
+        # Set project specific record handlers for the converter.
+        self._set_project_record_handlers(
+            {
+                "PlantUML": self._print_diagram,
+                "Requirement": self._print_req
+            }
+        )
+        self._record_policy = RecordsPolicy.RECORD_CONVERT_ALL
 
     @staticmethod
     def get_description() -> str:
@@ -46,45 +66,6 @@ class CustomMarkDownConverter(MarkdownConverter):
         """
         return "Convert into project extended markdown format."
 
-    def convert_section(self, section: str, level: int) -> Ret:
-        """Converts a section to Markdown format.
-
-        Args:
-            section (str): Section to convert
-            level (int): Current level of the section
-
-        Returns:
-            Ret: Status
-        """
-        markdown_text = self.markdown_create_heading(section, level + 1)
-        self._fd.write(markdown_text)
-
-        return Ret.OK
-
-    # pylint: disable=unused-argument
-    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
-        """Converts a record object to Markdown format.
-
-        Args:
-            record (Record_Object): Record object to convert
-            level (int): Current level of the record object
-
-        Returns:
-            Ret: Status
-        """
-
-        if record.n_typ.name == "Diagram":
-            self._print_diagram(record, level)
-
-        elif record.n_typ.name == "Requirement":
-            self._print_req(record, level)
-
-        else:
-            # Skipped.
-            pass
-
-        return Ret.OK
-
     def _print_table_head(self) -> None:
         """Prints the table head for software requirements and constraints.
         """
@@ -94,12 +75,15 @@ class CustomMarkDownConverter(MarkdownConverter):
         self._fd.write(markdown_table_head)
 
     # pylint: disable=unused-argument
-    def _print_diagram(self, diagram: Record_Object, level: int) -> None:
+    def _print_diagram(self, diagram: Record_Object, level: int) -> Ret:
         """Prints the diagram.
 
         Args:
             diagram (Record_Object): Diagram to print
             level (int): Current level of the record object
+
+        Returns:
+            Ret: Status
         """
         plantuml_generator = PlantUML()
         image_format = "png"
@@ -146,14 +130,18 @@ class CustomMarkDownConverter(MarkdownConverter):
             file_dst_path, caption)
         self._fd.write(markdown_image)
 
-    def _print_req(self, req: Record_Object, level: int) -> None:
+        return Ret.OK
+
+    def _print_req(self, req: Record_Object, level: int) -> Ret:
         """Prints the requirement.
 
         Args:
             req (Record_Object): Requirement to print
             level (int): Current level of the record object
+
+        Returns:
+            Ret: Status
         """
-        req_attributes = req.to_python_dict()
         description = self._get_attribute(req, "description")
 
         markdown_text = self.markdown_create_heading(req.name, level + 1)
@@ -170,6 +158,37 @@ class CustomMarkDownConverter(MarkdownConverter):
             self._fd.write(markdown_table_row)
 
         self._fd.write("\n")
+
+        return Ret.OK
+
+    def _locate_file(self, file_path: str) -> Optional[str]:
+        """
+        Locate a file by searching through the sources list if it 
+        cannot be accessed by the given file_path.
+
+        Args:
+            file_path (str): The name of the file to locate.
+
+        Returns:
+            str: The full path to the located file if found, otherwise None.
+        """
+
+        calculated_path = None
+
+        # Is the path to the file invalid?
+        if os.path.isfile(file_path) is False:
+            # Maybe the path is relative to one of the source paths.
+            for src_item in self._args.source:
+                if os.path.isdir(src_item):
+                    full_file_path = os.path.join(src_item, file_path)
+
+                    if os.path.isfile(full_file_path) is False:
+                        full_file_path = None
+                    else:
+                        calculated_path = full_file_path
+                        break
+
+        return calculated_path
 
 # Functions ********************************************************************
 
