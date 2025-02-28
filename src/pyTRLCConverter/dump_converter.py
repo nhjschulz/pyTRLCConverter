@@ -89,8 +89,12 @@ class DumpConverter(BaseConverter):
         print(f"{' ' * level}Section: {section} at level: {level}")
         return Ret.OK
 
-    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
-        """Process the given record object.
+    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+        """
+        Process the given record object in a generic way.
+
+        The handler is called by the base converter if no specific handler is
+        defined for the record type.
 
         Args:
             record (Record_Object): The record object
@@ -99,6 +103,7 @@ class DumpConverter(BaseConverter):
         Returns:
             Ret: Status
         """
+
         print(f"{' ' * level}Record {record.name}, Level: {level}")
         print(f"{record.dump(indent=level+1)}")
         return Ret.OK
