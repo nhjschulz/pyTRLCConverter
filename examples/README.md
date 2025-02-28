@@ -1,7 +1,8 @@
 # pyTRLCConverter <!-- omit in toc -->
 
 ## Examples
-The following examples show different functionality as well as possibilities. Because one part of the innovation is still on the user side, e.g. by introducing a Digram type and not just deal with requirements.
+
+The following examples show different functionality as well as possibilities. Because one part of the innovation is still on the user side, e.g. by introducing a Diagram type and not just deal with requirements.
 
 | Example | Single/Multiple source(s) | With project specific conversion functions | Diagram support | Single output document |
 | ------- | ------------------------- | ------------------------------------------ | --------------- | ---------------------- |
@@ -10,6 +11,10 @@ The following examples show different functionality as well as possibilities. Be
 | [simple_req_multi](./simple_req_multi/) | Multiple | No | No | No |
 | [simple_req_multi_single_out](./simple_req_multi_single_out/) | Multiple | No | No | Yes |
 | [simple_req_proj_spec](./simple_req/) | Single | Yes | No | No |
+
+Also look into the [tools/ProjectConverter](../tools/ProjectConverter) folder, which contains
+more sophisticated converter implementations. These are the converters for the pyTRLCConverter
+model files in [doc/models](../doc/models/).
 
 ## Issues, Ideas And Bugs
 
