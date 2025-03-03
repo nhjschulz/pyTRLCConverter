@@ -136,14 +136,13 @@ class TrlcAstWalker():
 
         self._dispatch(self._dispatcher_map_begin, array_aggregate, False)
 
-        if len(array_aggregate.value) > 0:
-            for expression in array_aggregate.value:
-                value_result = self._dispatch(self._dispatcher_map_process, expression, True)
+        for expression in array_aggregate.value:
+            value_result = self._dispatch(self._dispatcher_map_process, expression, True)
 
-                if isinstance(value_result, list):
-                    result.extend(value_result)
-                else:
-                    result.append(value_result)
+            if isinstance(value_result, list):
+                result.extend(value_result)
+            else:
+                result.append(value_result)
 
         self._dispatch(self._dispatcher_map_finish, array_aggregate, False)
 
