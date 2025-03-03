@@ -23,10 +23,10 @@
 import os
 import sys
 from typing import List, Optional
-from trlc import trlc
+from trlc.ast import Implicit_Null, Record_Object, Record_Reference
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.trlc_helper import Record_Object
+from pyTRLCConverter.trlc_helper import TrlcAstWalker
 from pyTRLCConverter.log_verbose import log_verbose
 
 # Variables ********************************************************************
@@ -53,7 +53,7 @@ class RstConverter(BaseConverter):
         # The path to the given output folder.
         self._out_path = args.out
 
-        # The file descriptor for the output file. Used in single and multiple document mode.
+        # The file descriptor for the output file.
         self._fd = None
 
         # The base level for the headings. Its the minimum level for the headings which depends
@@ -109,7 +109,7 @@ class RstConverter(BaseConverter):
             type=str,
             default=BaseConverter.EMPTY_ATTRIBUTE_DEFAULT,
             required=False,
-            help="Every attribute value which is empty will output the string." \
+            help="Every attribute value which is empty will output the string " \
                 f"(default = {BaseConverter.EMPTY_ATTRIBUTE_DEFAULT})."
         )
 
@@ -139,8 +139,8 @@ class RstConverter(BaseConverter):
             type=str,
             default=RstConverter.TOP_LEVEL_DEFAULT,
             required=False,
-            help="Name of the top level heading, required in single document mode. " \
-                f"(default = {RstConverter.TOP_LEVEL_DEFAULT})"
+            help="Name of the top level heading, required in single document mode " \
+                f"(default = {RstConverter.TOP_LEVEL_DEFAULT})."
         )
 
     def begin(self) -> Ret:
@@ -287,6 +287,11 @@ class RstConverter(BaseConverter):
         # lobster-trace: SwRequirements.sw_req_rst
         """
         Write an empty line if necessary.
+
+        For proper reStructuredText formatting, the first written part shall not have an empty
+        line before. But all following parts (heading, table, paragraph, image, etc.) shall
+        have an empty line before. And at the document bottom, there shall be just one empty
+        line.
         """
         if self._empty_line_required is False:
             self._empty_line_required = True
@@ -351,7 +356,7 @@ class RstConverter(BaseConverter):
 
         return result
 
-    def _on_implict_null(self, _) -> str:
+    def _on_implict_null(self, _: Implicit_Null) -> str:
         # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given implicit null value.
@@ -359,92 +364,29 @@ class RstConverter(BaseConverter):
         Returns:
             str: The implicit null value
         """
-        return self._empty_attribute_value
+        return self.rst_escape(self._empty_attribute_value)
 
-    def _on_array_aggregate(self, value: trlc.ast.Array_Aggregate) -> str:
-        # lobster-trace: SwRequirements.sw_req_rst_record
-        """
-        Process the given array aggregate value.
-        It will process the array elements recursively.
-        Each element will be separated by a comma.
-
-        Args:
-            value (trlc.ast.Array_Aggregate): The array aggregate value.
-        
-        Returns:
-            str: A comma separated list of array element names or reStructuredText links.
-        """
-        result = ""
-
-        dispatcher_map = {
-            trlc.ast.Implicit_Null: self._on_implict_null,
-            trlc.ast.Array_Aggregate: self._on_array_aggregate,
-            trlc.ast.Record_Reference: self._on_record_reference
-        }
-
-        if len(value.value) > 0:
-            type_name = type(value.value[0])
-            if type_name in dispatcher_map:
-                for idx, item in enumerate(value.value):
-                    if idx > 0:
-                        result += ", "
-
-                    result += dispatcher_map[type_name](item)
-            else:
-                result = self.rst_escape(value.to_python_object())
-
-        return result
-
-    def _on_record_reference(self, value: trlc.ast.Record_Reference) -> str:
+    def _on_record_reference(self, record_reference: Record_Reference) -> str:
         # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record reference value and return a reStructuredText link.
 
         Args:
-            value (trlc.ast.Record_Reference): The record reference value.
+            record_reference (Record_Reference): The record reference value.
         
         Returns:
             str: reStructuredText link to the record reference.
         """
-        return self._create_rst_link_from_record_object_reference(value)
+        return self._create_rst_link_from_record_object_reference(record_reference)
 
-    def _on_field(self, value: trlc.ast.Expression) -> str:
-        # lobster-trace: SwRequirements.sw_req_rst_record
-        """
-        Process the given field value and return it as a string.
-        The main purpose is to handle arrays and record references explicitly.
-        A record reference will be converted into a reStructuredText link.
-
-        Args:
-            value (trlc.ast.Expression): The field value
-        
-        Returns:
-            str: The field value
-        """
-        result = ""
-
-        dispatcher_map = {
-            trlc.ast.Implicit_Null: self._on_implict_null,
-            trlc.ast.Array_Aggregate: self._on_array_aggregate,
-            trlc.ast.Record_Reference: self._on_record_reference
-        }
-
-        type_name = type(value)
-        if type_name in dispatcher_map:
-            result = dispatcher_map[type_name](value)
-        else:
-            result = self.rst_escape(value.to_python_object())
-
-        return result
-
-    def _create_rst_link_from_record_object_reference(self, record_reference: trlc.ast.Record_Reference) -> str:
+    def _create_rst_link_from_record_object_reference(self, record_reference: Record_Reference) -> str:
         # lobster-trace: SwRequirements.sw_req_rst_link
         """
         Create a reStructuredText cross-reference from a record reference.
         It considers the file name, the package name, and the record name.
 
         Args:
-            record_reference (trlc.ast.Record_Reference): Record reference
+            record_reference (Record_Reference): Record reference
 
         Returns:
             str: reStructuredText cross-reference
@@ -466,6 +408,32 @@ class RstConverter(BaseConverter):
 
         return RstConverter.rst_create_link(record_reference.to_python_object(), target_id)
 
+    def _get_trlc_ast_walker(self) -> TrlcAstWalker:
+        # If a record object contains a record reference, the record reference will be converted to
+        # a Markdown link.
+        # If a record object contains an array of record references, the array will be converted to
+        # a Markdown list of links.
+        # Otherwise the record object fields attribute values will be written to the Markdown table.
+        trlc_ast_walker = TrlcAstWalker()
+        trlc_ast_walker.add_dispatcher(
+            Implicit_Null,
+            None,
+            self._on_implict_null,
+            None
+        )
+        trlc_ast_walker.add_dispatcher(
+            Record_Reference,
+            None,
+            self._on_record_reference,
+            None
+        )
+        trlc_ast_walker.set_other_dispatcher(
+            lambda expression: RstConverter.rst_escape(expression.to_python_object())
+        )
+
+        return trlc_ast_walker
+
+    # pylint: disable=too-many-locals
     def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_rst_record
         """
@@ -482,6 +450,8 @@ class RstConverter(BaseConverter):
         assert self._fd is not None
 
         self._write_empty_line_on_demand()
+
+         # The record name will be the heading.
         file_name = os.path.basename(self._fd.name)
         rst_heading = self.rst_create_heading(record.name,
                                                     self._get_rst_heading_level(level + 1),
@@ -490,28 +460,52 @@ class RstConverter(BaseConverter):
         self._fd.write(rst_heading)
         self._fd.write("\n")
 
+        # The record fields will be written to a table.
         column_titles = ["Attribute Name", "Attribute Value"]
 
-        # Calculate the maximum width of each column based on both headers and row values
-        max_widths = [len(title) for title in column_titles]
+        # Build rows for the table.
+        # Its required to calculate the maximum width for each column, therefore the rows
+        # will be stored first in a list and then the maximum width will be calculated.
+        # The table will be written after the maximum width calculation.
+        rows = []
+        trlc_ast_walker = self._get_trlc_ast_walker()
         for name, value in record.field.items():
             attribute_name = name
             if attribute_translation is not None and name in attribute_translation:
                 attribute_name = attribute_translation[name]
             attribute_name = self.rst_escape(attribute_name)
-            attribute_value = self._on_field(value)
-            max_widths = [max(max_widths[idx], len(val)) for idx, val in enumerate([attribute_name, attribute_value])]
 
+            # Retrieve the attribute value by processing the field value.
+            walker_result = trlc_ast_walker.walk(value)
+
+            attribute_value = ""
+            if isinstance(walker_result, list):
+                # List every list item line by line.
+                for idx, walker_result_item in enumerate(walker_result):
+                    if 0 < idx:
+                        attribute_value += "\n"
+
+                    attribute_value += walker_result_item
+
+            else:
+                attribute_value = walker_result
+
+            rows.append([attribute_name, attribute_value])
+
+        # Calculate the maximum width of each column based on both headers and row values.
+        max_widths = [len(title) for title in column_titles]
+        for row in rows:
+            for idx, value in enumerate(row):
+                lines = value.split('\n')
+                for line in lines:
+                    max_widths[idx] = max(max_widths[idx], len(line))
+
+        # Write the table head and rows.
         rst_table_head = self.rst_create_table_head(column_titles, max_widths)
         self._fd.write(rst_table_head)
 
-        for name, value in record.field.items():
-            attribute_name = name
-            if attribute_translation is not None and name in attribute_translation:
-                attribute_name = attribute_translation[name]
-            attribute_name = self.rst_escape(attribute_name)
-            attribute_value = self._on_field(value)
-            rst_table_row = self.rst_append_table_row([attribute_name, attribute_value], max_widths, False)
+        for row in rows:
+            rst_table_row = self.rst_append_table_row(row, max_widths, False)
             self._fd.write(rst_table_row)
 
         return Ret.OK
@@ -608,6 +602,7 @@ class RstConverter(BaseConverter):
         """
         Append a row to a reStructuredText table in grid format.
         The values will be automatically escaped for reStructuredText if necessary.
+        Supports multi-line cell values.
 
         Args:
             row_values ([str]): List of row values.
@@ -620,11 +615,23 @@ class RstConverter(BaseConverter):
         if escape:
             row_values = [RstConverter.rst_escape(value) for value in row_values]
 
-        # Create the row
-        table_row = "    |"
-        table_row += "|".join([f" {value.ljust(max_widths[idx])} " for idx, value in enumerate(row_values)]) + "|\n"
+        # Split each cell value into lines.
+        split_values = [value.split('\n') for value in row_values]
+        max_lines = max(len(lines) for lines in split_values)
 
-        # Create the separator row
+        # Create the row with multi-line support.
+        table_row = ""
+        for line_idx in range(max_lines):
+            table_row += "    |"
+            for col_idx, lines in enumerate(split_values):
+                if line_idx < len(lines):
+                    table_row += f" {lines[line_idx].ljust(max_widths[col_idx])} "
+                else:
+                    table_row += " " * (max_widths[col_idx] + 2)
+                table_row += "|"
+            table_row += "\n"
+
+        # Create the separator row.
         separator_row = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
         return table_row + separator_row

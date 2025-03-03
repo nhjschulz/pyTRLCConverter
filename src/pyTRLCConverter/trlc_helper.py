@@ -21,14 +21,168 @@
 
 # Imports **********************************************************************
 import os
+from typing import Union, Optional
 from trlc.errors import Message_Handler
 from trlc.trlc import Source_Manager
-from trlc.ast import Record_Object
+from trlc.ast import Array_Aggregate, Expression, Record_Object
 from pyTRLCConverter.log_verbose import log_verbose
 
 # Variables ********************************************************************
 
 # Classes **********************************************************************
+
+class TrlcAstWalker():
+    # lobster-trace: SwRequirements.sw_req_markdown
+    # lobster-trace: SwRequirements.sw_req_rst
+    """
+    This class helps to walk through the TRLC AST. It uses a dispatcher map to handle
+    the different AST nodes.
+
+    It contains three dispatcher maps: begin, process and finish.
+    
+    The begin map is used to handle the node when it is entered, the process map is used to
+    handle the node when it is processed and the finish map is used to handle the node when
+    it is finished.
+    
+    The dispatcher map is a dictionary with the type name as key and the handler as value.
+
+    By default the walker contains a dispatcher map only for the Array_Aggregate node. The other
+    nodes are handled by the other dispatcher. If no other dispatcher is set, the node is
+    converted to a string.
+    """
+    def __init__(self) -> None:
+        self._dispatcher_map_begin = {}
+        self._dispatcher_map_process = {
+            Array_Aggregate: self._on_array_aggregate
+        }
+        self._dispatcher_map_finish = {}
+        self._other_dispatcher = None
+
+    def walk(self, expression: Expression) -> Union[list[str],str]:
+        """
+        Walk through the TRLC AST.
+
+        Args:
+            expression (Expression): The AST node.
+
+        Returns:
+            Union[list[str],str]: The result of the walking as string or list of strings.
+        """
+        return self._on_general(expression)
+
+    # pylint: disable=line-too-long
+    def add_dispatcher(self, type_name: type, begin: Optional[callable], process: Optional[callable], finish: Optional[callable]) -> None:
+        """
+        Add a dispatcher to the walker.
+
+        Args:
+            type_name (type): The type name
+            begin (Optional[callable]): The begin handler
+            process (Optional[callable]): The process handler
+            finish (Optional[callable]): The finish handler
+        """
+        if begin is not None:
+            self._dispatcher_map_begin[type_name] = begin
+
+        if process is not None:
+            self._dispatcher_map_process[type_name] = process
+
+        if finish is not None:
+            self._dispatcher_map_finish[type_name] = finish
+
+    def set_other_dispatcher(self, dispatcher: callable) -> None:
+        """
+        Set the other dispatcher. This dispatcher is called when no dispatcher is found for the node.
+
+        Args:
+            dispatcher (callable): The other dispatcher
+        """
+        self._other_dispatcher = dispatcher
+
+    def _dispatch(self, dispatcher_map: dict, expression: Expression, handle_other: bool) -> Union[list[str],str]:
+        """
+        Dispatch the expression to the dispatcher map.
+
+        Args:
+            dispatcher_map (dict): The dispatcher map.
+            expression (Expression): The AST node.
+            handle_other (bool): If True, the other dispatcher is called when no dispatcher is found.
+
+        Returns:
+            Union[list[str],str]: The result of the dispatcher.
+        """
+        result = ""
+
+        type_name = type(expression)
+
+        if type_name in dispatcher_map:
+            result = dispatcher_map[type_name](expression)
+        elif handle_other is True:
+            result = self._on_other(expression)
+
+        return result
+
+    def _on_array_aggregate(self, array_aggregate: Array_Aggregate) -> list[str]:
+        """
+        Handle the Array_Aggregate node.
+
+        Args:
+            array_aggregate (Array_Aggregate): The AST node.
+
+        Returns:
+            list[str]: The result of the handling.
+        """
+        result = []
+
+        self._dispatch(self._dispatcher_map_begin, array_aggregate, False)
+
+        if len(array_aggregate.value) > 0:
+            for expression in array_aggregate.value:
+                value_result = self._dispatch(self._dispatcher_map_process, expression, True)
+
+                if isinstance(value_result, list):
+                    result.extend(value_result)
+                else:
+                    result.append(value_result)
+
+        self._dispatch(self._dispatcher_map_finish, array_aggregate, False)
+
+        return result
+
+    def _on_general(self, expression: Expression) -> Union[list[str],str]:
+        """
+        Handle the general case.
+
+        Args:
+            expression (Expression): The AST node.
+
+        Returns:
+            Union[list[str],str]: The result of the handling.
+        """
+        self._dispatch(self._dispatcher_map_begin, expression, False)
+        result = self._dispatch(self._dispatcher_map_process, expression, True)
+        self._dispatch(self._dispatcher_map_finish, expression, False)
+
+        return result
+
+    def _on_other(self, expression: Expression) -> Union[list[str],str]:
+        """
+        Handle the other case.
+
+        Args:
+            expression (Expression): The AST node.
+
+        Returns:
+            Union[list[str],str]: The result of the handling.
+        """
+        result = ""
+
+        if self._other_dispatcher is not None:
+            result = self._other_dispatcher(expression)
+        else:
+            result = expression.to_string()
+
+        return result
 
 # Functions ********************************************************************
 
