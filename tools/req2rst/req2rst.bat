@@ -18,7 +18,7 @@ rem If not, see <https://www.gnu.org/licenses/>.
 
 cd ..\plantuml
 call get_plantuml.bat
-cd ..\req2markdown
+cd ..\req2rst
 
 if not exist "out" (
     md out
@@ -27,9 +27,9 @@ if not exist "out" (
 rem ****************************************************************************************************
 rem Software Requirements
 rem ****************************************************************************************************
-set SWE_REQ_OUT_FORMAT=markdown
+set SWE_REQ_OUT_FORMAT=rst
 set SWE_REQ_OUT_DIR=.\out\sw-requirements\%SWE_REQ_OUT_FORMAT%
-set SWE_REQ_CONVERTER=..\ProjectConverter\req2markdown
+set SWE_REQ_CONVERTER=..\ProjectConverter\req2rst
 
 if not exist %SWE_REQ_OUT_DIR% (
     md %SWE_REQ_OUT_DIR%

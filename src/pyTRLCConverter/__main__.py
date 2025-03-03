@@ -37,6 +37,7 @@ from pyTRLCConverter.trlc_helper import get_trlc_symbols
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.docx_converter import DocxConverter
 from pyTRLCConverter.log_verbose import enable_verbose, log_verbose, is_verbose_enabled
+from pyTRLCConverter.rst_converter import RstConverter
 
 # Variables ********************************************************************
 
@@ -50,7 +51,8 @@ PROG_EPILOG = PROG_COPYRIGHT + " - " + PROG_GITHUB
 BUILD_IN_CONVERTER_LIST = [
     MarkdownConverter,
     DocxConverter,
-    DumpConverter
+    DumpConverter,
+    RstConverter
 ]
 
 # Classes **********************************************************************
@@ -232,7 +234,11 @@ def _get_project_converter() -> Optional[AbstractConverter]:
         # Dynamically load the module and search for an AbstractConverter class definition
         sys.path.append(os.path.dirname(project_module_name))
         project_module_name = os.path.basename(project_module_name).replace('.py', '')
-        module = importlib.import_module(project_module_name)
+
+        try:
+            module = importlib.import_module(project_module_name)
+        except ImportError as exc:
+            raise ValueError(f"Failed to import module {project_module_name}: {exc}") from exc
 
         #Filter classes that are defined in the module directly.
         classes = inspect.getmembers(module, inspect.isclass)

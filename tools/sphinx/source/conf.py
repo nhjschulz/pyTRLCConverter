@@ -55,16 +55,22 @@ exclude_patterns = []
 # Support restructured text and Markdown
 source_suffix = ['.rst', '.md']
 
+rst_prolog = """
+.. include:: <s5defs.txt>
+
+"""
+
 # -- MyST parser configuration ---------------------------------------------------
 
 # Configure MyST parser to generate GitHub-style anchors
-myst_heading_anchors = 3
+myst_heading_anchors = 6
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'haiku'
 html_static_path = ['_static']
+html_style = 'custom.css'
 
 # Copy favorite icon to static path.
 html_favicon = '../../../doc/images/favicon.ico'
@@ -101,7 +107,6 @@ def copy_coverage_files(app: any) -> None:
     for filename in os.listdir(source_dir):
         full_file_name = os.path.join(source_dir, filename)
         if os.path.isfile(full_file_name):
-            print(f'Copy {full_file_name} to {target_dir}\n')
             shutil.copy(full_file_name, target_dir)
 
 # Main *************************************************************************

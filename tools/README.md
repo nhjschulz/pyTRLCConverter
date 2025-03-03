@@ -1,4 +1,14 @@
-# Tools
+# Tools <!-- omit in toc -->
+
+- [createTestReport](#createtestreport)
+- [lobster](#lobster)
+- [plantuml](#plantuml)
+- [req2docx](#req2docx)
+- [req2markdown](#req2markdown)
+- [req2rst](#req2rst)
+- [sphinx](#sphinx)
+- [tc2markdown](#tc2markdown)
+- [tc2rst](#tc2rst)
 
 ## createTestReport
 
@@ -30,6 +40,12 @@ Used to convert the requirements written with TRLC to the Markdown format.
 
 [Details](./req2markdown/README.md)
 
+## req2rst
+
+Used to convert the requirements written with TRLC to the reStructuredText format.
+
+[Details](./req2rst/README.md)
+
 ## sphinx
 
 Used to generate static HTML files, which will be deployed on Github pages.
@@ -41,3 +57,9 @@ Used to generate static HTML files, which will be deployed on Github pages.
 Used to convert the test cases written with TRLC to the Markdown format.
 
 [Details](./tc2markdown/README.md)
+
+## tc2rst
+
+Used to convert the test cases written with TRLC to the reStructuredText format.
+
+[Details](./tc2rst/README.md)

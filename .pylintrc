@@ -38,3 +38,8 @@ max-line-length=120
 ignore-long-lines=(?x)(
   ^\s*(\#\ )?<?https?://\S+>?$|
   ^\s*(from\s+\S+\s+)?import\s+.+$)
+
+[SIMILARITIES]
+# Minimum lines number of a similarity.
+# Some of the converters use similar code and further breakdown will decrease the readability.
+min-similarity-lines=14

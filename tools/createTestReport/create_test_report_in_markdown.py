@@ -20,8 +20,8 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.ret import Ret
-
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.trlc_helper import Record_Object
 
@@ -30,8 +30,8 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Classes **********************************************************************
 
 
-class CustomMarkDownConverter(MarkdownConverter):
-    """Custom Project specific Markdown Converter responsible for converting the
+class CustomMarkdownConverter(MarkdownConverter):
+    """Custom Project specific Markdown converter responsible for converting the
         SW test case results into Markdown format.
     """
 
@@ -39,6 +39,15 @@ class CustomMarkDownConverter(MarkdownConverter):
         """Initializes the converter.
         """
         super().__init__(args)
+
+        # Set project specific record handlers for the converter.
+        self._set_project_record_handlers(
+           {
+            "SwTestCaseResult": self._print_test_case_result
+           }
+        )
+
+        self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
 
         self._is_table_head_req = True
 
@@ -70,33 +79,11 @@ class CustomMarkDownConverter(MarkdownConverter):
 
         return Ret.OK
 
-    # pylint: disable=unused-argument
-    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
-        """Converts a record object to Markdown format.
-
-        Args:
-            record (Record_Object): Record object to convert
-            level (int): Current level of the record object
-
-        Returns:
-            Ret: Status
-        """
-        assert self._fd is not None
-
-        self._write_empty_line_on_demand()
-
-        if record.n_typ.name == "SwTestCaseResult":
-            self._print_test_case_result(record, level)
-
-        else:
-            # Skipped.
-            pass
-
-        return Ret.OK
-
     def _print_table_head(self) -> None:
         """Prints the table head for software test case results.
         """
+        self._write_empty_line_on_demand()
+
         column_titles = ["Test Case", "Test Function", "Test Result"]
         markdown_table_head = self.markdown_create_table_head(column_titles)
 

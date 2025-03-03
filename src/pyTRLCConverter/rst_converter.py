@@ -1,6 +1,6 @@
-"""Converter to Markdown format.
+"""Converter to reStructuredText format.
 
-    Author: Andreas Merkle (andreas.merkle@newtec.de)
+    Author: Gabryel Reyes (gabryel.reyes@newtec.de)
 """
 
 # pyTRLCConverter - A tool to convert TRLC files to specific formats.
@@ -33,17 +33,15 @@ from pyTRLCConverter.log_verbose import log_verbose
 
 # Classes **********************************************************************
 
-class MarkdownConverter(BaseConverter):
+class RstConverter(BaseConverter):
     """
-    MarkdownConverter provides functionality for converting to a markdown format.
+    RstConverter provides functionality for converting to a reStructuredText format.
     """
-
-    OUTPUT_FILE_NAME_DEFAULT = "output.md"
+    OUTPUT_FILE_NAME_DEFAULT = "output.rst"
     TOP_LEVEL_DEFAULT = "Specification"
 
     def __init__(self, args: any) -> None:
-        # lobster-trace: SwRequirements.sw_req_no_prj_spec
-        # lobster-trace: SwRequirements.sw_req_markdown
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Initializes the converter.
 
@@ -62,46 +60,41 @@ class MarkdownConverter(BaseConverter):
         # on the single/multiple document mode.
         self._base_level = 1
 
-        # For proper Markdown formatting, the first written Markdown part shall not have an empty line before.
+        # For proper reStructuredText formatting, the first written part shall not have an empty line before.
         # But all following parts (heading, table, paragraph, image, etc.) shall have an empty line before.
         # And at the document bottom, there shall be just one empty line.
         self._empty_line_required = False
 
-        # A top level heading is always required to generate a compliant Markdown document.
-        # In single document mode it will always be necessary.
-        # In multiple document mode only if there is no top level section.
-        self._is_top_level_heading_req = True
-
     @staticmethod
     def get_subcommand() -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Return subcommand token for this converter.
 
         Returns:
             str: Parser subcommand token
         """
-        return "markdown"
+        return "rst"
 
     @staticmethod
     def get_description() -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Return converter description.
 
         Returns:
             str: Converter description
         """
-        return "Convert into markdown format."
+        return "Convert into reStructuredText format."
 
     @classmethod
     def register(cls, args_parser: any) -> None:
-        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
-        # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
-        # lobster-trace: SwRequirements.sw_req_markdown_top_level_default
-        # lobster-trace: SwRequirements.sw_req_markdown_top_level_custom
-        # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_default
-        # lobster-trace: SwRequirements.sw_req_markdown_out_file_name_custom
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_sd_top_level_default
+        # lobster-trace: SwRequirements.sw_req_rst_sd_top_level_custom
+        # lobster-trace: SwRequirements.sw_req_rst_out_file_name_default
+        # lobster-trace: SwRequirements.sw_req_rst_out_file_name_custom
         """
         Register converter specific argument parser.
 
@@ -124,10 +117,10 @@ class MarkdownConverter(BaseConverter):
             "-n",
             "--name",
             type=str,
-            default=MarkdownConverter.OUTPUT_FILE_NAME_DEFAULT,
+            default=RstConverter.OUTPUT_FILE_NAME_DEFAULT,
             required=False,
             help="Name of the generated output file inside the output folder " \
-                f"(default = {MarkdownConverter.OUTPUT_FILE_NAME_DEFAULT}) in " \
+                f"(default = {RstConverter.OUTPUT_FILE_NAME_DEFAULT}) in " \
                 "case a single document is generated."
         )
 
@@ -144,15 +137,15 @@ class MarkdownConverter(BaseConverter):
             "-tl",
             "--top-level",
             type=str,
-            default=MarkdownConverter.TOP_LEVEL_DEFAULT,
+            default=RstConverter.TOP_LEVEL_DEFAULT,
             required=False,
             help="Name of the top level heading, required in single document mode " \
-                f"(default = {MarkdownConverter.TOP_LEVEL_DEFAULT})."
+                f"(default = {RstConverter.TOP_LEVEL_DEFAULT})."
         )
 
     def begin(self) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
-        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level
+        # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_sd_top_level
         """
         Begin the conversion process.
 
@@ -179,7 +172,7 @@ class MarkdownConverter(BaseConverter):
             result = self._generate_out_file(self._args.name)
 
             if self._fd is not None:
-                self._write_top_level_heading_on_demand()
+                self._fd.write(RstConverter.rst_create_heading(self._args.top_level, 1, self._args.name))
 
                 # All headings will be shifted by one level.
                 self._base_level = self._base_level + 1
@@ -187,7 +180,7 @@ class MarkdownConverter(BaseConverter):
         return result
 
     def enter_file(self, file_name: str) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
         """
         Enter a file.
 
@@ -203,16 +196,16 @@ class MarkdownConverter(BaseConverter):
         if self._args.single_document is False:
             assert self._fd is None
 
-            file_name_md = self._file_name_trlc_to_md(file_name)
-            result = self._generate_out_file(file_name_md)
+            file_name_rst = self._file_name_trlc_to_rst(file_name)
+            result = self._generate_out_file(file_name_rst)
 
-            # The very first written Markdown part shall not have a empty line before.
+            # The very first written reStructuredText part shall not have an empty line before.
             self._empty_line_required = False
 
         return result
 
     def leave_file(self, file_name: str) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
         """
         Leave a file.
 
@@ -232,11 +225,10 @@ class MarkdownConverter(BaseConverter):
         return Ret.OK
 
     def convert_section(self, section: str, level: int) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_section
-        # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
+        # lobster-trace: SwRequirements.sw_req_rst_section
         """
         Process the given section item.
-        It will create a Markdown heading with the given section name and level.
+        It will create a reStructuredText heading with the given section name and level.
 
         Args:
             section (str): The section name
@@ -249,17 +241,15 @@ class MarkdownConverter(BaseConverter):
         assert self._fd is not None
 
         self._write_empty_line_on_demand()
-        markdown_heading = self.markdown_create_heading(section, self._get_markdown_heading_level(level))
-        self._fd.write(markdown_heading)
-
-        # If a section heading is written, there is no top level heading required anymore.
-        self._is_top_level_heading_req = False
+        rst_heading = self.rst_create_heading(section,
+                                            self._get_rst_heading_level(level),
+                                            os.path.basename(self._fd.name))
+        self._fd.write(rst_heading)
 
         return Ret.OK
 
     def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_record
-        # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record object in a generic way.
 
@@ -275,13 +265,12 @@ class MarkdownConverter(BaseConverter):
         """
         assert self._fd is not None
 
-        self._write_top_level_heading_on_demand()
         self._write_empty_line_on_demand()
 
         return self._convert_record_object(record, level, None)
 
     def finish(self):
-        # lobster-trace: SwRequirements.sw_req_markdown_single_doc_mode
+        # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode
         """
         Finish the conversion process.
         """
@@ -294,21 +283,12 @@ class MarkdownConverter(BaseConverter):
 
         return Ret.OK
 
-    def _write_top_level_heading_on_demand(self) -> None:
-        # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
-        # lobster-trace: SwRequirements.sw_req_markdown_sd_top_level
-        """Write the top level heading if necessary.
-        """
-        if self._is_top_level_heading_req is True:
-            self._fd.write(MarkdownConverter.markdown_create_heading(self._args.top_level, 1))
-            self._is_top_level_heading_req = False
-
     def _write_empty_line_on_demand(self) -> None:
-        # lobster-trace: SwRequirements.sw_req_markdown
+        # lobster-trace: SwRequirements.sw_req_rst
         """
         Write an empty line if necessary.
 
-        For proper Markdown formatting, the first written part shall not have an empty
+        For proper reStructuredText formatting, the first written part shall not have an empty
         line before. But all following parts (heading, table, paragraph, image, etc.) shall
         have an empty line before. And at the document bottom, there shall be just one empty
         line.
@@ -318,38 +298,39 @@ class MarkdownConverter(BaseConverter):
         else:
             self._fd.write("\n")
 
-    def _get_markdown_heading_level(self, level: int) -> int:
-        # lobster-trace: SwRequirements.sw_req_markdown_record
-        """Get the Markdown heading level from the TRLC object level.
-            Its mandatory to use this method to calculate the Markdown heading level.
-            Otherwise in single document mode the top level heading will be wrong.
+    def _get_rst_heading_level(self, level: int) -> int:
+        # lobster-trace: SwRequirements.sw_req_rst_section
+        """
+        Get the reStructuredText heading level from the TRLC object level.
+        Its mandatory to use this method to calculate the reStructuredText heading level.
+        Otherwise in single document mode the top level heading will be wrong.
 
         Args:
             level (int): The TRLC object level.
         
         Returns:
-            int: Markdown heading level
+            int: reStructuredText heading level
         """
         return self._base_level + level
 
-    def _file_name_trlc_to_md(self, file_name_trlc: str) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_multiple_doc_mode
+    def _file_name_trlc_to_rst(self, file_name_trlc: str) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_multiple_doc_mode
         """
-        Convert a TRLC file name to a Markdown file name.
+        Convert a TRLC file name to a reStructuredText file name.
 
         Args:
             file_name_trlc (str): TRLC file name
         
         Returns:
-            str: Markdown file name
+            str: reStructuredText file name
         """
         file_name = os.path.basename(file_name_trlc)
-        file_name = os.path.splitext(file_name)[0] + ".md"
+        file_name = os.path.splitext(file_name)[0] + ".rst"
 
         return file_name
 
     def _generate_out_file(self, file_name: str) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_out_folder
+        # lobster-trace: SwRequirements.sw_req_rst_out_folder
         """
         Generate the output file.
 
@@ -376,40 +357,39 @@ class MarkdownConverter(BaseConverter):
         return result
 
     def _on_implict_null(self, _: Implicit_Null) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_record
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given implicit null value.
         
         Returns:
             str: The implicit null value
         """
-        return self.markdown_escape(self._empty_attribute_value)
+        return self.rst_escape(self._empty_attribute_value)
 
     def _on_record_reference(self, record_reference: Record_Reference) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_record
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
-        Process the given record reference value and return a markdown link.
+        Process the given record reference value and return a reStructuredText link.
 
         Args:
             record_reference (Record_Reference): The record reference value.
         
         Returns:
-            str: Markdown link to the record reference.
+            str: reStructuredText link to the record reference.
         """
-        return self._create_markdown_link_from_record_object_reference(record_reference)
+        return self._create_rst_link_from_record_object_reference(record_reference)
 
-    # pylint: disable=line-too-long
-    def _create_markdown_link_from_record_object_reference(self, record_reference: Record_Reference) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_record
+    def _create_rst_link_from_record_object_reference(self, record_reference: Record_Reference) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_link
         """
-        Create a Markdown link from a record reference.
+        Create a reStructuredText cross-reference from a record reference.
         It considers the file name, the package name, and the record name.
 
         Args:
             record_reference (Record_Reference): Record reference
 
         Returns:
-            str: Markdown link
+            str: reStructuredText cross-reference
         """
         file_name = ""
 
@@ -419,13 +399,14 @@ class MarkdownConverter(BaseConverter):
 
         # Multiple document mode
         else:
-            file_name = self._file_name_trlc_to_md(record_reference.target.location.file_name)
+            file_name = self._file_name_trlc_to_rst(record_reference.target.location.file_name)
 
         record_name = record_reference.target.name
 
-        anchor_tag = file_name + "#" + record_name.lower().replace(" ", "-")
+        # Create a target ID for the record
+        target_id = f"{file_name}-{record_name.lower().replace(' ', '-')}"
 
-        return MarkdownConverter.markdown_create_link(record_reference.to_python_object(), anchor_tag)
+        return RstConverter.rst_create_link(record_reference.to_python_object(), target_id)
 
     def _get_trlc_ast_walker(self) -> TrlcAstWalker:
         # If a record object contains a record reference, the record reference will be converted to
@@ -447,14 +428,14 @@ class MarkdownConverter(BaseConverter):
             None
         )
         trlc_ast_walker.set_other_dispatcher(
-            lambda expression: MarkdownConverter.markdown_escape(expression.to_python_object())
+            lambda expression: RstConverter.rst_escape(expression.to_python_object())
         )
 
         return trlc_ast_walker
 
     # pylint: disable=too-many-locals
     def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_markdown_record
+        # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record object.
 
@@ -463,33 +444,36 @@ class MarkdownConverter(BaseConverter):
             level (int): The record level.
             attribute_translation (Optional[dict]): Attribute translation (attribute name -> user friendly name).
         
-        Returns:
+            Returns:
             Ret: Status
         """
         assert self._fd is not None
 
-        # The record name will be the heading.
-        markdown_heading = self.markdown_create_heading(record.name, self._get_markdown_heading_level(level + 1))
-        self._fd.write(markdown_heading)
+        self._write_empty_line_on_demand()
+
+         # The record name will be the heading.
+        file_name = os.path.basename(self._fd.name)
+        rst_heading = self.rst_create_heading(record.name,
+                                                    self._get_rst_heading_level(level + 1),
+                                                    file_name,
+                                                    is_object_heading=True)
+        self._fd.write(rst_heading)
         self._fd.write("\n")
 
         # The record fields will be written to a table.
-        # First write the table head.
         column_titles = ["Attribute Name", "Attribute Value"]
-        markdown_table_head = self.markdown_create_table_head(column_titles)
-        self._fd.write(markdown_table_head)
 
-        # Walk through the record object fields and write the table rows.
+        # Build rows for the table.
+        # Its required to calculate the maximum width for each column, therefore the rows
+        # will be stored first in a list and then the maximum width will be calculated.
+        # The table will be written after the maximum width calculation.
+        rows = []
         trlc_ast_walker = self._get_trlc_ast_walker()
-
         for name, value in record.field.items():
-            # Translate the attribute name if available.
             attribute_name = name
-            if attribute_translation is not None:
-                if name in attribute_translation:
-                    attribute_name = attribute_translation[name]
-
-            attribute_name = self.markdown_escape(attribute_name)
+            if attribute_translation is not None and name in attribute_translation:
+                attribute_name = attribute_translation[name]
+            attribute_name = self.rst_escape(attribute_name)
 
             # Retrieve the attribute value by processing the field value.
             walker_result = trlc_ast_walker.walk(value)
@@ -499,24 +483,38 @@ class MarkdownConverter(BaseConverter):
                 # List every list item line by line.
                 for idx, walker_result_item in enumerate(walker_result):
                     if 0 < idx:
-                        attribute_value += "<br>"
+                        attribute_value += "\n"
 
                     attribute_value += walker_result_item
 
             else:
                 attribute_value = walker_result
 
-            # Write the attribute name and value to the Markdown table as row.
-            markdown_table_row = self.markdown_append_table_row([attribute_name, attribute_value], False)
-            self._fd.write(markdown_table_row)
+            rows.append([attribute_name, attribute_value])
+
+        # Calculate the maximum width of each column based on both headers and row values.
+        max_widths = [len(title) for title in column_titles]
+        for row in rows:
+            for idx, value in enumerate(row):
+                lines = value.split('\n')
+                for line in lines:
+                    max_widths[idx] = max(max_widths[idx], len(line))
+
+        # Write the table head and rows.
+        rst_table_head = self.rst_create_table_head(column_titles, max_widths)
+        self._fd.write(rst_table_head)
+
+        for row in rows:
+            rst_table_row = self.rst_append_table_row(row, max_widths, False)
+            self._fd.write(rst_table_row)
 
         return Ret.OK
 
     @staticmethod
-    def markdown_escape(text: str) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_escape
+    def rst_escape(text: str) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_escape
         """
-        Escapes the text to be used in a Markdown document.
+        Escapes the text to be used in a reStructuredText document.
 
         Args:
             text (str): Text to escape
@@ -532,146 +530,141 @@ class MarkdownConverter(BaseConverter):
         return text
 
     @staticmethod
-    def markdown_lf2soft_return(text: str) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_soft_return
+    def rst_create_heading(text: str,
+                           level: int,
+                           file_name: str,
+                           escape: bool = True,
+                           is_object_heading: bool = False) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_heading
         """
-        A single LF will be converted to backslash + LF.
-        Use it for paragraphs, but not for headings or tables.
-
-        Args:
-            text (str): Text
-        Returns:
-            str: Handled text
-        """
-        return text.replace("\n", "\\\n")
-
-    @staticmethod
-    def markdown_create_heading(text: str, level: int, escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_heading
-        """
-        Create a Markdown heading.
-        The text will be automatically escaped for Markdown if necessary.
+        Create a reStructuredText heading with a label.
+        The text will be automatically escaped for reStructuredText if necessary.
 
         Args:
             text (str): Heading text
             level (int): Heading level
+            file_name (str): File name where the heading is found
             escape (bool): Escape the text (default: True).
+            is_object_heading (bool): Indicates if this is an object heading (default: False).
 
         Returns:
-            str: Markdown heading
+            str: reStructuredText heading with a label
         """
         text_raw = text
 
         if escape is True:
-            text_raw = MarkdownConverter.markdown_escape(text)
+            text_raw = RstConverter.rst_escape(text)
 
-        return f"{'#' * level} {text_raw}\n"
+        label = f"{file_name}-{text_raw.lower().replace(' ', '-')}"
+
+        underline_char = ["=", "#", "~", "^", "\"", "+", "'"][level - 1]
+        underline = underline_char * len(text_raw)
+
+        if is_object_heading:
+            admonition_label = f".. admonition:: {text_raw}\n\n    "
+            return f".. _{label}:\n\n{admonition_label}"
+
+        return f".. _{label}:\n\n{text_raw}\n{underline}\n"
 
     @staticmethod
-    def markdown_create_table_head(column_titles : List[str], escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_table
+    def rst_create_table_head(column_titles: List[str], max_widths: List[int], escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_table
         """
-        Create the table head for a Markdown table.
-        The titles will be automatically escaped for Markdown if necessary.
+        Create the table head for a reStructuredText table in grid format.
+        The titles will be automatically escaped for reStructuredText if necessary.
 
         Args:
             column_titles ([str]): List of column titles.
+            max_widths ([int]): List of maximum widths for each column.
             escape (bool): Escape the titles (default: True).
 
         Returns:
             str: Table head
         """
-        table_head = "|"
+        if escape:
+            column_titles = [RstConverter.rst_escape(title) for title in column_titles]
 
-        for column_title in column_titles:
-            column_title_raw = column_title
+        # Create the top border of the table
+        table_head = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
-            if escape is True:
-                column_title_raw = MarkdownConverter.markdown_escape(column_title)
+        # Create the title row
+        table_head += "    |"
+        table_head += "|".join([f" {title.ljust(max_widths[idx])} " for idx, title in enumerate(column_titles)]) + "|\n"
 
-            table_head += f" {column_title_raw} |"
-
-        table_head += "\n"
-
-        table_head += "|"
-
-        for column_title in column_titles:
-            column_title_raw = column_title
-
-            if escape is True:
-                column_title_raw = MarkdownConverter.markdown_escape(column_title)
-
-            table_head += " "
-
-            for _ in range(len(column_title_raw)):
-                table_head += "-"
-
-            table_head += " |"
-
-        table_head += "\n"
+        # Create the separator row
+        table_head += "    +" + "+".join(["=" * (width + 2) for width in max_widths]) + "+\n"
 
         return table_head
 
     @staticmethod
-    def markdown_append_table_row(row_values: List[str], escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_table
+    def rst_append_table_row(row_values: List[str], max_widths: List[int], escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_table
         """
-        Append a row to a Markdown table.
-        The values will be automatically escaped for Markdown if necessary.
+        Append a row to a reStructuredText table in grid format.
+        The values will be automatically escaped for reStructuredText if necessary.
+        Supports multi-line cell values.
 
         Args:
             row_values ([str]): List of row values.
+            max_widths ([int]): List of maximum widths for each column.
             escape (bool): Escapes every row value (default: True).
 
         Returns:
             str: Table row
         """
-        table_row = "|"
+        if escape:
+            row_values = [RstConverter.rst_escape(value) for value in row_values]
 
-        for row_value in row_values:
-            row_value_raw = row_value
+        # Split each cell value into lines.
+        split_values = [value.split('\n') for value in row_values]
+        max_lines = max(len(lines) for lines in split_values)
 
-            if escape is True:
-                row_value_raw = MarkdownConverter.markdown_escape(row_value)
+        # Create the row with multi-line support.
+        table_row = ""
+        for line_idx in range(max_lines):
+            table_row += "    |"
+            for col_idx, lines in enumerate(split_values):
+                if line_idx < len(lines):
+                    table_row += f" {lines[line_idx].ljust(max_widths[col_idx])} "
+                else:
+                    table_row += " " * (max_widths[col_idx] + 2)
+                table_row += "|"
+            table_row += "\n"
 
-            # Replace every LF with a HTML <br>.
-            row_value_raw = row_value_raw.replace("\n", "<br>")
+        # Create the separator row.
+        separator_row = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
-            table_row += f" {row_value_raw} |"
-
-        table_row += "\n"
-
-        return table_row
+        return table_row + separator_row
 
     @staticmethod
-    def markdown_create_link(text: str, url: str, escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_link
+    def rst_create_link(text: str, target: str, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_link
         """
-        Create a Markdown link.
-        The text will be automatically escaped for Markdown if necessary.
+        Create a reStructuredText cross-reference.
+        The text will be automatically escaped for reStructuredText if necessary.
         There will be no newline appended at the end.
 
         Args:
             text (str): Link text
-            url (str): Link URL
+            target (str): Cross-reference target
             escape (bool): Escapes text (default: True).
 
         Returns:
-            str: Markdown link
+            str: reStructuredText cross-reference
         """
         text_raw = text
 
         if escape is True:
-            text_raw = MarkdownConverter.markdown_escape(text)
+            text_raw = RstConverter.rst_escape(text)
 
-        return f"[{text_raw}]({url})"
+        return f":ref:`{text_raw} <{target}>`"
 
     @staticmethod
-    def markdown_create_diagram_link(diagram_file_name: str, diagram_caption: str, escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_image
+    def rst_create_diagram_link(diagram_file_name: str, diagram_caption: str, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_image
         """
-        Create a Markdown diagram link.
-        The caption will be automatically escaped for Markdown if necessary.
+        Create a reStructuredText diagram link.
+        The caption will be automatically escaped for reStructuredText if necessary.
 
         Args:
             diagram_file_name (str): Diagram file name
@@ -679,37 +672,36 @@ class MarkdownConverter(BaseConverter):
             escape (bool): Escapes caption (default: True).
 
         Returns:
-            str: Markdown diagram link
+            str: reStructuredText diagram link
         """
         diagram_caption_raw = diagram_caption
 
         if escape is True:
-            diagram_caption_raw = MarkdownConverter.markdown_escape(diagram_caption)
+            diagram_caption_raw = RstConverter.rst_escape(diagram_caption)
 
-        return f"![{diagram_caption_raw}](./{diagram_file_name})\n"
+        return f".. image:: ./{diagram_file_name}\n   :alt: {diagram_caption_raw}\n"
 
     @staticmethod
-    def markdown_text_color(text: str, color: str, escape: bool = True) -> str:
-        # lobster-trace: SwRequirements.sw_req_markdown_text_color
+    def rst_role(text: str, role: str, escape: bool = True) -> str:
         """
-        Create colored text in Markdown.
-        The text will be automatically escaped for Markdown if necessary.
+        Create role text in reStructuredText.
+        The text will be automatically escaped for reStructuredText if necessary.
         There will be no newline appended at the end.
 
         Args:
             text (str): Text
-            color (str): HTML color
+            color (str): Role
             escape (bool): Escapes text (default: True).
 
         Returns:
-            str: Colored text
+            str: Text with role
         """
         text_raw = text
 
         if escape is True:
-            text_raw = MarkdownConverter.markdown_escape(text)
+            text_raw = RstConverter.rst_escape(text)
 
-        return f"<span style=\"{color}\">{text_raw}</span>"
+        return f":{role}:`{text_raw}`"
 
 # Functions ********************************************************************
 

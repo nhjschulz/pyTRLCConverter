@@ -183,6 +183,4 @@ examples/simple_req_proj_spec/out/
 tools/createTestReport/out/
 tools/lobster/out/
 tools/plantuml/plantuml.jar
-tools/req2docx/out/
-tools/req2markdown/out/
-tools/tc2markdown/out/
+tools/*/out/

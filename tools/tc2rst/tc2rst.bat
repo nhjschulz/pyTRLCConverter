@@ -18,26 +18,22 @@ rem If not, see <https://www.gnu.org/licenses/>.
 
 cd ..\plantuml
 call get_plantuml.bat
-cd ..\req2markdown
+cd ..\tc2rst
 
 if not exist "out" (
     md out
 )
 
 rem ****************************************************************************************************
-rem Software Requirements
+rem Software Tests
 rem ****************************************************************************************************
-set SWE_REQ_OUT_FORMAT=markdown
-set SWE_REQ_OUT_DIR=.\out\sw-requirements\%SWE_REQ_OUT_FORMAT%
-set SWE_REQ_CONVERTER=..\ProjectConverter\req2markdown
+set SW_TEST_OUT_FORMAT=rst
+set SW_TEST_OUT_DIR=.\out\sw-tests\%SW_TEST_OUT_FORMAT%
+set SW_TEST_CONVERTER=..\ProjectConverter\tc2rst
 
-if not exist %SWE_REQ_OUT_DIR% (
-    md %SWE_REQ_OUT_DIR%
+if not exist %SW_TEST_OUT_DIR% (
+    md %SW_TEST_OUT_DIR%
 )
 
-echo Generate software requirements ...
-pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SWE_REQ_OUT_DIR% --verbose --project=%SWE_REQ_CONVERTER% %SWE_REQ_OUT_FORMAT%
-
-if errorlevel 1 (
-    pause
-)
+echo Generate software tests ...
+pyTRLCConverter --source=..\..\doc\sw-requirements --source=..\..\doc\sw-test --exclude=..\..\doc\sw-requirements --source=..\..\doc\models -o=%SW_TEST_OUT_DIR% --verbose --project=%SW_TEST_CONVERTER% %SW_TEST_OUT_FORMAT%

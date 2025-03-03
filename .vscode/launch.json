@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: markdown",
+            "name": "Python Debugger: Markdown",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/pyTRLCConverter/__main__.py",
@@ -42,6 +42,27 @@
                 "docx"
             ]
             
-        }
+        },
+        {
+            "name": "Python Debugger: reStructuredText",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/pyTRLCConverter/__main__.py",
+            "cwd": "${workspaceFolder}/tools/tc2rst",
+            "console": "integratedTerminal",
+            "env": {
+                "PLANTUML": "../plantuml/plantuml.jar",
+            },
+            "args": [
+                "--source=../../doc/sw-requirements",
+                "--source=../../doc/sw-test",
+                "--exclude=../../doc/sw-requirements",
+                "--source=../../doc/models",
+                "-o=./out/sw-tests/rst",
+                "--verbose",
+                "--project=../ProjectConverter/tc2rst",
+                "rst",
+            ]
+        },
     ]
 }

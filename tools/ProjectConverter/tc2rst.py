@@ -1,4 +1,4 @@
-"""Project specific Markdown converter functions.
+"""Project specific reStructuredText converter functions.
 
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
@@ -27,19 +27,19 @@ from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
 
 # pylint: disable=wrong-import-order
-from generic_rsl_markdown_converter import GenericRslMarkdownConverter
+from generic_rsl_rst_converter import GenericRslRstConverter
 
 # Variables ********************************************************************
 
 # Classes **********************************************************************
 
 
-class TestCaseMarkdownConverter(GenericRslMarkdownConverter):
-    """Custom Project specific Markdown converter for test cases.
+class TestCaseRstConverter(GenericRslRstConverter):
+    """Custom Project specific reStructuredText converter for test cases.
     """
     def __init__(self, args: any) -> None:
         """
-        Initialize the custom Markdown converter.
+        Initialize the custom reStructuredText converter.
 
         Args:
             args (any): The parsed program arguments.
@@ -64,7 +64,7 @@ class TestCaseMarkdownConverter(GenericRslMarkdownConverter):
          Returns:
             str: Converter description
         """
-        return "Convert test case definitions into project extended Markdown format."
+        return "Convert test case definitions into project extended reStructuredText format."
 
     def _print_sw_test_case(self, sw_test_case: Record_Object, level: int) -> Ret:
         """Prints the software test case.

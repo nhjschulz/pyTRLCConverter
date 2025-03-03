@@ -59,18 +59,18 @@ jobs:
           echo "PLANTUML=$PLANTUML" >> $GITHUB_ENV
           cd ../..
 
-      - name: Generate requirements in Markdown
+      - name: Generate requirements in reStructuredText
         run: |
-          cd ./tools/req2markdown
-          chmod +x req2markdown.sh
-          ./req2markdown.sh
+          cd ./tools/req2rst
+          chmod +x req2rst.sh
+          ./req2rst.sh
           cd ../..
 
-      - name: Generate test cases in Markdown
+      - name: Generate test cases in reStructuredText
         run: |
-          cd ./tools/tc2markdown
-          chmod +x tc2markdown.sh
-          ./tc2markdown.sh
+          cd ./tools/tc2rst
+          chmod +x tc2rst.sh
+          ./tc2rst.sh
           cd ../..
 
       - name: Create test report
@@ -78,6 +78,7 @@ jobs:
           cd ./tools/createTestReport
           chmod +x create_test_report.sh
           ./create_test_report.sh
+          rm -f ./out/coverage/.gitignore
           cd ../..
 
       - name: Build tracing report

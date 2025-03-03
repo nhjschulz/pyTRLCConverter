@@ -204,6 +204,97 @@ section "pyTRLCConverter" {
             }
         }
 
+        section "reStructuredText" {
+            SwReq sw_req_rst {
+                description = "The software shall support the conversion into reStructuredText format."
+                verification_criteria = "Verify by converting one or more TRLC files into reStructuredText format."
+            }
+
+            SwReq sw_req_rst_section {
+                description = "The reStructuredText converter shall convert a TRLC section into a reStructuredText heading by considering the depth level."
+                verification_criteria = "Verify by converting a TRLC section into a reStructuredText heading."
+            }
+
+            SwReq sw_req_rst_record {
+                description = "The reStructuredText converter shall convert the attributes of a TRLC record into a reStructuredText table."
+                verification_criteria = "Verify by converting consecutive TRLC records into a reStructuredText table."
+            }
+
+            SwReq sw_req_rst_escape {
+                description = "The software shall escape all strings according the reStructuredText format."
+                verification_criteria = "Verify by using strings with characters, which needs escaping."
+            }
+
+            SwReq sw_req_rst_heading {
+                description = "The reStructuredText converter shall provide a function to create a reStructuredText heading."
+                verification_criteria = "Verify by creating a reStructuredText heading."
+            }
+
+            SwReq sw_req_rst_table {
+                description = "The reStructuredText converter shall provide a function to create a reStructuredText table."
+                verification_criteria = "Verify by creating a reStructuredText table."
+            }
+
+            SwReq sw_req_rst_link {
+                description = "The reStructuredText converter shall provide a function to create a reStructuredText link."
+                verification_criteria = "Verify by creating a reStructuredText link."
+            }
+
+            SwReq sw_req_rst_image {
+                description = "The reStructuredText converter shall provide a function to create a reStructuredText image to embed images."
+                verification_criteria = "Verify by creating a reStructuredText image."
+            }
+
+            SwReq sw_req_rst_text_color {
+                description = "The reStructuredText converter shall provide a function to create colored text in reStructuredText format."
+                verification_criteria = "Verify by creating colored text in reStructuredText format."
+            }
+
+            SwReq sw_req_rst_out_folder {
+                description = "The reStructuredText converter shall create the converted files in the specified output folder."
+                verification_criteria = "Verify by specifing an output folder, that doesn't exist. It must exist after the conversion."
+            }
+
+            section "ReST Multiple Documents Mode" {
+                SwReq sw_req_rst_multiple_doc_mode {
+                    description = "The software shall create a reStructuredText file for each TRLC file by default."
+                    verification_criteria = "Verify by converting one or more TRLC files into reStructuredText format and check if a reStructuredText file is created for each TRLC file."
+                }
+            }
+
+            section "ReST Single Document Mode" {
+                SwReq sw_req_rst_single_doc_mode {
+                    description = "The software shall create a single reStructuredText file which combines all TRLC files if requested by command line arguments."
+                    verification_criteria = "Verify by converting one or more TRLC files into reStructuredText format and check if a single reStructuredText file is created."
+                }
+
+                SwReq sw_req_rst_out_file_name_default {
+                    description = "The output file name shall be 'output.rst' by default."
+                    verification_criteria = "Verify by converting one or more TRLC files into reStructuredText format and check if the output file name is 'output.rst'."
+                }
+
+                SwReq sw_req_rst_out_file_name_custom {
+                    description = "The output file name shall be customizable by command line arguments."
+                    verification_criteria = "Verify by converting one or more TRLC files into reStructuredText format and check if the output file name is customizable."
+                }
+
+                SwReq sw_req_rst_sd_top_level {
+                    description = "The software shall add a top level heading to the reStructuredText file in single doc mode."
+                    verification_criteria = "Verify the top level heading in the reStructuredText file in single doc mode."
+                }
+
+                SwReq sw_req_rst_sd_top_level_default {
+                    description = "The top level heading shall be 'Specification' by default."
+                    verification_criteria = "Verify the top level heading in the reStructuredText file in single doc mode."
+                }
+
+                SwReq sw_req_rst_sd_top_level_custom {
+                    description = "The top level heading shall be customizable by command line arguments."
+                    verification_criteria = "Verify by specifying a custom top level heading in the reStructuredText file in single doc mode."
+                }
+            }
+        }
+
         section "Docx" {
             SwReq sw_req_docx {
                 description = "The software shall support the conversion into docx format."

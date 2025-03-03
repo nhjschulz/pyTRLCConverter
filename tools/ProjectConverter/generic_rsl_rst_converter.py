@@ -1,7 +1,7 @@
 """
-Project specific Markdown converter for Generic.rsl types.
+Project specific reStructuredText converter for Generic.rsl types.
 
-This module provides a project specific Markdown converter subclass with
+This module provides a project specific reStructuredText converter subclass with
 support for the TRLC record types defined in Generic.rsl.
 
     Author: Andreas Merkle (andreas.merkle@newtec.de)
@@ -27,7 +27,7 @@ support for the TRLC record types defined in Generic.rsl.
 import os
 import shutil
 from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.markdown_converter import MarkdownConverter
+from pyTRLCConverter.rst_converter import RstConverter
 from pyTRLCConverter.trlc_helper import Record_Object
 
 # pylint: disable=wrong-import-order
@@ -38,8 +38,8 @@ from image_processing import convert_plantuml_to_image, locate_file
 # Classes **********************************************************************
 
 
-class GenericRslMarkdownConverter(MarkdownConverter):
-    """Project specific Markdown converter subclass for generic.rsl types.
+class GenericRslRstConverter(RstConverter):
+    """Project specific reStructuredText converter subclass for generic.rsl types.
     """
 
     # pylint: disable=unused-argument
@@ -54,9 +54,8 @@ class GenericRslMarkdownConverter(MarkdownConverter):
 
         description = self._get_attribute(info, "description")
 
-        markdown_info = self.markdown_escape(description)
-        markdown_info = self.markdown_lf2soft_return(markdown_info)
-        self._fd.write(markdown_info)
+        rst_info = self.rst_escape(description)
+        self._fd.write(rst_info)
         self._fd.write("\n")
         return Ret.OK
 
@@ -76,11 +75,11 @@ class GenericRslMarkdownConverter(MarkdownConverter):
 
         if image_file is not None:
             self._write_empty_line_on_demand()
-            markdown_image = self.markdown_create_diagram_link(
+            rst_image = self.rst_create_diagram_link(
                 os.path.basename(image_file),
                 self._get_attribute(diagram, "caption")
             )
-            self._fd.write(markdown_image)
+            self._fd.write(rst_image)
 
         return Ret.OK
 
@@ -99,11 +98,11 @@ class GenericRslMarkdownConverter(MarkdownConverter):
 
             self._write_empty_line_on_demand()
 
-            markdown_image = self.markdown_create_diagram_link(
+            rst_image = self.rst_create_diagram_link(
                 os.path.basename(image_file),
                 self._get_attribute(image, "caption")
             )
-            self._fd.write(markdown_image)
+            self._fd.write(rst_image)
 
         return Ret.OK
 
