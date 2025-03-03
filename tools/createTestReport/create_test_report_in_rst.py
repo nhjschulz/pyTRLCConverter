@@ -20,8 +20,8 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.ret import Ret
-
 from pyTRLCConverter.rst_converter import RstConverter
 from pyTRLCConverter.trlc_helper import Record_Object
 
@@ -39,6 +39,15 @@ class CustomRstConverter(RstConverter):
         """Initializes the converter.
         """
         super().__init__(args)
+
+        # Set project specific record handlers for the converter.
+        self._set_project_record_handlers(
+           {
+            "SwTestCaseResult": self._append_test_case_result
+           }
+        )
+
+        self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
 
         self._test_case_results = []
 
@@ -70,8 +79,9 @@ class CustomRstConverter(RstConverter):
         return super().leave_file(file_name)
 
     # pylint: disable=unused-argument
-    def convert_record_object(self, record: Record_Object, level: int) -> Ret:
-        """Converts a record object to reStructuredText format.
+    def _append_test_case_result(self, record: Record_Object, level: int) -> Ret:
+        """
+        Append test case result.
 
         Args:
             record (Record_Object): Record object to convert
@@ -80,15 +90,7 @@ class CustomRstConverter(RstConverter):
         Returns:
             Ret: Status
         """
-        assert self._fd is not None
-
-        if record.n_typ.name == "SwTestCaseResult":
-            self._test_case_results.append(record)
-
-        else:
-            # Skipped.
-            pass
-
+        self._test_case_results.append(record)
         return Ret.OK
 
     def finish(self):

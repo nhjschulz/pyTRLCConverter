@@ -85,15 +85,15 @@ class GenericRslRstConverter(RstConverter):
 
     # pylint: disable=unused-argument
     def _print_image(self, image: Record_Object, level: int) -> Ret:
-        """Prints the diagram.
+        """Prints the image.
 
         Args:
-            diagram (Record_Object): Diagram to print
+            image (Record_Object): Diagram to print
             level (int): Current level of the record object
         """
         image_file = locate_file(self._get_attribute(image, "file_path"), self._args.source)
         if image_file is not None:
-            # Copy diagram image file to output folder.
+            # Copy image image file to output folder.
             shutil.copy(image_file, self._args.out)
 
             self._write_empty_line_on_demand()
