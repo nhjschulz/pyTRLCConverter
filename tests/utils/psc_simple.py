@@ -82,8 +82,10 @@ class SimpleConverter(BaseConverter):
         """
         attributes = record.to_python_dict()
 
+        description = attributes["description"]
+
         print(f"{record.name}")
-        print(f"{attributes["description"]}")
+        print(f"{description}")
 
         return Ret.OK
 
