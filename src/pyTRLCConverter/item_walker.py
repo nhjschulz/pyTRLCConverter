@@ -143,7 +143,7 @@ class ItemWalker:  # pylint: disable=too-few-public-methods
             traceback.print_exc()
             result = Ret.ERROR
 
-        return Ret.OK
+        return result
 
     def _visit_item(self, item: any) -> Ret:
         """
