@@ -3,19 +3,42 @@ package SwTests
 import Generic
 import SwRequirements
 
-section "SW-Test" {
+section "SW-Tests" {
 
     Generic.Info sw_test_info_about_sw_test {
         description = "This file contains the software test cases for the pyTRLCConverter tool."
     }
 
-    SwTestCase tc1 {
-        description = "This test case ..."
-        derived = [SwRequirements.sw_req_cli]
-    }
+    section "General" {
 
-    SwTestCase tc2 {
-        description = "This test case ..."
-        derived = [SwRequirements.sw_req_prj_spec]
+        SwTestCase tc_cli {
+            description = "This test case checks whether the tool supports the command line arguments."
+            derived = [SwRequirements.sw_req_cli]
+        }
+
+        SwTestCase tc_prj_spec {
+            description = "This test case check whether a project specific converter can be instantiated."
+            derived = [SwRequirements.sw_req_prj_spec]
+        }
+
+        SwTestCase tc_version {
+            description = "This test case check whether '--version' shows the correct version format format <program-name> <major>.<minor>.<patch>."
+            derived = [SwRequirements.sw_req_version]
+        }
+
+        SwTestCase tc_process_trlc_symbols_one_file_one_req {
+            description = "This test case check whether one single TRLC requirement is printed out of one TRLC file."
+            derived = [SwRequirements.sw_req_process_trlc_symbols, SwRequirements.sw_req_destination_format]
+        }
+
+        SwTestCase tc_process_trlc_symbols_two_files_one_req {
+            description = "This test case check whether one single TRLC requirement per TRLC file is printed out of two TRLC files."
+            derived = [SwRequirements.sw_req_process_trlc_symbols, SwRequirements.sw_req_destination_format]
+        }
+
+        SwTestCase tc_verbose {
+            description = "This test case check whether in verbose mode more information is printed out."
+            derived = [SwRequirements.sw_req_verbose_mode]
+        }
     }
 }
