@@ -6,6 +6,7 @@ interface AbstractConverter <<abstract>>{
     + {abstract} convert_record()
     + {abstract} enter_file()
     + {abstract} leave_file()
+    + {abstract} begin()
     + {abstract} finish()
 
 }
@@ -23,6 +24,9 @@ rectangle "Built-in Converter" {
     class MarkdownConverter {
     }
 
+    class RstConverter {
+
+    }
     class DocxConverter {
     }
     class DumpConverter {
@@ -33,6 +37,7 @@ AbstractConverter <|.. BaseConverter: <<realize>>
 BaseConverter <|.. MarkdownConverter: <<realize>>
 BaseConverter <|.. DocxConverter: <<realize>>
 BaseConverter <|.. DumpConverter: <<realize>>
+BaseConverter <|.. RstConverter: <<realize>>
 
 class version <<module>> {
 }
@@ -85,7 +90,7 @@ end note
 
 main ..> ItemWalker: <<use>>
 ItemWalker ..> AbstractConverter: <<use>>
-main *--- "Output Converter"
+main *--- AbstractConverter
 main ..> version: <<use>>
 
 

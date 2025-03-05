@@ -1,5 +1,7 @@
 # Tools <!-- omit in toc -->
 
+The following tools are available for this project:
+
 - [createTestReport](#createtestreport)
 - [lobster](#lobster)
 - [plantuml](#plantuml)
@@ -9,6 +11,9 @@
 - [sphinx](#sphinx)
 - [tc2markdown](#tc2markdown)
 - [tc2rst](#tc2rst)
+
+Converter support for the pyTRLCConverter project model files are described in the
+[ProjectConverter Readme](./ProjectConverter/README.md) file.
 
 ## createTestReport
 
