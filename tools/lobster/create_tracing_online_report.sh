@@ -50,11 +50,6 @@ SW_TEST_LOBSTER_HTML_OUT=sw_test_tracing_online_report.html
 
 LOCAL_REPOSITORY_ROOT=../../..
 
-if [ -z "$1" ]; then
-    echo "Branch/Commit hash is missing."
-    exit 1
-fi
-
 if [ ! -d "$OUT_DIR" ]; then
     mkdir -p $OUT_DIR
 fi

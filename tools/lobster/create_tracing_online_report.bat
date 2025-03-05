@@ -50,11 +50,6 @@ set SW_TEST_LOBSTER_HTML_OUT=sw_test_tracing_online_report.html
 
 set LOCAL_REPOSITORY_ROOT=..\..\..
 
-if "%1" == "" (
-    echo Branch/Commit hash is missing.
-    goto error
-)
-
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
 )
