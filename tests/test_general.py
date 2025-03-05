@@ -20,6 +20,8 @@
 # Imports **********************************************************************
 
 import re
+import pytest
+
 from pyTRLCConverter.__main__ import main
 
 # Variables ********************************************************************
@@ -45,10 +47,8 @@ def test_tc_cli_no_arguments(record_property, capsys, monkeypatch):
     monkeypatch.setattr("sys.argv", ["pyTRLCConverter"])
 
     # argparse will raise an exception if no arguments are provided.
-    try:
+    with pytest.raises(SystemExit):
         main()
-    except SystemExit:
-        pass
 
     # Capture stdout and stderr.
     captured = capsys.readouterr()
@@ -68,7 +68,7 @@ def test_tc_prj_spec(record_property, capsys, monkeypatch):
     """
     record_property("lobster-trace", "SwTests.tc_prj_spec")
 
-    # Mock program arguments to simulate running the script without any arguments.
+    # Mock program arguments to simulate running the script with a project specific converter.
     monkeypatch.setattr("sys.argv", [
         "pyTRLCConverter",
         "--source", "./tests/utils/req.rsl",
@@ -77,11 +77,8 @@ def test_tc_prj_spec(record_property, capsys, monkeypatch):
         "doNothing"
     ])
 
-    # argparse will raise an exception if no arguments are provided.
-    try:
-        main()
-    except SystemExit:
-        pass
+    # Expecting the programm to run without any exceptions.
+    main()
 
     # Capture stdout and stderr.
     captured = capsys.readouterr()
@@ -105,14 +102,12 @@ def test_tc_version(record_property, capsys, monkeypatch):
     """
     record_property("lobster-trace", "SwTests.tc_version")
 
-    # Mock program arguments to simulate running the script without any arguments.
+    # Mock program arguments to simulate running the script with the --version flag set.
     monkeypatch.setattr("sys.argv", ["pyTRLCConverter", "--version"])
 
-    # argparse will raise an exception if no arguments are provided.
-    try:
+    # argparse will raise SystemExit after printing the version information.
+    with pytest.raises(SystemExit):
         main()
-    except SystemExit:
-        pass
 
     # Capture stdout and stderr.
     captured = capsys.readouterr()
@@ -136,7 +131,7 @@ def test_tc_process_trlc_symbols_one_file_one_req(record_property, capsys, monke
     """
     record_property("lobster-trace", "SwTests.tc_process_trlc_symbols_one_file_one_req")
 
-    # Mock program arguments to simulate running the script without any arguments.
+    # Mock program arguments to simulate running the script with the single test requirement.
     monkeypatch.setattr("sys.argv", [
         "pyTRLCConverter",
         "--source", "./tests/utils/req.rsl",
@@ -145,11 +140,8 @@ def test_tc_process_trlc_symbols_one_file_one_req(record_property, capsys, monke
         "simple"
     ])
 
-    # argparse will raise an exception if no arguments are provided.
-    try:
-        main()
-    except SystemExit:
-        pass
+    # Expecting the programm to run without any exceptions.
+    main()
 
     # Capture stdout and stderr.
     captured = capsys.readouterr()
@@ -175,7 +167,7 @@ def test_tc_process_trlc_symbols_two_files_one_req(record_property, capsys, monk
     """
     record_property("lobster-trace", "SwTests.tc_process_trlc_symbols_two_files_one_req")
 
-    # Mock program arguments to simulate running the script without any arguments.
+    # Mock program arguments to simulate running the script with two test requirement files.
     monkeypatch.setattr("sys.argv", [
         "pyTRLCConverter",
         "--source", "./tests/utils/req.rsl",
@@ -185,11 +177,8 @@ def test_tc_process_trlc_symbols_two_files_one_req(record_property, capsys, monk
         "simple"
     ])
 
-    # argparse will raise an exception if no arguments are provided.
-    try:
-        main()
-    except SystemExit:
-        pass
+    # Expecting the programm to run without any exceptions.
+    main()
 
     # Capture stdout and stderr.
     captured = capsys.readouterr()
@@ -220,7 +209,7 @@ def test_tc_verbose(record_property, capsys, monkeypatch):
     """
     record_property("lobster-trace", "SwTests.tc_verbose")
 
-    # Mock program arguments to simulate running the script without any arguments.
+    # Mock program arguments to simulate running the script with the --verbose flag set.
     monkeypatch.setattr("sys.argv", [
         "pyTRLCConverter",
         "--verbose",
@@ -230,11 +219,8 @@ def test_tc_verbose(record_property, capsys, monkeypatch):
         "simple"
     ])
 
-    # argparse will raise an exception if no arguments are provided.
-    try:
-        main()
-    except SystemExit:
-        pass
+    # Expecting the programm to run without any exceptions.
+    main()
 
     # Capture stdout and stderr.
     captured = capsys.readouterr()
