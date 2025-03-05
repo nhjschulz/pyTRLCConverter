@@ -12,7 +12,7 @@ The following tools are available for this project:
 - [tc2markdown](#tc2markdown)
 - [tc2rst](#tc2rst)
 
-Converter support for the pyTRLCConverter project model files are described in the
+Converter support for the pyTRLCConverter project model files is described in the
 [ProjectConverter Readme](./ProjectConverter/README.md) file.
 
 ## createTestReport
