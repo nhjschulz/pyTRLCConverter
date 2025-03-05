@@ -30,7 +30,7 @@ fi
 
 # Create the test report and the coverage analysis.
 cd ../..
-pytest "$TESTS_PATH" -v --cov="$SRC_PATH" --cov-report=term-missing --cov-report=html:"$OUT_DIR/$COVERAGE_REPORT" -o junit_family=xunit1 --junitxml="$REPORT_TOOL_PATH/$OUT_DIR/$TEST_RESULT_REPORT_XML"
+pytest "$TESTS_PATH" -v --cov="$SRC_PATH" --cov-report=term-missing --cov-report=html:"$REPORT_TOOL_PATH/$OUT_DIR/$COVERAGE_REPORT" -o junit_family=xunit1 --junitxml="$REPORT_TOOL_PATH/$OUT_DIR/$TEST_RESULT_REPORT_XML"
 cd $REPORT_TOOL_PATH
 
 # Convert XML test report to TRLC.
