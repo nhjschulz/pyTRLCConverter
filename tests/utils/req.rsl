@@ -1,5 +1,6 @@
 package Requirements
 
 type Requirement {
-    description String
+    description             String
+    link        optional    Requirement
 }

@@ -76,6 +76,7 @@ class ItemWalker:  # pylint: disable=too-few-public-methods
 
                 if self._exclude_files is not None:
                     for excluded_path in self._exclude_files:
+                        excluded_path = os.path.normpath(excluded_path)
                         if os.path.commonpath([excluded_path, file_name]) == excluded_path:
                             skip_it = True
                             break
