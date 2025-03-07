@@ -68,7 +68,7 @@ section "SW-Tests" {
 
         SwTestCase tc_markdown {
             description = "This test case checks whether the conversion to Markdown format works."
-            derived = [SwRequirements.sw_req_markdown, SwRequirements.sw_req_markdown_record]
+            derived = [SwRequirements.sw_req_markdown, SwRequirements.sw_req_markdown_record, SwRequirements.sw_req_no_prj_spec, SwRequirements.sw_req_cli_out]
         }
 
         SwTestCase tc_markdown_section {
