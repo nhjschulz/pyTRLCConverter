@@ -301,6 +301,7 @@ class MarkdownConverter(BaseConverter):
         """
         if self._is_top_level_heading_req is True:
             self._fd.write(MarkdownConverter.markdown_create_heading(self._args.top_level, 1))
+            self._empty_line_required = True
             self._is_top_level_heading_req = False
 
     def _write_empty_line_on_demand(self) -> None:
@@ -686,7 +687,11 @@ class MarkdownConverter(BaseConverter):
         if escape is True:
             diagram_caption_raw = MarkdownConverter.markdown_escape(diagram_caption)
 
-        return f"![{diagram_caption_raw}](./{diagram_file_name})\n"
+        # Filenames are relative to the Markdown file.
+        if not diagram_file_name.startswith("./"):
+            diagram_file_name = "./" + diagram_file_name
+
+        return f"![{diagram_caption_raw}]({diagram_file_name})\n"
 
     @staticmethod
     def markdown_text_color(text: str, color: str, escape: bool = True) -> str:

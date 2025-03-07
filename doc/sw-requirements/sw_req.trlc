@@ -130,7 +130,7 @@ section "pyTRLCConverter" {
             }
 
             SwReq sw_req_markdown_table {
-                description = "The Markdown converter shall provide a function to create a Markdown table."
+                description = "The Markdown converter shall provide the functionality to create a Markdown table."
                 verification_criteria = "Verify by creating a Markdown table."
             }
 
@@ -150,7 +150,7 @@ section "pyTRLCConverter" {
             }
 
             SwReq sw_req_markdown_soft_return {
-                description = "The Markdown convert shall provide a function to convert a line feed to Markdown soft return."
+                description = "The Markdown converter shall provide a function to convert a line feed to Markdown soft return."
                 verification_criteria = "Verify by creating a text with one and more line feeds."
             }
 

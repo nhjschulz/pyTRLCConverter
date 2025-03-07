@@ -23,7 +23,7 @@ section "SW-Tests" {
 
         SwTestCase tc_version {
             description = "This test case check whether '--version' shows the correct version format format <program-name> <major>.<minor>.<patch>."
-            derived = [SwRequirements.sw_req_version]
+            derived = [SwRequirements.sw_req_version, SwRequirements.sw_req_cli_version]
         }
 
         SwTestCase tc_process_trlc_symbols_one_file_one_req {
@@ -39,6 +39,77 @@ section "SW-Tests" {
         SwTestCase tc_verbose {
             description = "This test case check whether in verbose mode more information is printed out."
             derived = [SwRequirements.sw_req_verbose_mode]
+        }
+    }
+
+    section "Project Specific Conversion" {
+
+    }
+
+    section "Command Line Arguments" {
+        
+        Generic.Info info_cli_version {
+            description = "The --version cli argument is already tested in the 'General' section."
+        }
+    }
+
+    section "Markdown" {
+
+        SwTestCase tc_markdown {
+            description = "This test case checks whether the conversion to Markdown format works."
+            derived = [SwRequirements.sw_req_markdown, SwRequirements.sw_req_markdown_record]
+        }
+
+        SwTestCase tc_markdown_section {
+            description = "This test case checks whether the conversion of a TRLC section to a Markdown section works."
+            derived = [SwRequirements.sw_req_markdown_section]
+        }
+
+        SwTestCase tc_markdown_escape {
+            description = "This test case checks whether the default Markdown converter can convert strings with Markdown escaping."
+            derived = [SwRequirements.sw_req_markdown_escape]
+        }
+
+        SwTestCase tc_markdown_heading {
+            description = '''This test case checks whether the default Markdown converter provides a function
+             to create valid Markdown headings.'''
+            derived = [SwRequirements.sw_req_markdown_heading]
+        }
+
+        SwTestCase tc_markdown_table {
+            description = '''This test case checks whether the default Markdown converter provides the functionality
+             to create valid Markdown tables.'''
+            derived = [SwRequirements.sw_req_markdown_table]
+        }
+
+        SwTestCase tc_markdown_link {
+            description = '''This test case checks whether the default Markdown converter provides a function
+             to create valid Markdown links.'''
+            derived = [SwRequirements.sw_req_markdown_link]
+        }
+
+        SwTestCase tc_markdown_image {
+            description = '''This test case checks whether the default Markdown converter provides a function
+             to embed images in Markdown.'''
+            derived = [SwRequirements.sw_req_markdown_image]
+        }
+
+        SwTestCase tc_markdown_text_color {
+            description = '''This test case checks whether the default Markdown converter provides a function
+             to create colored text in Markdown.'''
+            derived = [SwRequirements.sw_req_markdown_text_color]
+        }
+
+        SwTestCase tc_markdown_soft_return {
+            description = '''This test case checks whether the default Markdown converter provides a function
+             to encode line feeds as Markdown soft returns.'''
+            derived = [SwRequirements.sw_req_markdown_soft_return]
+        }
+
+        SwTestCase tc_markdown_out_folder {
+            description = '''This test case checks whether the default Markdown converter creates output files in the
+             specified output folder.'''
+            derived = [SwRequirements.sw_req_markdown_out_folder]
         }
     }
 }
