@@ -555,18 +555,23 @@ class MarkdownConverter(BaseConverter):
 
         Args:
             text (str): Heading text
-            level (int): Heading level
+            level (int): Heading level [1; inf]
             escape (bool): Escape the text (default: True).
 
         Returns:
             str: Markdown heading
         """
-        text_raw = text
+        result = ""
 
-        if escape is True:
-            text_raw = MarkdownConverter.markdown_escape(text)
+        if 1 <= level:
+            text_raw = text
 
-        return f"{'#' * level} {text_raw}\n"
+            if escape is True:
+                text_raw = MarkdownConverter.markdown_escape(text)
+
+            result = f"{'#' * level} {text_raw}\n"
+
+        return result
 
     @staticmethod
     def markdown_create_table_head(column_titles : List[str], escape: bool = True) -> str:

@@ -123,4 +123,64 @@ section "SW-Tests" {
             derived = [SwRequirements.sw_req_markdown_out_folder]
         }
     }
+
+    section "reStructuredText" {
+
+        SwTestCase tc_rst {
+            description = "This test case checks whether the conversion to reStructuredText format works."
+            derived = [SwRequirements.sw_req_rst, SwRequirements.sw_req_rst_record, SwRequirements.sw_req_no_prj_spec, SwRequirements.sw_req_cli_out]
+        }
+
+        SwTestCase tc_rst_section {
+            description = "This test case checks whether the conversion of a TRLC section to a reStructuredText section works."
+            derived = [SwRequirements.sw_req_rst_section]
+        }
+
+        SwTestCase tc_rst_escape {
+            description = "This test case checks whether the default reStructuredText converter can convert strings with reStructuredText escaping."
+            derived = [SwRequirements.sw_req_rst_escape]
+        }
+
+        SwTestCase tc_rst_heading {
+            description = '''This test case checks whether the default reStructuredText converter provides a function
+             to create valid reStructuredText headings.'''
+            derived = [SwRequirements.sw_req_rst_heading]
+        }
+
+        SwTestCase tc_rst_admonition {
+            description = '''This test case checks whether the default reStructuredText converter provides a function
+             to create valid reStructuredText admonition.'''
+            derived = [SwRequirements.sw_req_rst_admonition]
+        }
+
+        SwTestCase tc_rst_table {
+            description = '''This test case checks whether the default reStructuredText converter provides the functionality
+             to create valid reStructuredText tables.'''
+            derived = [SwRequirements.sw_req_rst_table]
+        }
+
+        SwTestCase tc_rst_link {
+            description = '''This test case checks whether the default reStructuredText converter provides a function
+             to create valid reStructuredText links.'''
+            derived = [SwRequirements.sw_req_rst_link]
+        }
+
+        SwTestCase tc_rst_image {
+            description = '''This test case checks whether the default reStructuredText converter provides a function
+             to embed images in reStructuredText.'''
+            derived = [SwRequirements.sw_req_rst_image]
+        }
+
+        SwTestCase tc_rst_role {
+            description = '''This test case checks whether the default reStructuredText converter provides a function
+             to create colored text in reStructuredText.'''
+            derived = [SwRequirements.sw_req_rst_role]
+        }
+
+        SwTestCase tc_rst_out_folder {
+            description = '''This test case checks whether the default reStructuredText converter creates output files in the
+             specified output folder.'''
+            derived = [SwRequirements.sw_req_rst_out_folder]
+        }
+    }
 }

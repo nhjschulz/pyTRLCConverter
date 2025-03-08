@@ -121,7 +121,7 @@ def test_tc_markdown_section(record_property, capsys, monkeypatch, tmp_path):
 def test_tc_markdown_escape(record_property, tmp_path):
     # lobster-trace: SwTests.tc_markdown_escape
     """
-    The Markdown converter shall support Mardown escaping.
+    The Markdown converter shall support Markdown escaping.
 
     Args:
         record_property (Any): Used to inject the test case reference into the test results.
@@ -170,6 +170,9 @@ def test_tc_markdown_heading(record_property, tmp_path):
     assert markdown_converter.markdown_create_heading("Heading", 6) == r"###### Heading" + "\n"
     assert markdown_converter.markdown_create_heading("Chapter.2", 2) == r"## Chapter\.2" + "\n"
     assert markdown_converter.markdown_create_heading("Chapter.2", 2, escape=False) == r"## Chapter.2" + "\n"
+
+    # Invalid level shall return a empty string.
+    assert markdown_converter.markdown_create_heading("Heading", 0) == ""
 
 def test_tc_markdown_table(record_property, tmp_path):
     # lobster-trace: SwTests.tc_markdown_table
