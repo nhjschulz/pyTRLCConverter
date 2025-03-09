@@ -67,7 +67,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
 
     
     def _convert_sw_req(self, sw_req: Record_Object, level: int) -> Ret:
-        """Prints the software requirement.
+        """Convert a requirement record object to the destination format.
 
         Args:
             sw_req (Record_Object): Software requirement to print
@@ -84,7 +84,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
         return self._convert_record_object(sw_req, level, attribute_translation)
 
     def _convert_sw_req_non_func(self, sw_req: Record_Object, level: int) -> Ret:
-        """Prints the software non-functional requirement.
+        """Convert a software non-functional requirement.
 
         Args:
             sw_req (Record_Object): Software non-functional requirement to print
@@ -100,7 +100,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
         return self._convert_record_object(sw_req, level, attribute_translation)
 
     def _convert_sw_constraint(self, sw_constraint: Record_Object, level: int) -> Ret:
-        """Prints the software constraint.
+        """Convert a software constraint.
 
         Args:
             sw_constraint (Record_Object): Software constraint to print
