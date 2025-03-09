@@ -20,7 +20,6 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-import docx
 from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -33,7 +32,7 @@ from generic_rsl_docx_converter import GenericRslDocxConverter
 # Classes **********************************************************************
 
 class ProjectDocxConverter(GenericRslDocxConverter):
-    """Custom Project specific Docx format converter. 
+    """Custom Project specific Docx format converter.
     """
     def __init__(self, args: any) -> None:
         """
@@ -50,9 +49,9 @@ class ProjectDocxConverter(GenericRslDocxConverter):
                 "Info": self._convert_record_object_info,
                 "Image": self._convert_record_object_image,
                 "PlantUML": self._convert_record_object_plantuml,
-                "SwReq": self._print_sw_req,
-                "SwReqNonFunc": self._print_sw_req_non_func,
-                "SwConstraint": self._print_sw_constraint
+                "SwReq": self._convert_sw_req,
+                "SwReqNonFunc": self._convert_sw_req_non_func,
+                "SwConstraint": self._convert_sw_constraint
            }
         )
         self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
@@ -67,7 +66,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
         return "Convert into project specific docx format."
 
     
-    def _print_sw_req(self, sw_req: Record_Object, level: int) -> Ret:
+    def _convert_sw_req(self, sw_req: Record_Object, level: int) -> Ret:
         """Prints the software requirement.
 
         Args:
@@ -84,7 +83,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
 
         return self._convert_record_object(sw_req, level, attribute_translation)
 
-    def _print_sw_req_non_func(self, sw_req: Record_Object, level: int) -> Ret:
+    def _convert_sw_req_non_func(self, sw_req: Record_Object, level: int) -> Ret:
         """Prints the software non-functional requirement.
 
         Args:
@@ -100,7 +99,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
 
         return self._convert_record_object(sw_req, level, attribute_translation)
 
-    def _print_sw_constraint(self, sw_constraint: Record_Object, level: int) -> Ret:
+    def _convert_sw_constraint(self, sw_constraint: Record_Object, level: int) -> Ret:
         """Prints the software constraint.
 
         Args:

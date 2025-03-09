@@ -24,7 +24,6 @@ support for the TRLC record types defined in Generic.rsl.
 
 # Imports **********************************************************************
 import docx
-from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.docx_converter import DocxConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -37,7 +36,8 @@ from image_processing import convert_plantuml_to_image, locate_file
 # Classes **********************************************************************
 
 class GenericRslDocxConverter(DocxConverter):
-    """Custom Project specific Docx format converter. 
+    """
+    Project specific docx converter subclass for generic.rsl types.
     """
     def __init__(self, args: any) -> None:
         """
@@ -57,7 +57,7 @@ class GenericRslDocxConverter(DocxConverter):
         Args:
             record (Record_Object): The record object to convert.
             level (int): Current level of the record object
-        
+
         Returns:
             Ret: Status
         """
@@ -70,7 +70,7 @@ class GenericRslDocxConverter(DocxConverter):
         Args:
             record (Record_Object): The record object to convert.
             level (int): Current level of the record object
-        
+
         Returns:
             Ret: Status
         """
@@ -94,7 +94,7 @@ class GenericRslDocxConverter(DocxConverter):
         Args:
             record (Record_Object): The record object to convert.
             level (int): Current level of the record object
-        
+
         Returns:
             Ret: Status
         """

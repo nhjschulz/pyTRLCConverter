@@ -55,7 +55,6 @@ class DocxConverter(BaseConverter):
             log_verbose(f"Loading template file {args.template}.")
 
         self._docx = docx.Document(docx=args.template)
-        self._style_map = {}   # Style map for mapping docx style names
 
     @staticmethod
     def get_subcommand() -> str:
@@ -71,7 +70,7 @@ class DocxConverter(BaseConverter):
     def get_description() -> str:
         # lobster-trace: SwRequirements.sw_req_docx
         """ Return converter description.
-        
+ 
         Returns:
             Ret: Status
         """
@@ -116,8 +115,8 @@ class DocxConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        style = f"Heading {level+1}"
-        self._docx.add_paragraph(section, style=self._localize_style(style))
+        self._docx.add_heading(section, level)
+
         return Ret.OK
 
     def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
@@ -198,22 +197,9 @@ class DocxConverter(BaseConverter):
         # Add a paragraph with the record object location
         p = self._docx.add_paragraph()
         p.add_run(f"from {record.location.file_name}:{record.location.line_no}").italic = True
+
         return Ret.OK
 
-    def _localize_style(self, style_name: str) -> str:
-        """
-        Localize the given style name.
-
-        Args:
-            style_name (str): The style name
-
-        Returns:
-            str: Localized style name
-        """
-        if style_name in self._style_map:
-            style_name = self._style_map[style_name]
-
-        return style_name
 
 # Functions ********************************************************************
 
