@@ -128,7 +128,7 @@ section "SW-Tests" {
 
         SwTestCase tc_rst {
             description = "This test case checks whether the conversion to reStructuredText format works."
-            derived = [SwRequirements.sw_req_rst, SwRequirements.sw_req_rst_record, SwRequirements.sw_req_no_prj_spec, SwRequirements.sw_req_cli_out]
+            derived = [SwRequirements.sw_req_rst, SwRequirements.sw_req_rst_record, SwRequirements.sw_req_no_prj_spec, SwRequirements.sw_req_cli_out, SwRequirements.sw_req_rst_single_doc_mode, SwRequirements.sw_req_rst_out_file_name_default, SwRequirements.sw_req_rst_sd_top_level, SwRequirements.sw_req_rst_sd_top_level_default]
         }
 
         SwTestCase tc_rst_section {
@@ -181,6 +181,16 @@ section "SW-Tests" {
             description = '''This test case checks whether the default reStructuredText converter creates output files in the
              specified output folder.'''
             derived = [SwRequirements.sw_req_rst_out_folder]
+        }
+
+        SwTestCase tc_single_doc_custom {
+            description = "This test case checks whether the conversion to reStructuredText in single document mode is customizeable."
+            derived = [SwRequirements.sw_req_rst_out_file_name_custom, SwRequirements.sw_req_rst_sd_top_level_custom]
+        }
+
+        SwTestCase tc_multi_doc {
+            description = "This test case checks whether the conversion to reStructuredText in multiple document mode convers one output document per TRLC source file."
+            derived = [SwRequirements.sw_req_rst_multiple_doc_mode]
         }
     }
 }

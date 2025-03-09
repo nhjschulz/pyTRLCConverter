@@ -194,6 +194,27 @@ def test_tc_rst_heading(record_property, tmp_path):
     assert rst_converter.rst_create_heading("Heading", 0, "test.rst") == ""
     assert rst_converter.rst_create_heading("Heading", 8, "test.rst") == ""
 
+def test_tc_rst_admonition(record_property, tmp_path):
+    # lobster-trace: SwTests.tc_rst_admonition
+    """
+    The reStructuredText converter shall provide a function to create reStructuredText admonition.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_rst_admonition")
+
+    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+
+    # Test the admonition function.
+    lines = rst_converter.rst_create_admonition("Test text", "test.rst").split('\n')
+    assert lines[0] == ".. _test.rst-test-text:" # Label
+    assert lines[1] == ""
+    assert lines[2] == ".. admonition:: Test text"
+
 def test_tc_rst_table(record_property, tmp_path):
     # lobster-trace: SwTests.tc_rst_table
     """
@@ -336,3 +357,140 @@ def test_tc_rst_out_folder(record_property, capsys, monkeypatch, tmp_path):
     # Assert the output folder contains the generated reStructuredText file.
     assert output_folder.exists()
     assert (output_folder / "output.rst").exists()
+
+def test_tc_single_doc_custom(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_single_doc_custom
+    """
+    The software shall support conversion of TRLC source files into reStructuredText
+    with a custom single document header and customer output file name.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_single_doc_custom")
+
+    # Mock program arguments to simulate running the script with inbuild reStructuredText converter.
+    monkeypatch.setattr("sys.argv", [
+        "pyTRLCConverter",
+        "--source", "./tests/utils/req.rsl",
+        "--source", "./tests/utils/single_req_no_section.trlc",
+        "--out", str(tmp_path),
+        "rst",
+        "--single-document",
+        "--name", "custom_output.rst",
+        "--top-level", "Custom Specification"
+    ])
+
+    # Expect the program to run without any exceptions.
+    main()
+
+    # Capture stdout and stderr.
+    captured = capsys.readouterr()
+    # Check that no errors were reported.
+    assert captured.err == ""
+
+    print(tmp_path)
+
+    # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
+    with open(tmp_path / "custom_output.rst", "r", encoding='utf-8') as generated_rst:
+        lines = generated_rst.readlines()
+        assert lines[0] == ".. _custom_output.rst-custom-specification:\n" # Label
+        assert lines[1] == "\n"
+        assert lines[2] == "Custom Specification\n"
+        assert lines[3] == "====================\n"
+        assert lines[4] == "\n"
+        assert lines[5] == ".. _custom_output.rst-req\\_id\\_1:\n" # Label
+        assert lines[6] == "\n"
+        assert lines[7] == ".. admonition:: req\\_id\\_1\n"
+        assert lines[8] == "\n"
+        assert lines[9] == "    +----------------+------------------+\n"
+        assert lines[10] == "    | Attribute Name | Attribute Value  |\n"
+        assert lines[11] == "    +================+==================+\n"
+        assert lines[12] == "    | description    | Test description |\n"
+        assert lines[13] == "    +----------------+------------------+\n"
+        assert lines[14] == "    | link           | N/A              |\n"
+        assert lines[15] == "    +----------------+------------------+\n"
+
+def test_tc_multi_doc(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_multi_doc
+    """
+    The software shall support conversion of TRLC source files into reStructuredText
+    files with one output file per TRLC source file.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_multi_doc")
+
+    # Mock program arguments to simulate running the script with inbuild reStructuredText converter.
+    monkeypatch.setattr("sys.argv", [
+        "pyTRLCConverter",
+        "--source", "./tests/utils",
+        "--out", str(tmp_path),
+        "rst"
+    ])
+
+    # Expect the program to run without any exceptions.
+    main()
+
+    # Capture stdout and stderr.
+    captured = capsys.readouterr()
+    # Check that no errors were reported.
+    assert captured.err == ""
+
+    print(tmp_path)
+
+    # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
+    with open(tmp_path / "single_req_no_section.rst", "r", encoding='utf-8') as generated_rst:
+        lines = generated_rst.readlines()
+        assert lines[0] == ".. _single_req_no_section.rst-req\\_id\\_1:\n" # Label
+        assert lines[1] == "\n"
+        assert lines[2] == ".. admonition:: req\\_id\\_1\n"
+        assert lines[3] == "\n"
+        assert lines[4] == "    +----------------+------------------+\n"
+        assert lines[5] == "    | Attribute Name | Attribute Value  |\n"
+        assert lines[6] == "    +================+==================+\n"
+        assert lines[7] == "    | description    | Test description |\n"
+        assert lines[8] == "    +----------------+------------------+\n"
+        assert lines[9] == "    | link           | N/A              |\n"
+        assert lines[10] == "    +----------------+------------------+\n"
+
+    with open(tmp_path / "single_req_with_link.rst", "r", encoding='utf-8') as generated_rst:
+        lines = generated_rst.readlines()
+        assert lines[0] == ".. _single_req_with_link.rst-req\\_id\\_3:\n" # Label
+        assert lines[1] == "\n"
+        assert lines[2] == ".. admonition:: req\\_id\\_3\n"
+        assert lines[3] == "\n"
+        # pylint: disable=line-too-long
+        assert lines[4] == "    +----------------+------------------------------------------------------------------------+\n"
+        assert lines[5] == "    | Attribute Name | Attribute Value                                                        |\n"
+        assert lines[6] == "    +================+========================================================================+\n"
+        assert lines[7] == "    | description    | Test description                                                       |\n"
+        assert lines[8] == "    +----------------+------------------------------------------------------------------------+\n"
+        assert lines[9] == "    | link           | :ref:`Requirements\\.req\\_id\\_2 <single_req_with_section.rst-req_id_2>` |\n"
+        assert lines[10] == "    +----------------+------------------------------------------------------------------------+\n"
+
+    with open(tmp_path / "single_req_with_section.rst", "r", encoding='utf-8') as generated_rst:
+        lines = generated_rst.readlines()
+        assert lines[0] == ".. _single_req_with_section.rst-test-section:\n" # Label
+        assert lines[1] == "\n"
+        assert lines[2] == "Test section\n"
+        assert lines[3] == "============\n"
+        assert lines[4] == "\n"
+        assert lines[5] == ".. _single_req_with_section.rst-req\\_id\\_2:\n" # Label
+        assert lines[6] == "\n"
+        assert lines[7] == ".. admonition:: req\\_id\\_2\n"
+        assert lines[8] == "\n"
+        assert lines[9] == "    +----------------+------------------+\n"
+        assert lines[10] == "    | Attribute Name | Attribute Value  |\n"
+        assert lines[11] == "    +================+==================+\n"
+        assert lines[12] == "    | description    | Test description |\n"
+        assert lines[13] == "    +----------------+------------------+\n"
+        assert lines[14] == "    | link           | N/A              |\n"
+        assert lines[15] == "    +----------------+------------------+\n"
