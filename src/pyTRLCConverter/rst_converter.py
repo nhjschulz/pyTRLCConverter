@@ -434,7 +434,7 @@ class RstConverter(BaseConverter):
 
         return trlc_ast_walker
 
-    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-locals, unused-argument
     def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_rst_record
         """
