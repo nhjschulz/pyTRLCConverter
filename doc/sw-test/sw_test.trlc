@@ -196,7 +196,7 @@ section "SW-Tests" {
 
     section "Dump" {
 
-        SwReq tc_ascii_conversion {
+        SwTestCase tc_ascii_conversion {
             description = "This test case checks whether the conversion to ASCII format works."
             derived = [SwRequirements.sw_req_ascii_conversion]
         }
