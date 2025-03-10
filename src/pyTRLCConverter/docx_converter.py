@@ -21,6 +21,7 @@
 
 # Imports **********************************************************************
 import os
+from typing import Optional
 import docx
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.log_verbose import log_verbose
@@ -30,6 +31,7 @@ from pyTRLCConverter.trlc_helper import Record_Object
 # Variables ********************************************************************
 
 # Classes **********************************************************************
+
 class DocxConverter(BaseConverter):
     """
     Converter to docx format.
@@ -68,7 +70,7 @@ class DocxConverter(BaseConverter):
     def get_description() -> str:
         # lobster-trace: SwRequirements.sw_req_docx
         """ Return converter description.
-        
+ 
         Returns:
             Ret: Status
         """
@@ -109,11 +111,12 @@ class DocxConverter(BaseConverter):
         Args:
             section (str): The section name
             level (int): The section indentation level
-        
+
         Returns:
             Ret: Status
         """
         self._docx.add_heading(section, level)
+
         return Ret.OK
 
     def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
@@ -128,6 +131,42 @@ class DocxConverter(BaseConverter):
             record (Record_Object): The record object
             level (int): The record level
         
+        Returns:
+            Ret: Status
+        """
+        return self._convert_record_object(record, level, None)
+
+    def finish(self) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_docx_file
+        """Finish the conversion.
+
+        Returns:
+            Ret: Status
+        """
+        result = Ret.ERROR
+
+        if self._docx is not None:
+            output_file_name = self._args.name
+            if 0 < len(self._args.out):
+                output_file_name = os.path.join(self._args.out, self._args.name)
+
+            log_verbose(f"Writing docx {output_file_name}.")
+            self._docx.save(output_file_name)
+            self._docx = None
+            result = Ret.OK
+
+        return result
+
+    def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
+        # lobster-trace: SwRequirements.sw_req_docx_record
+        """
+        Process the given record object.
+
+        Args:
+            record (Record_Object): The record object.
+            level (int): The record level.
+            attribute_translation (Optional[dict]): Attribute translation (attribute name -> user friendly name).
+
         Returns:
             Ret: Status
         """
@@ -146,7 +185,11 @@ class DocxConverter(BaseConverter):
         # Populate table with attribute key-value pairs
         for key, value in attributes.items():
             if value is None:
-                value = "N/A"
+                value = self._empty_attribute_value
+
+            if attribute_translation is not None:
+                if key in attribute_translation:
+                    key = attribute_translation[key]
 
             cells = table.add_row().cells
             cells[0].text = key
@@ -155,27 +198,9 @@ class DocxConverter(BaseConverter):
         # Add a paragraph with the record object location
         p = self._docx.add_paragraph()
         p.add_run(f"from {record.location.file_name}:{record.location.line_no}").italic = True
+
         return Ret.OK
 
-    def finish(self) -> Ret:
-        # lobster-trace: SwRequirements.sw_req_docx_file
-        """Finish the conversion.
-
-        Returns:
-            Ret: Status
-        """
-        result = Ret.OK
-
-        if self._docx is not None:
-            output_file_name = self._args.name
-            if 0 < len(self._args.out):
-                output_file_name = os.path.join(self._args.out, self._args.name)
-
-            log_verbose(f"Writing docx {output_file_name}.")
-            self._docx.save(output_file_name)
-            self._docx = None
-
-        return result
 
 # Functions ********************************************************************
 
