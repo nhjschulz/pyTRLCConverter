@@ -18,7 +18,7 @@ section "SW-Tests" {
 
         SwTestCase tc_prj_spec {
             description = "This test case check whether a project specific converter can be instantiated."
-            derived = [SwRequirements.sw_req_prj_spec]
+            derived = [SwRequirements.sw_req_prj_spec, SwRequirements.sw_req_prj_spec_file, SwRequirements.sw_req_prj_spec_interface]
         }
 
         SwTestCase tc_version {
@@ -191,6 +191,14 @@ section "SW-Tests" {
         SwTestCase tc_multi_doc {
             description = "This test case checks whether the conversion to reStructuredText in multiple document mode convers one output document per TRLC source file."
             derived = [SwRequirements.sw_req_rst_multiple_doc_mode]
+        }
+    }
+
+    section "Dump" {
+
+        SwReq tc_ascii_conversion {
+            description = "This test case checks whether the conversion to ASCII format works."
+            derived = [SwRequirements.sw_req_ascii_conversion]
         }
     }
 }

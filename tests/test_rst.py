@@ -62,8 +62,6 @@ def test_tc_rst(record_property, capsys, monkeypatch, tmp_path):
     # Check that no errors were reported.
     assert captured.err == ""
 
-    print(tmp_path)
-
     # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
     with open(tmp_path / "output.rst", "r", encoding='utf-8') as generated_rst:
         lines = generated_rst.readlines()
@@ -392,8 +390,6 @@ def test_tc_single_doc_custom(record_property, capsys, monkeypatch, tmp_path):
     # Check that no errors were reported.
     assert captured.err == ""
 
-    print(tmp_path)
-
     # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
     with open(tmp_path / "custom_output.rst", "r", encoding='utf-8') as generated_rst:
         lines = generated_rst.readlines()
@@ -443,8 +439,6 @@ def test_tc_multi_doc(record_property, capsys, monkeypatch, tmp_path):
     captured = capsys.readouterr()
     # Check that no errors were reported.
     assert captured.err == ""
-
-    print(tmp_path)
 
     # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
     with open(tmp_path / "single_req_no_section.rst", "r", encoding='utf-8') as generated_rst:
