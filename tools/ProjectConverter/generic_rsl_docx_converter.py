@@ -1,4 +1,4 @@
-"""Project specific Markdown converter for Generic.rsl types.
+"""Project specific docx converter for Generic.rsl types.
 
 This module provides a project specific docx converter subclass with
 support for the TRLC record types defined in Generic.rsl.
@@ -107,7 +107,7 @@ class GenericRslDocxConverter(DocxConverter):
 
         return result
 
-    def _add_image(self, image_file: str, caption: str, level:int) -> None:
+    def _add_image(self, image_file: str, caption: str, level: int) -> None:
         """Add an image to the docx file.
 
         Args:

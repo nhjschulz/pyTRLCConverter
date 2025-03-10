@@ -143,7 +143,7 @@ class DocxConverter(BaseConverter):
         Returns:
             Ret: Status
         """
-        result = Ret.OK
+        result = Ret.ERROR
 
         if self._docx is not None:
             output_file_name = self._args.name
@@ -153,6 +153,7 @@ class DocxConverter(BaseConverter):
             log_verbose(f"Writing docx {output_file_name}.")
             self._docx.save(output_file_name)
             self._docx = None
+            result = Ret.OK
 
         return result
 
