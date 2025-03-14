@@ -693,9 +693,12 @@ class MarkdownConverter(BaseConverter):
         if escape is True:
             diagram_caption_raw = MarkdownConverter.markdown_escape(diagram_caption)
 
-        # Filenames are relative to the Markdown file.
-        if not diagram_file_name.startswith("./"):
-            diagram_file_name = "./" + diagram_file_name
+        # Allowed are absolute and relative paths.
+        # Relative path shall contain "./" as prefix.
+        diagram_file_name = os.path.normpath(diagram_file_name)
+        abs_path_prefx = os.path.normpath("/")
+        if not diagram_file_name.startswith(abs_path_prefx):
+            diagram_file_name = os.path.join("./", diagram_file_name)
 
         return f"![{diagram_caption_raw}]({diagram_file_name})\n"
 

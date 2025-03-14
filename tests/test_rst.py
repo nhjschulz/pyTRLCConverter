@@ -18,6 +18,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+import os
 
 from argparse import Namespace
 from collections import namedtuple
@@ -292,13 +293,24 @@ def test_tc_rst_image(record_property, tmp_path):
     rst_converter = RstConverter(Namespace(out=str(tmp_path)))
 
     # Create a reStructuredText diagram link. Both paths starting with ./ and without should be supported.
-    assert rst_converter.rst_create_diagram_link("diagram.png", "Caption") == \
-        ".. image:: diagram.png\n    :alt: Caption\n"
-    assert rst_converter.rst_create_diagram_link("./graph.jpg", "Caption with special characters!") == \
-        ".. image:: ./graph.jpg\n    :alt: Caption with special characters\\!\n"
-    assert rst_converter.rst_create_diagram_link("./I/am/nested.png", "Caption with special characters!",
+    link = os.path.normpath('./diagram.png')
+    assert rst_converter.rst_create_diagram_link(
+        "diagram.png",
+        "Caption") == \
+        f".. image:: {os.path.join('./', link)}\n    :alt: Caption\n"
+
+    link = os.path.normpath('./graph.jpg')
+    assert rst_converter.rst_create_diagram_link(
+        "./graph.jpg",
+        "Caption with special characters!") == \
+        f".. image:: {os.path.join('./', link)}\n    :alt: Caption with special characters\\!\n"
+
+    link = os.path.normpath('./I/am/nested.png')
+    assert rst_converter.rst_create_diagram_link(
+        "./I/am/nested.png",
+        "Caption with special characters!",
         escape=False) == \
-        ".. image:: ./I/am/nested.png\n    :alt: Caption with special characters!\n"
+        f".. image:: {os.path.join('./', link)}\n    :alt: Caption with special characters!\n"
 
 def test_tc_rst_role(record_property, tmp_path):
     # lobster-trace: SwTests.tc_rst_role

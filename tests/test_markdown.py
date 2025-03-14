@@ -256,15 +256,23 @@ def test_tc_markdown_image(record_property, tmp_path):
     markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
 
     # Create a Markdown diagram link. Both paths starting with ./ and without should be supported.
-    assert markdown_converter.markdown_create_diagram_link("diagram.png", "Caption") == \
-        r"![Caption](./diagram.png)" + "\n"
+    link = os.path.normpath('./diagram.png')
+    assert markdown_converter.markdown_create_diagram_link(
+        "diagram.png",
+        "Caption") == \
+        f"![Caption]({os.path.join('./', link)})\n"
+
+    link = os.path.normpath('./graph.jpg')
     assert markdown_converter.markdown_create_diagram_link(
         "./graph.jpg",
-        "Caption with special characters!") == r"![Caption with special characters\!](./graph.jpg)" + "\n"
+        "Caption with special characters!") == \
+        f"![Caption with special characters\!]({os.path.join('./', link)})\n"
+
+    link = os.path.normpath('./I/am/nested.png')
     assert markdown_converter.markdown_create_diagram_link(
         "./I/am/nested.png",
         "Caption with special characters!",
-        escape=False) == r"![Caption with special characters!](./I/am/nested.png)" + "\n"
+        escape=False) == f"![Caption with special characters!]({os.path.join('./', link)})\n"
 
 def test_tc_markdown_text_color(record_property, tmp_path):
     # lobster-trace: SwTests.tc_markdown_text_color

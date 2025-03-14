@@ -136,9 +136,7 @@ The tool requires two kinds of TRLC input sources for the conversion. These are 
 pyTRLCConverter --source doc/models --source doc/sw-requirement rst
 ```
 
-It will create a reStructuredText file with the same name as the requirements file (\*.trlc) in the current directory, but with the reStructuredText extension (.rst).
-
-If the requirements are split into several files, a reStructuredText file will be created for each. To generate a single reStructuredText file the argument --single-document can be used, which will create an ```output.md``` file by default.
+If the requirements are split into several files (\*.trlc), a reStructuredText file will be created for each. To generate a single reStructuredText file the argument --single-document can be used, which will create an ```output.md``` file by default.
 
 The converter supports additional arguments that are shown by adding the --help option after the reStructuredText subcommand.
 
