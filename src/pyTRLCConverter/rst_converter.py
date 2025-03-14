@@ -561,6 +561,9 @@ class RstConverter(BaseConverter):
 
             result = f".. _{label}:\n\n{text_raw}\n{underline}\n"
 
+        else:
+            print(f"Invalid heading level {level} for {text}.", file=sys.stderr)
+
         return result
 
     @staticmethod
@@ -703,12 +706,8 @@ class RstConverter(BaseConverter):
         if escape is True:
             diagram_caption_raw = RstConverter.rst_escape(diagram_caption)
 
-        # Allowed are absolute and relative paths.
-        # Relative path shall contain "./" as prefix.
+        # Allowed are absolute and relative to source paths.
         diagram_file_name = os.path.normpath(diagram_file_name)
-        abs_path_prefx = os.path.normpath("/")
-        if not diagram_file_name.startswith(abs_path_prefx):
-            diagram_file_name = os.path.join("./", diagram_file_name)
 
         return f".. image:: {diagram_file_name}\n    :alt: {diagram_caption_raw}\n"
 
