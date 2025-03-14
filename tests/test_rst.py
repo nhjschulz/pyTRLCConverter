@@ -274,7 +274,7 @@ def test_tc_rst_link(record_property, tmp_path):
         escape=True) == \
         ":ref:`Special Characters <http://example.com/path%20with%20spaces>`"
     assert rst_converter.rst_create_link("Link with special characters!", "http://example.com") == \
-        ":ref:`Link with special characters\! <http://example.com>`"
+        r":ref:`Link with special characters\! <http://example.com>`"
     assert rst_converter.rst_create_link("Link with special characters!", "http://example.com", escape=False) == \
         ":ref:`Link with special characters! <http://example.com>`"
 
@@ -356,8 +356,8 @@ def test_tc_rst_out_folder(record_property, capsys, monkeypatch, tmp_path):
     assert output_folder.exists()
     assert (output_folder / "output.rst").exists()
 
-def test_tc_single_doc_custom(record_property, capsys, monkeypatch, tmp_path):
-    # lobster-trace: SwTests.tc_single_doc_custom
+def test_tc_rst_single_doc_custom(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_rst_single_doc_custom
     """
     The software shall support conversion of TRLC source files into reStructuredText
     with a custom single document header and customer output file name.
@@ -368,7 +368,7 @@ def test_tc_single_doc_custom(record_property, capsys, monkeypatch, tmp_path):
         monkeypatch (Any): Used to mock program arguments.
         tmp_path (Path): Used to create a temporary output directory.
     """
-    record_property("lobster-trace", "SwTests.tc_single_doc_custom")
+    record_property("lobster-trace", "SwTests.tc_rst_single_doc_custom")
 
     # Mock program arguments to simulate running the script with inbuild reStructuredText converter.
     monkeypatch.setattr("sys.argv", [
@@ -410,8 +410,8 @@ def test_tc_single_doc_custom(record_property, capsys, monkeypatch, tmp_path):
         assert lines[14] == "    | link           | N/A              |\n"
         assert lines[15] == "    +----------------+------------------+\n"
 
-def test_tc_multi_doc(record_property, capsys, monkeypatch, tmp_path):
-    # lobster-trace: SwTests.tc_multi_doc
+def test_tc_rst_multi_doc(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_rst_multi_doc
     """
     The software shall support conversion of TRLC source files into reStructuredText
     files with one output file per TRLC source file.
@@ -422,7 +422,7 @@ def test_tc_multi_doc(record_property, capsys, monkeypatch, tmp_path):
         monkeypatch (Any): Used to mock program arguments.
         tmp_path (Path): Used to create a temporary output directory.
     """
-    record_property("lobster-trace", "SwTests.tc_multi_doc")
+    record_property("lobster-trace", "SwTests.tc_rst_multi_doc")
 
     # Mock program arguments to simulate running the script with inbuild reStructuredText converter.
     monkeypatch.setattr("sys.argv", [

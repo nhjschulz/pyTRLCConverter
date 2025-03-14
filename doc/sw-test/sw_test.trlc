@@ -68,12 +68,23 @@ section "SW-Tests" {
 
         SwTestCase tc_markdown {
             description = "This test case checks whether the conversion to Markdown format works."
-            verifies = [SwRequirements.sw_req_markdown, SwRequirements.sw_req_markdown_record, SwRequirements.sw_req_no_prj_spec, SwRequirements.sw_req_cli_out]
+            verifies = [
+                SwRequirements.sw_req_markdown,
+                SwRequirements.sw_req_markdown_record,
+                SwRequirements.sw_req_no_prj_spec,
+                SwRequirements.sw_req_cli_out,
+                SwRequirements.sw_req_markdown_single_doc_mode,
+                SwRequirements.sw_req_markdown_out_file_name_default,
+                SwRequirements.sw_req_markdown_sd_top_level,
+                SwRequirements.sw_req_markdown_top_level_default]
         }
 
         SwTestCase tc_markdown_section {
             description = "This test case checks whether the conversion of a TRLC section to a Markdown section works."
-            verifies = [SwRequirements.sw_req_markdown_section]
+            verifies = [
+                SwRequirements.sw_req_markdown_section,
+                SwRequirements.sw_req_markdown_out_file_name_custom,
+                SwRequirements.sw_req_markdown_top_level_custom]
         }
 
         SwTestCase tc_markdown_escape {
@@ -122,13 +133,26 @@ section "SW-Tests" {
              specified output folder.'''
             verifies = [SwRequirements.sw_req_markdown_out_folder]
         }
+
+        SwTestCase tc_markdown_multi_doc {
+            description = "This test case checks whether the conversion to markdown in multiple document mode convers one output document per TRLC source file."
+            verifies = [SwRequirements.sw_req_markdown_multiple_doc_mode]
+        }
     }
 
     section "reStructuredText" {
 
         SwTestCase tc_rst {
             description = "This test case checks whether the conversion to reStructuredText format works."
-            verifies = [SwRequirements.sw_req_rst, SwRequirements.sw_req_rst_record, SwRequirements.sw_req_no_prj_spec, SwRequirements.sw_req_cli_out, SwRequirements.sw_req_rst_single_doc_mode, SwRequirements.sw_req_rst_out_file_name_default, SwRequirements.sw_req_rst_sd_top_level, SwRequirements.sw_req_rst_sd_top_level_default]
+            verifies = [
+                SwRequirements.sw_req_rst,
+                SwRequirements.sw_req_rst_record, 
+                SwRequirements.sw_req_no_prj_spec, 
+                SwRequirements.sw_req_cli_out, 
+                SwRequirements.sw_req_rst_single_doc_mode, 
+                SwRequirements.sw_req_rst_out_file_name_default, 
+                SwRequirements.sw_req_rst_sd_top_level, 
+                SwRequirements.sw_req_rst_sd_top_level_default]
         }
 
         SwTestCase tc_rst_section {
@@ -183,12 +207,12 @@ section "SW-Tests" {
             verifies = [SwRequirements.sw_req_rst_out_folder]
         }
 
-        SwTestCase tc_single_doc_custom {
+        SwTestCase tc_rst_single_doc_custom {
             description = "This test case checks whether the conversion to reStructuredText in single document mode is customizeable."
             verifies = [SwRequirements.sw_req_rst_out_file_name_custom, SwRequirements.sw_req_rst_sd_top_level_custom]
         }
 
-        SwTestCase tc_multi_doc {
+        SwTestCase tc_rst_multi_doc {
             description = "This test case checks whether the conversion to reStructuredText in multiple document mode convers one output document per TRLC source file."
             verifies = [SwRequirements.sw_req_rst_multiple_doc_mode]
         }

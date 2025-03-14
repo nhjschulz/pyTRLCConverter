@@ -18,7 +18,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-
+import os
 from argparse import Namespace
 from collections import namedtuple
 
@@ -65,7 +65,7 @@ def test_tc_markdown(record_property, capsys, monkeypatch, tmp_path):
     # Read the contents of the generated Markdown file and assert it is the expected valid Markdown.
     with open(tmp_path / "output.md", "r", encoding='utf-8') as generated_md:
         lines = generated_md.readlines()
-        assert lines[0] == "# Specification\n"
+        assert lines[0] == "# Specification\n"  # Default top level name
         assert lines[1] == "\n"
         assert lines[2] == r"### req\_id\_1" + "\n"  # Expect lvl3 heading as section heading would be lvl2.
         assert lines[3] == "\n"
@@ -94,6 +94,8 @@ def test_tc_markdown_section(record_property, capsys, monkeypatch, tmp_path):
         "--out", str(tmp_path),
         "markdown",
         "--single-document",
+        "--name", "custom.md",
+        "--top-level", "Requirement Specification",
     ])
 
     # Expect the program to run without any exceptions.
@@ -105,9 +107,9 @@ def test_tc_markdown_section(record_property, capsys, monkeypatch, tmp_path):
     assert captured.err == ""
 
     # Read the contents of the generated Markdown file and assert it is the expected valid Markdown.
-    with open(tmp_path / "output.md", "r", encoding='utf-8') as generated_md:
+    with open(tmp_path / "custom.md", "r", encoding='utf-8') as generated_md:
         lines = generated_md.readlines()
-        assert lines[0] == "# Specification\n"
+        assert lines[0] == "# Requirement Specification\n"
         assert lines[1] == "\n"
         assert lines[2] == r"## Test section" + "\n"
         assert lines[3] == "\n"
@@ -339,3 +341,65 @@ def test_tc_markdown_out_folder(record_property, capsys, monkeypatch, tmp_path):
     # Assert the output folder contains the generated Markdown file.
     assert output_folder.exists()
     assert (output_folder / "output.md").exists()
+
+def test_tc_markdown_multi_doc(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_markdown_multi_doc
+    """
+    The software shall support conversion of TRLC source files into reStructuredText
+    files with one output file per TRLC source file.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_markdown_multi_doc")
+
+    # Mock program arguments to simulate running the script with inbuild reStructuredText converter.
+    monkeypatch.setattr("sys.argv", [
+        "pyTRLCConverter",
+        "--source", "./tests/utils",
+        "--out", str(tmp_path),
+        "markdown"
+    ])
+
+    # Expect the program to run without any exceptions.
+    main()
+
+    # Capture stdout and stderr.
+    captured = capsys.readouterr()
+    # Check that no errors were reported.
+    assert captured.err == ""
+
+    # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
+    with open(tmp_path / "single_req_no_section.md", "r", encoding='utf-8') as generated_md:
+        lines = generated_md.readlines()
+        assert lines[0] == "# Specification\n"
+        assert lines[1] == "\n"
+        assert lines[2] == r"## req\_id\_1" + "\n"
+        assert lines[3] == "\n"
+        assert lines[4] == r"| Attribute Name | Attribute Value |" + "\n"
+        assert lines[5] == r"| -------------- | --------------- |" + "\n"
+        assert lines[6] == r"| description | Test description |" + "\n"
+
+    with open(tmp_path / "single_req_with_link.md", "r", encoding='utf-8') as generated_md:
+        lines = generated_md.readlines()
+        assert lines[0] == "# Specification\n"
+        assert lines[1] == "\n"
+        assert lines[2] == r"## req\_id\_3" + "\n"
+        assert lines[3] == "\n"
+        assert lines[4] == r"| Attribute Name | Attribute Value |" + "\n"
+        assert lines[5] == r"| -------------- | --------------- |" + "\n"
+        assert lines[6] == r"| description | Test description |" + "\n"
+        assert lines[7] == r"| link | [Requirements\.req\_id\_2](single_req_with_section.md#req_id_2) |" + "\n"
+
+    with open(tmp_path / "single_req_with_section.md", "r", encoding='utf-8') as generated_md:
+        lines = generated_md.readlines()
+        assert lines[0] == r"# Test section" + "\n"
+        assert lines[1] == "\n"
+        assert lines[2] == r"## req\_id\_2" + "\n"
+        assert lines[3] == "\n"
+        assert lines[4] == r"| Attribute Name | Attribute Value |" + "\n"
+        assert lines[5] == r"| -------------- | --------------- |" + "\n"
+        assert lines[6] == r"| description | Test description |" + "\n"

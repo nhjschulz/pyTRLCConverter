@@ -228,6 +228,7 @@ class MarkdownConverter(BaseConverter):
             assert self._fd is not None
             self._fd.close()
             self._fd = None
+            self._is_top_level_heading_req = True
 
         return Ret.OK
 
