@@ -24,10 +24,10 @@ set LOBSTER_RENDERER=lobster-html-report
 set OUT_DIR=out
 set MODELS=..\..\..\doc\models
 
-set SW_REQ_LOBSTER_CONF=..\lobster-trlc-sw-req.conf
+set SW_REQ_LOBSTER_CONF=..\lobster-trlc-sw-req.yaml
 set SW_REQ_LOBSTER_OUT=sw_req.lobster
 
-set SW_TEST_LOBSTER_CONF=..\lobster-trlc-sw-test.conf
+set SW_TEST_LOBSTER_CONF=..\lobster-trlc-sw-test.yaml
 set SW_TEST_LOBSTER_OUT=sw_test.lobster
 
 set SW_CODE_SOURCES=..\..\..\src\pyTRLCConverter
