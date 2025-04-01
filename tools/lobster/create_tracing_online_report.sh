@@ -24,12 +24,10 @@ LOBSTER_RENDERER=lobster-html-report
 OUT_DIR=out
 MODELS=../../../doc/models
 
-SW_REQ_SOURCES=../../../doc/sw-requirements
-SW_REQ_LOBSTER_CONF=../lobster-sw-req.conf
+SW_REQ_LOBSTER_CONF=../lobster-trc-sw-req.conf
 SW_REQ_LOBSTER_OUT=sw_req.lobster
 
-SW_TEST_SOURCES=../../../doc/sw-test
-SW_TEST_LOBSTER_CONF=../lobster-sw-test.conf
+SW_TEST_LOBSTER_CONF=../lobster-trlc-sw-test.conf
 SW_TEST_LOBSTER_OUT=sw_test.lobster
 
 SW_CODE_SOURCES=../../../src/pyTRLCConverter
@@ -57,13 +55,13 @@ fi
 cd $OUT_DIR || exit
 
 # ********** SW-Requirements **********
-$LOBSTER_TRLC --config-file $SW_REQ_LOBSTER_CONF --out $SW_REQ_LOBSTER_OUT $SW_REQ_SOURCES $MODELS
+$LOBSTER_TRLC --config $SW_REQ_LOBSTER_CONF --out $SW_REQ_LOBSTER_OUT
 if [ $? -ne 0 ]; then
     exit 1
 fi
 
 # ********** SW-Tests **********
-$LOBSTER_TRLC --config-file $SW_TEST_LOBSTER_CONF --out $SW_TEST_LOBSTER_OUT $SW_REQ_SOURCES $SW_TEST_SOURCES $MODELS
+$LOBSTER_TRLC --config $SW_TEST_LOBSTER_CONF --out $SW_TEST_LOBSTER_OUT
 if [ $? -ne 0 ]; then
     exit 1
 fi
