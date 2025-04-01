@@ -135,8 +135,9 @@ section "SW-Tests" {
         }
 
         SwTestCase tc_markdown_multi_doc {
-            description = "This test case checks whether the conversion to markdown in multiple document mode convers one output document per TRLC source file."
-            verifies = [SwRequirements.sw_req_markdown_multiple_doc_mode]
+            description = '''This test case checks whether the conversion to markdown in multiple document mode creates one output document per TRLC source file and
+             whether the top level heading is created when required.'''
+            verifies = [SwRequirements.sw_req_markdown_multiple_doc_mode, SwRequirements.sw_req_markdown_md_top_level]
         }
     }
 

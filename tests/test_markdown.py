@@ -272,7 +272,7 @@ def test_tc_markdown_image(record_property, tmp_path):
     assert markdown_converter.markdown_create_diagram_link(
         "./graph.jpg",
         "Caption with special characters!") == \
-        f"![Caption with special characters\!]({os.path.normpath(diagram_path)})\n"
+        fr"![Caption with special characters\!]({os.path.normpath(diagram_path)})" + "\n"
 
     diagram_path = "./I/am/nested.png"
     assert markdown_converter.markdown_create_diagram_link(
@@ -370,7 +370,7 @@ def test_tc_markdown_multi_doc(record_property, capsys, monkeypatch, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_multi_doc")
 
-    # Mock program arguments to simulate running the script with inbuild reStructuredText converter.
+    # Mock program arguments to simulate running the script with inbuild Markdown converter.
     monkeypatch.setattr("sys.argv", [
         "pyTRLCConverter",
         "--source", "./tests/utils",
@@ -386,10 +386,10 @@ def test_tc_markdown_multi_doc(record_property, capsys, monkeypatch, tmp_path):
     # Check that no errors were reported.
     assert captured.err == ""
 
-    # Read the contents of the generated reStructuredText file and assert it is the expected valid reStructuredText.
+    # Read the contents of the generated Markdown file and assert it is the expected valid Markdown.
     with open(tmp_path / "single_req_no_section.md", "r", encoding='utf-8') as generated_md:
         lines = generated_md.readlines()
-        assert lines[0] == "# Specification\n"
+        assert lines[0] == "# Specification\n"  # Automatically generated top level heading.
         assert lines[1] == "\n"
         assert lines[2] == r"## req\_id\_1" + "\n"
         assert lines[3] == "\n"
