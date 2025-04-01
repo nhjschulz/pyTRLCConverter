@@ -24,7 +24,7 @@ LOBSTER_RENDERER=lobster-html-report
 OUT_DIR=out
 MODELS=../../../doc/models
 
-SW_REQ_LOBSTER_CONF=../lobster-trc-sw-req.conf
+SW_REQ_LOBSTER_CONF=../lobster-trlc-sw-req.conf
 SW_REQ_LOBSTER_OUT=sw_req.lobster
 
 SW_TEST_LOBSTER_CONF=../lobster-trlc-sw-test.conf
