@@ -76,7 +76,7 @@ def test_tc_docx(record_property, capsys, monkeypatch, tmp_path):
     assert created_docx.tables[0].cell(1, 1).text == "Test description"
 
 def test_tc_docx_section(record_property, capsys, monkeypatch, tmp_path):
-    # lobster-trace: SwTests.tc_docx_sdection
+    # lobster-trace: SwTests.tc_docx_section
     """
     The software shall support conversion of TRLC source files into docx.
 
