@@ -58,7 +58,8 @@ class DocxConverter(BaseConverter):
         self._docx = docx.Document(docx=args.template)
 
         # Ensure default table style is present in the document.
-        self._docx.styles.add_style('Table Grid', docx.enum.style.WD_STYLE_TYPE.TABLE, builtin=True)
+        if not 'Table Grid' in self._docx.styles:
+            self._docx.styles.add_style('Table Grid', docx.enum.style.WD_STYLE_TYPE.TABLE, builtin=True)
 
     @staticmethod
     def get_subcommand() -> str:
