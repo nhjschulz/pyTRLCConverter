@@ -1,0 +1,6 @@
+inputs:
+    - ../../../doc/models/
+    - ../../../doc/sw-requirements/
+    - ../../../doc/sw-test/
+
+trlc_config_file: ../lobster-sw-test.conf
