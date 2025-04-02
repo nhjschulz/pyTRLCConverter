@@ -23,7 +23,6 @@
 import os
 from typing import Optional
 import docx
-import docx.enum
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.log_verbose import log_verbose
 from pyTRLCConverter.ret import Ret
