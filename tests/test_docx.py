@@ -78,7 +78,7 @@ def test_tc_docx(record_property, capsys, monkeypatch, tmp_path):
 def test_tc_docx_section(record_property, capsys, monkeypatch, tmp_path):
     # lobster-trace: SwTests.tc_docx_section
     """
-    The software shall support conversion of TRLC source files into docx.
+    The test case checks if a TRLC section is correctly converted into docx.
 
     Args:
         record_property (Any): Used to inject the test case reference into the test results.
@@ -117,7 +117,7 @@ def test_tc_docx_section(record_property, capsys, monkeypatch, tmp_path):
 def test_tc_docx_file(record_property, capsys, monkeypatch, tmp_path):
     # lobster-trace: SwTests.tc_docx_file
     """
-    The software shall support conversion of TRLC source files into docx.
+    The test case checks whether multiple TRLC files are combined into one docx output document.
 
     Args:
         record_property (Any): Used to inject the test case reference into the test results.
@@ -158,7 +158,7 @@ def test_tc_docx_file(record_property, capsys, monkeypatch, tmp_path):
 def test_tc_docx_template(record_property, capsys, monkeypatch, tmp_path):
     # lobster-trace: SwTests.tc_docx_template
     """
-    The software shall support conversion of TRLC source files into docx.
+    The test case checks whether docx templated are correctly applied.
 
     Args:
         record_property (Any): Used to inject the test case reference into the test results.

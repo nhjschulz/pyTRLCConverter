@@ -49,7 +49,7 @@ section "SW-Tests" {
     section "PlantUML" {
 
         SwTestCase tc_plantuml {
-            description = '''This test case checks the conversion of a PlantUML diagram into an image.'''
+            description = "This test case checks the conversion of a PlantUML diagram into an image."
             verifies = [SwRequirements.sw_req_plantuml]
         }
 
