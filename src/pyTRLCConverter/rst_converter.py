@@ -713,6 +713,7 @@ class RstConverter(BaseConverter):
 
     @staticmethod
     def rst_role(text: str, role: str, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_role
         """
         Create role text in reStructuredText.
         The text will be automatically escaped for reStructuredText if necessary.
