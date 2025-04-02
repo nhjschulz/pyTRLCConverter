@@ -233,6 +233,30 @@ section "SW-Tests" {
         }
     }
 
+    section "Docx" {
+
+        SwTestCase tc_docx {
+            description = "This test case checks whether the conversion to docx format works."
+            verifies = [SwRequirements.sw_req_docx, SwRequirements.sw_req_docx_record]
+        }
+
+        SwTestCase tc_docx_section {
+            description = "This test case checks whether the conversion of a TRLC section to a docx section works."
+            verifies = [SwRequirements.sw_req_docx_section]
+        }
+
+        SwTestCase tc_docx_file {
+            description = "This test case checks whether the conversion to docx combines the results from multiple TRLC files into one docx file"
+            verifies = [SwRequirements.sw_req_docx_file]
+        }
+
+        SwTestCase tc_docx_template {
+            description = "This test case checks whether the conversion using a template works correctly."
+            verifies = [SwRequirements.sw_req_docx_template]
+        }
+
+    }
+
     section "Dump" {
 
         SwTestCase tc_ascii_conversion {
