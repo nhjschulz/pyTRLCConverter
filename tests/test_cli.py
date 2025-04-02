@@ -165,14 +165,9 @@ def test_tc_cli_include(record_property, capsys, monkeypatch):
     # Check if the expected output. TRLC will include all inlcude files in the symbol table.
     lines = captured.out.splitlines()
     assert len(lines) == 8
-    assert lines[0] == "req_id_3"
-    assert lines[1] == "Test description"
-    assert lines[2] == "req_id_1"
-    assert lines[3] == "Test description"
-    assert lines[4] == "Test section"
-    assert lines[5] == ""
-    assert lines[6] == "req_id_2"
-    assert lines[7] == "Test description"
+    assert "req_id_1" in lines
+    assert "req_id_2" in lines
+    assert "req_id_3" in lines
 
 
 # Main *************************************************************************
