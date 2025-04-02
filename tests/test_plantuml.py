@@ -29,8 +29,8 @@ Tests:
 
 # Imports **********************************************************************
 import os
-import pytest
 from unittest.mock import patch, mock_open
+import pytest
 from pyTRLCConverter.plantuml import PlantUML
 
 # Variables ********************************************************************
@@ -57,7 +57,7 @@ def plantuml_instance():
 
 
 def test_make_server_url(record_property: any, plantuml_instance: PlantUML):
-    # lobster-trace: SwTests.tc_cli
+    # lobster-trace: SwTests.tc_plantuml
     """
     Test the _make_server_url method of the PlantUML instance.
     This test verifies that the _make_server_url method correctly generates
@@ -70,8 +70,8 @@ def test_make_server_url(record_property: any, plantuml_instance: PlantUML):
         The generated URL starts with the expected base URL.
         The generated URL matches the expected URL.
     """
-    record_property("lobster-trace", "SwTests.tc_cli")
-    
+    record_property("lobster-trace", "SwTests.tc_plantuml")
+
     diagram_type = "svg"
     diagram_path = "test_diagram.puml"
     expected_url = "http://plantuml.com/plantuml/svg/SoWkIImgAStDuNBCoKnELT2rKt3AJx9Iy4ZDoSddSaZDIm7A0G0%3D"

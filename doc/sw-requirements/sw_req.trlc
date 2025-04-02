@@ -77,7 +77,7 @@ section "pyTRLCConverter" {
             SwReq sw_req_cli_source {
                 description = "The software shall support the command line argument '-s' and '--source' multiple times to specify the source file(s) (*.rsl and *.trlc)."
                 verification_criteria = "Verify by calling the software with the argument '--source' and check if the source file(s) are used for conversion."
-                note = "Its equal to TRLC --source program argument."
+                note = "Source files will be given to TRLC for conversion."
             }
 
             SwReq sw_req_cli_include {

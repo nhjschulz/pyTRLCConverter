@@ -46,6 +46,15 @@ section "SW-Tests" {
 
     }
 
+    section "PlantUML" {
+
+        SwTestCase tc_plantuml {
+            description = "This test case checks the conversion of a PlantUML diagram into an image."
+            verifies = [SwRequirements.sw_req_plantuml]
+        }
+
+    }
+
     section "Command Line Arguments" {
 
         SwTestCase tc_help {
@@ -61,6 +70,11 @@ section "SW-Tests" {
         SwTestCase tc_cli_exclude {
             description = "This test case checks whether a TRLC file can be excluded from the conversion."
             verifies = [SwRequirements.sw_req_cli_exclude]
+        }
+
+        SwTestCase tc_cli_include {
+            description = "This test case checks whether a TRLC file can be included as on demand context in the conversion."
+            verifies = [SwRequirements.sw_req_cli_include]
         }
     }
 
@@ -135,8 +149,9 @@ section "SW-Tests" {
         }
 
         SwTestCase tc_markdown_multi_doc {
-            description = "This test case checks whether the conversion to markdown in multiple document mode convers one output document per TRLC source file."
-            verifies = [SwRequirements.sw_req_markdown_multiple_doc_mode]
+            description = '''This test case checks whether the conversion to markdown in multiple document mode creates one output document per TRLC source file and
+             whether the top level heading is created when required.'''
+            verifies = [SwRequirements.sw_req_markdown_multiple_doc_mode, SwRequirements.sw_req_markdown_md_top_level]
         }
     }
 
@@ -216,6 +231,30 @@ section "SW-Tests" {
             description = "This test case checks whether the conversion to reStructuredText in multiple document mode convers one output document per TRLC source file."
             verifies = [SwRequirements.sw_req_rst_multiple_doc_mode]
         }
+    }
+
+    section "Docx" {
+
+        SwTestCase tc_docx {
+            description = "This test case checks whether the conversion to docx format works."
+            verifies = [SwRequirements.sw_req_docx, SwRequirements.sw_req_docx_record]
+        }
+
+        SwTestCase tc_docx_section {
+            description = "This test case checks whether the conversion of a TRLC section to a docx section works."
+            verifies = [SwRequirements.sw_req_docx_section]
+        }
+
+        SwTestCase tc_docx_file {
+            description = "This test case checks whether the conversion to docx combines the results from multiple TRLC files into one docx file"
+            verifies = [SwRequirements.sw_req_docx_file]
+        }
+
+        SwTestCase tc_docx_template {
+            description = "This test case checks whether the conversion using a template works correctly."
+            verifies = [SwRequirements.sw_req_docx_template]
+        }
+
     }
 
     section "Dump" {
