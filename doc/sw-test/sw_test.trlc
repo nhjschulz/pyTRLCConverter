@@ -46,6 +46,15 @@ section "SW-Tests" {
 
     }
 
+    section "PlantUML" {
+
+        SwTestCase tc_plantuml {
+            description = '''This test case checks the conversion of a PlantUML diagram into an image.'''
+            verifies = [SwRequirements.sw_req_plantuml]
+        }
+
+    }
+
     section "Command Line Arguments" {
 
         SwTestCase tc_help {
@@ -61,6 +70,11 @@ section "SW-Tests" {
         SwTestCase tc_cli_exclude {
             description = "This test case checks whether a TRLC file can be excluded from the conversion."
             verifies = [SwRequirements.sw_req_cli_exclude]
+        }
+
+        SwTestCase tc_cli_include {
+            description = "This test case checks whether a TRLC file can be included as on demand context in the conversion."
+            verifies = [SwRequirements.sw_req_cli_include]
         }
     }
 
