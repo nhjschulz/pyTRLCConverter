@@ -23,6 +23,7 @@
 import os
 from typing import Optional
 import docx
+import docx.enum
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.log_verbose import log_verbose
 from pyTRLCConverter.ret import Ret
@@ -55,6 +56,9 @@ class DocxConverter(BaseConverter):
             log_verbose(f"Loading template file {args.template}.")
 
         self._docx = docx.Document(docx=args.template)
+
+        # Ensure default table style is present in the document.
+        self._docx.styles.add_style('Table Grid', docx.enum.style.WD_STYLE_TYPE.TABLE, builtin=True)
 
     @staticmethod
     def get_subcommand() -> str:
