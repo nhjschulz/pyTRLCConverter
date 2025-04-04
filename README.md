@@ -12,6 +12,8 @@ Currently out of the box supported formats:
 * reStructuredText
 * dump
 
+Find the requirements, test cases, coverage and etc. on the [github pages](https://newtec-gmbh.github.io/pyTRLCConverter/).
+
 ## Table of Contents <!-- omit in toc -->
 
 - [Overview](#overview)
