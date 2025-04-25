@@ -37,4 +37,4 @@ if [ ! -d "$SW_TEST_OUT_DIR" ]; then
 fi
 
 echo "Generate software test cases ..."
-pyTRLCConverter --source=../../doc/sw-requirements --source=../../doc/sw-test --exclude=../../doc/sw-requirements --source=../../doc/models -o="$SW_TEST_OUT_DIR" --verbose --project="$SW_TEST_CONVERTER" "$SW_TEST_OUT_FORMAT"
+pyTRLCConverter --source=../../trlc/swe-req --source=../../trlc/swe-test --exclude=../../trlc/swe-req --source=../../trlc/model -o="$SW_TEST_OUT_DIR" --verbose --project="$SW_TEST_CONVERTER" "$SW_TEST_OUT_FORMAT"

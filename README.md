@@ -79,7 +79,7 @@ pip install -e .
 The tool requires two kinds of TRLC input sources for the conversion. These are the requirements (\*.trlc) files and the model (\*.tls) files. These input files are specified using one or more --source  or -s options followed by a file name or directory path. If a path is given, all files with a .trlc or .tls extension are read by the tool.
 
 ```bash
-pyTRLCConverter --source doc/models --source doc/sw-requirement markdown
+pyTRLCConverter --source trlc/model --source trlc/swe-req markdown
 ```
 
 It will create a Markdown file with the same name as the requirements file (\*.trlc) in the current directory, but with the Markdown extension (.md).
@@ -109,7 +109,7 @@ More examples are shown in the [examples folder](./examples/).
 Similar to the Markdown conversion, minimal required are the requirements (\*.trlc) and the model (\*.tls). Both can be added by file name or just the path where they are located.
 
 ```bash
-pyTRLCConverter --source doc/models --source doc/sw-requirement docx
+pyTRLCConverter --source trlc/model --source trlc/swe-req docx
 ```
 
 It will create a docx file with default name ```output.docx``` in the current directory.
@@ -135,7 +135,7 @@ options:
 The tool requires two kinds of TRLC input sources for the conversion. These are the requirements (\*.trlc) files and the model (\*.tls) files. These input files are specified using one or more --source  or -s options followed by a file name or directory path. If a path is given, all files with a .trlc or .tls extension are read by the tool.
 
 ```bash
-pyTRLCConverter --source doc/models --source doc/sw-requirement rst
+pyTRLCConverter --source trlc/model --source trlc/swe-req rst
 ```
 
 If the requirements are split into several files (\*.trlc), a reStructuredText file will be created for each. To generate a single reStructuredText file the argument --single-document can be used, which will create an ```output.md``` file by default.
@@ -165,7 +165,7 @@ More examples are shown in the [examples folder](./examples/).
 Mainly for development all TRLC items can be dumped to the console.
 
 ```bash
-pyTRLCConverter --source doc/models --source doc/sw-requirement dump
+pyTRLCConverter --source trlc/model --source trlc/swe-req dump
 ```
 
 ### Show tool version

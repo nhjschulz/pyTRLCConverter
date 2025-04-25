@@ -21,7 +21,7 @@ set LOBSTER_PYTHON=lobster-python
 set LOBSTER_REPORT=lobster-report
 set LOBSTER_RENDERER=lobster-html-report
 set OUT_DIR=out
-set MODELS=..\..\..\doc\models
+set MODELS=..\..\..\trlc\model
 
 set SW_REQ_LOBSTER_CONF=..\lobster-trlc-sw-req.yaml
 set SW_REQ_LOBSTER_OUT=sw_req.lobster

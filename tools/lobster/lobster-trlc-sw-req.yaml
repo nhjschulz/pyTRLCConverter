@@ -1,5 +1,5 @@
 inputs:
-    - ../../../doc/models/
-    - ../../../doc/sw-requirements/
+    - ../../../trlc/model/
+    - ../../../trlc/swe-req/
 
 trlc_config_file: ../lobster-sw-req.conf

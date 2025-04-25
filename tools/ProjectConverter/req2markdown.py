@@ -77,6 +77,7 @@ class ProjectMarkdownConverter(GenericRslMarkdownConverter):
 
         attribute_translation = {
             "description": "Description",
+            "valid_status": "Valid Status",
             "note": "Note",
             "verification_criteria": "Verification Criteria",
             "derived": "Derived"
@@ -96,6 +97,7 @@ class ProjectMarkdownConverter(GenericRslMarkdownConverter):
 
         attribute_translation = {
             "description": "Description",
+            "valid_status": "Valid Status",
             "note": "Note",
             "derived": "Derived"
         }
@@ -113,6 +115,7 @@ class ProjectMarkdownConverter(GenericRslMarkdownConverter):
 
         attribute_translation = {
             "description": "Description",
+            "valid_status": "Valid Status",
             "note": "Note",
             "derived": "Derived"
         }

@@ -76,6 +76,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
 
         attribute_translation = {
             "description": "Description",
+            "valid_status": "Valid Status",
             "note": "Note",
             "verification_criteria": "Verification Criteria",
             "derived": "Derived"
@@ -93,6 +94,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
 
         attribute_translation = {
             "description": "Description",
+            "valid_status": "Valid Status",
             "note": "Note",
             "derived": "Derived"
         }
@@ -109,6 +111,7 @@ class ProjectDocxConverter(GenericRslDocxConverter):
 
         attribute_translation = {
             "description": "Description",
+            "valid_status": "Valid Status",
             "note": "Note",
             "derived": "Derived"
         }
