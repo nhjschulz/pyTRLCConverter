@@ -55,6 +55,12 @@ class MarkdownConverter(BaseConverter):
         # The path to the given output folder.
         self._out_path = args.out
 
+        # The excluded files in normalized form.
+        self._excluded_files = []
+
+        if args.exclude is not None:
+            self._excluded_paths = [os.path.normpath(path) for path in args.exclude]
+
         # The file descriptor for the output file.
         self._fd = None
 
@@ -418,6 +424,13 @@ class MarkdownConverter(BaseConverter):
         # Single document mode?
         if self._args.single_document is True:
             file_name = self._args.name
+
+            # Is the link to a excluded file?
+            for excluded_path in self._excluded_paths:
+
+                if os.path.commonpath([excluded_path, record_reference.target.location.file_name]) == excluded_path:
+                    file_name = self._file_name_trlc_to_md(record_reference.target.location.file_name)
+                    break
 
         # Multiple document mode
         else:

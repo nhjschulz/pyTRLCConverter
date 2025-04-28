@@ -150,7 +150,7 @@ def test_tc_rst_escape(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_escape")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Escaping rules see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#escaping-mechanism
     EscapingResult = namedtuple("EscapingResult", ["initial", "escaped"])
@@ -177,7 +177,7 @@ def test_tc_rst_heading(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_heading")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Test the heading function. Levels 1-6 need to be supported.
     underline_chars = ["=", "#", "~", "^", "\"", "+", "'"]
@@ -206,7 +206,7 @@ def test_tc_rst_admonition(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_admonition")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Test the admonition function.
     lines = rst_converter.rst_create_admonition("Test text", "test.rst").split('\n')
@@ -227,7 +227,7 @@ def test_tc_rst_table(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_table")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Create a table head.
     headers = ["Header1", "Header2"]
@@ -262,7 +262,7 @@ def test_tc_rst_link(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_link")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Create a reStructuredText link. Escaoubg should only apply to the text, not the url.
     assert rst_converter.rst_create_link("Link Text", "http://example.com") == \
@@ -290,7 +290,7 @@ def test_tc_rst_image(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_image")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Create a reStructuredText diagram link. Absolute and relative paths shall be supported.
     diagram_path = "/diagram.png"
@@ -329,7 +329,7 @@ def test_tc_rst_role(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_rst_role")
 
-    rst_converter = RstConverter(Namespace(out=str(tmp_path)))
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Test colored text output. HTML span element with style attribute should be used.
     assert rst_converter.rst_role("Text", "red") == ":red:`Text`"
@@ -427,6 +427,61 @@ def test_tc_rst_single_doc_custom(record_property, capsys, monkeypatch, tmp_path
         assert lines[13] == "    +----------------+------------------+\n"
         assert lines[14] == "    | link           | N/A              |\n"
         assert lines[15] == "    +----------------+------------------+\n"
+
+def test_tc_rst_single_doc_exclude(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_cli_exclude
+    """
+    The software shall support excluding specific files from the conversion.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_cli_exclude")
+
+    # Mock program arguments to specify an output folder.
+    output_file_name = "myReq.rst"
+    monkeypatch.setattr("sys.argv", [
+        "pyTRLCConverter",
+        "--source", "./tests/utils",
+        "--exclude", "./tests/utils/single_req_no_section.trlc",
+        "--exclude", "./tests/utils/single_req_with_section.trlc",
+        "--out", str(tmp_path),
+        "rst",
+        "--single-document",
+        "--name", output_file_name
+    ])
+
+    # Expect the program to run without any exceptions.
+    main()
+
+    # Capture stdout and stderr.
+    captured = capsys.readouterr()
+    # Check that no errors were reported.
+    assert captured.err == ""
+
+    # Verify
+    with open(os.path.join(tmp_path, output_file_name), "r", encoding='utf-8') as generated_rst:
+        lines = generated_rst.readlines()
+        assert lines[0] == ".. _myReq.rst-specification:\n" # Label
+        assert lines[1] == "\n"
+        assert lines[2] == "Specification\n"
+        assert lines[3] == "=============\n"
+        assert lines[4] == "\n"
+        assert lines[5] == ".. _myReq.rst-req\\_id\\_3:\n" # Label
+        assert lines[6] == "\n"
+        assert lines[7] == ".. admonition:: req\\_id\\_3\n"
+        assert lines[8] == "\n"
+        # pylint: disable=line-too-long
+        assert lines[9] == "    +----------------+------------------------------------------------------------------------+\n"
+        assert lines[10] == "    | Attribute Name | Attribute Value                                                        |\n"
+        assert lines[11] == "    +================+========================================================================+\n"
+        assert lines[12] == "    | description    | Test description                                                       |\n"
+        assert lines[13] == "    +----------------+------------------------------------------------------------------------+\n"
+        assert lines[14] == "    | link           | :ref:`Requirements\\.req\\_id\\_2 <single_req_with_section.rst-req_id_2>` |\n"
+        assert lines[15] == "    +----------------+------------------------------------------------------------------------+\n"
 
 def test_tc_rst_multi_doc(record_property, capsys, monkeypatch, tmp_path):
     # lobster-trace: SwTests.tc_rst_multi_doc
