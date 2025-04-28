@@ -33,6 +33,7 @@ from pyTRLCConverter.log_verbose import log_verbose
 
 # Classes **********************************************************************
 
+# pylint: disable=too-many-instance-attributes
 class MarkdownConverter(BaseConverter):
     """
     MarkdownConverter provides functionality for converting to a markdown format.
