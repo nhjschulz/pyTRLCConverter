@@ -9,8 +9,8 @@ enum VALID_STATUS {
 
 // Abstract requirement which contains the generic attributes for all types.
 abstract type Requirement {
-    description 			String
+    description             String
     valid_status            VALID_STATUS
-    note 		optional	String
-    derived		optional	Requirement [0 .. *]
+    note        optional    String
+    derived     optional    Requirement [0 .. *]
 }
