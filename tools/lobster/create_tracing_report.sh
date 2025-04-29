@@ -21,7 +21,7 @@ LOBSTER_PYTHON=lobster-python
 LOBSTER_REPORT=lobster-report
 LOBSTER_RENDERER=lobster-html-report
 OUT_DIR=out
-MODELS=../../../doc/models
+MODELS=../../../trlc/model
 
 SW_REQ_LOBSTER_CONF=../lobster-trlc-sw-req.yaml
 SW_REQ_LOBSTER_OUT=sw_req.lobster

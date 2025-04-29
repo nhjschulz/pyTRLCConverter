@@ -43,7 +43,7 @@ jobs:
 
       - name: Analysing the requirements and test cases with TRLC
         run: |
-          trlc ./doc/models ./doc/sw-requirements ./doc/sw-test
+          trlc ./trlc/model ./trlc/swe-req ./trlc/swe-test
 
       - name: Build tracing report
         run: |

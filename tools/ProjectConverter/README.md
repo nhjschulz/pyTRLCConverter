@@ -6,7 +6,7 @@
 ## Overview
 
 This folder adds project specifc converters for the pyTRCLConverter model files in
-[doc/models](../../doc/models/). The coverters build hierarchies based on model file
+[trlc/model](../../trlc/model/). The coverters build hierarchies based on model file
 include dependencies:
 
 ## Project Converter Class Diagram

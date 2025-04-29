@@ -14,7 +14,7 @@ The following examples show different functionality as well as possibilities. Be
 
 Also look into the [tools/ProjectConverter](../tools/ProjectConverter) folder, which contains
 more sophisticated converter implementations. These are the converters for the pyTRLCConverter
-model files in [doc/models](../doc/models/).
+model files in [trlc/model](../trlc/model/).
 
 ## Issues, Ideas And Bugs
 

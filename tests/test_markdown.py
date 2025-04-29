@@ -133,7 +133,7 @@ def test_tc_markdown_escape(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_escape")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Escaping rules see https://daringfireball.net/projects/markdown/syntax#misc
     EscapingResult = namedtuple("EscapingResult", ["initial", "escaped"])
@@ -161,7 +161,7 @@ def test_tc_markdown_heading(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_heading")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Test the heading function. Levels 1-6 need to be supported.
     assert markdown_converter.markdown_create_heading("Heading", 1) == r"# Heading" + "\n"
@@ -189,7 +189,7 @@ def test_tc_markdown_table(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_table")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Create a table header. Expect 2 lines. First containing the column titles, second the separator.
     assert markdown_converter.markdown_create_table_head(["Header1", "Header2"]).split('\n') == \
@@ -222,7 +222,7 @@ def test_tc_markdown_link(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_link")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Create a Markdown link. Escaoubg should only apply to the text, not the url.
     assert markdown_converter.markdown_create_link("Link Text", "http://example.com") == \
@@ -253,7 +253,7 @@ def test_tc_markdown_image(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_image")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Create a Markdown diagram link. Absolute and relative paths shall be supported.
     diagram_path = "/diagram.png"
@@ -291,7 +291,7 @@ def test_tc_markdown_text_color(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_text_color")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # Test colored text output. HTML span element with style attribute should be used.
     assert markdown_converter.markdown_text_color("Text", "red") == r'<span style="red">Text</span>'
@@ -311,7 +311,7 @@ def test_tc_markdown_soft_return(record_property, tmp_path):
     """
     record_property("lobster-trace", "SwTests.tc_markdown_soft_return")
 
-    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path)))
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
 
     # The markdown_lf2soft_return function is expected to replace line feeds with a backslash and newline.
     assert markdown_converter.markdown_lf2soft_return("Line 1\nLine 2") == "Line 1\\\nLine 2"
@@ -355,6 +355,52 @@ def test_tc_markdown_out_folder(record_property, capsys, monkeypatch, tmp_path):
     # Assert the output folder contains the generated Markdown file.
     assert output_folder.exists()
     assert (output_folder / "output.md").exists()
+
+def test_tc_markdown_single_doc_exclude(record_property, capsys, monkeypatch, tmp_path):
+    # lobster-trace: SwTests.tc_cli_exclude
+    """
+    The software shall support excluding specific files from the conversion.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_cli_exclude")
+
+    # Mock program arguments to specify an output folder.
+    output_file_name = "myReq.md"
+    monkeypatch.setattr("sys.argv", [
+        "pyTRLCConverter",
+        "--source", "./tests/utils",
+        "--exclude", "./tests/utils/single_req_no_section.trlc",
+        "--exclude", "./tests/utils/single_req_with_section.trlc",
+        "--out", str(tmp_path),
+        "markdown",
+        "--single-document",
+        "--name", output_file_name
+    ])
+
+    # Expect the program to run without any exceptions.
+    main()
+
+    # Capture stdout and stderr.
+    captured = capsys.readouterr()
+    # Check that no errors were reported.
+    assert captured.err == ""
+
+    # Verify
+    with open(os.path.join(tmp_path, output_file_name), "r", encoding='utf-8') as generated_md:
+        lines = generated_md.readlines()
+        assert lines[0] == "# Specification\n"
+        assert lines[1] == "\n"
+        assert lines[2] == r"### req\_id\_3" + "\n"
+        assert lines[3] == "\n"
+        assert lines[4] == r"| Attribute Name | Attribute Value |" + "\n"
+        assert lines[5] == r"| -------------- | --------------- |" + "\n"
+        assert lines[6] == r"| description | Test description |" + "\n"
+        assert lines[7] == r"| link | [Requirements\.req\_id\_2](single_req_with_section.md#req_id_2) |" + "\n"
 
 def test_tc_markdown_multi_doc(record_property, capsys, monkeypatch, tmp_path):
     # lobster-trace: SwTests.tc_markdown_multi_doc

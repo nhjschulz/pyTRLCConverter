@@ -7,11 +7,11 @@ component "SW-Tests" as swTests
 file "SW-Implementation\n(/src/pyTRLCConverter/*.py)" as swImplementation
 file "SW-Test Implementation\n(/tests/*.py)" as swTestImplementation
 
-file "SW-Requirement Model\n(/doc/model/sw_req.rsl)" as swReqRsl
-file "SW-Requirements\n(/doc/sw-requirements/sw_req.trlc)" as swReqTrlc
+file "SW-Requirement Model\n(/trlc/model/swe-req.rsl)" as swReqRsl
+file "SW-Requirements\n(/trlc/swe-req/swe-req.trlc)" as swReqTrlc
 
-file "SW-Test Model\n(/doc/model/sw_req.rsl)" as swTestRsl
-file "SW-Test\n(/doc/sw-test/sw_req.trlc)" as swTestTrlc
+file "SW-Test Model\n(/trlc/model/swe-test.rsl)" as swTestRsl
+file "SW-Test\n(/trlc/swe-test/swe-testq.trlc)" as swTestTrlc
 
 swReqRsl <.. swRequirements
 swReqTrlc <.. swRequirements
