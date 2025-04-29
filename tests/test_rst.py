@@ -297,26 +297,26 @@ def test_tc_rst_image(record_property, tmp_path):
     assert rst_converter.rst_create_diagram_link(
         f"{diagram_path}",
         "Caption") == \
-        f".. image:: {os.path.normpath(diagram_path)}\n    :alt: Caption\n"
+        f".. figure:: {os.path.normpath(diagram_path)}\n    :alt: Caption\n\n    Caption\n"
 
     diagram_path = "diagram.png"
     assert rst_converter.rst_create_diagram_link(
         f"{diagram_path}",
         "Caption") == \
-        f".. image:: {os.path.normpath(diagram_path)}\n    :alt: Caption\n"
+        f".. figure:: {os.path.normpath(diagram_path)}\n    :alt: Caption\n\n    Caption\n"
 
     diagram_path = "./graph.jpg"
     assert rst_converter.rst_create_diagram_link(
         "./graph.jpg",
         "Caption with special characters!") == \
-        f".. image:: {os.path.normpath(diagram_path)}\n    :alt: Caption with special characters\\!\n"
+        f".. figure:: {os.path.normpath(diagram_path)}\n    :alt: Caption with special characters\\!\n\n    Caption with special characters\\!\n"
 
     diagram_path = "./I/am/nested.png"
     assert rst_converter.rst_create_diagram_link(
         "./I/am/nested.png",
         "Caption with special characters!",
         escape=False) == \
-        f".. image:: {os.path.normpath(diagram_path)}\n    :alt: Caption with special characters!\n"
+        f".. figure:: {os.path.normpath(diagram_path)}\n    :alt: Caption with special characters!\n\n    Caption with special characters!\n"
 
 def test_tc_rst_role(record_property, tmp_path):
     # lobster-trace: SwTests.tc_rst_role
