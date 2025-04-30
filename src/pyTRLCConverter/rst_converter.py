@@ -722,7 +722,12 @@ class RstConverter(BaseConverter):
         # Allowed are absolute and relative to source paths.
         diagram_file_name = os.path.normpath(diagram_file_name)
 
-        return f".. image:: {diagram_file_name}\n    :alt: {diagram_caption_raw}\n"
+        result =  f".. figure:: {diagram_file_name}\n    :alt: {diagram_caption_raw}\n"
+
+        if diagram_caption_raw:
+            result += f"\n    {diagram_caption_raw}\n"
+
+        return result
 
     @staticmethod
     def rst_role(text: str, role: str, escape: bool = True) -> str:
