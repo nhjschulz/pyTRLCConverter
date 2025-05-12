@@ -89,7 +89,7 @@ class DumpConverter(BaseConverter):
         print(f"{' ' * level}Section: {section} at level: {level}")
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
         """
         Process the given record object in a generic way.
 
@@ -97,8 +97,9 @@ class DumpConverter(BaseConverter):
         defined for the record type.
 
         Args:
-            record (Record_Object): The record object
-            level (int): The record level
+            record (Record_Object): The record object.
+            level (int): The record level.
+            _translation (dict): The attribute translation dictionary.
         
         Returns:
             Ret: Status

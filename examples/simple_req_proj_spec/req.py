@@ -61,12 +61,13 @@ class CustomMarkdownConverter(MarkdownConverter):
         """
         return "Convert into project extended markdown format."
 
-    def _print_req(self, req: Record_Object, level: int) -> Ret:
+    def _print_req(self, req: Record_Object, level: int, _translation: dict) -> Ret:
         """Prints the requirement.
 
         Args:
-            req (Record_Object): Requirement to print
-            level (int): Current level of the record object
+            req (Record_Object): Requirement to print.
+            level (int): Current level of the record object.
+            _translation (dict): Translation dictionary for the record object.
 
         Returns:
             Ret: Status
@@ -74,6 +75,8 @@ class CustomMarkdownConverter(MarkdownConverter):
 
         self._write_empty_line_on_demand()
 
+        # Translation file is not used, therefore _translation is not needed.
+        # Its translated here, just for example.
         attribute_translation = {
             "description": "Description"
         }

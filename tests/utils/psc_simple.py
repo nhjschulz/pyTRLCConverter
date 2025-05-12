@@ -70,12 +70,13 @@ class SimpleConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
         """Convert a record object generically.
 
         Args:
-            record (Record_Object): The record object
-            level (int): The record level
+            record (Record_Object): The record object.
+            level (int): The record level.
+            translation (dict): The attribute translation dictionary.
 
         Returns:
             Ret: Status

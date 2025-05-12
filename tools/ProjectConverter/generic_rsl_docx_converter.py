@@ -51,12 +51,13 @@ class GenericRslDocxConverter(DocxConverter):
         self._img_counter = 1
 
     # pylint: disable=unused-argument
-    def _convert_record_object_info(self, record: Record_Object, level: int) -> Ret:
+    def _convert_record_object_info(self, record: Record_Object, level: int, translation: dict) -> Ret:
         """Convert an information record object to the destination format.
 
         Args:
             record (Record_Object): The record object to convert.
-            level (int): Current level of the record object
+            level (int): Current level of the record object.
+            translation (dict): Translation dictionary for the record object.
 
         Returns:
             Ret: Status
@@ -64,12 +65,13 @@ class GenericRslDocxConverter(DocxConverter):
         self._docx.add_paragraph(self._get_attribute(record, "description"))
         return Ret.OK
 
-    def _convert_record_object_plantuml(self, record: Record_Object, level: int) -> Ret:
+    def _convert_record_object_plantuml(self, record: Record_Object, level: int, translation: dict) -> Ret:
         """Convert a Plantuml diagram record object to the destination format.
 
         Args:
             record (Record_Object): The record object to convert.
-            level (int): Current level of the record object
+            level (int): Current level of the record object.
+            translation (dict): Translation dictionary for the record object.
 
         Returns:
             Ret: Status
@@ -88,12 +90,13 @@ class GenericRslDocxConverter(DocxConverter):
 
         return result
 
-    def _convert_record_object_image(self, record: Record_Object, level: int) -> Ret:
+    def _convert_record_object_image(self, record: Record_Object, level: int, translation: dict) -> Ret:
         """Convert a software diagram record object to the destination format.
 
         Args:
             record (Record_Object): The record object to convert.
-            level (int): Current level of the record object
+            level (int): Current level of the record object.
+            translation (dict): Translation dictionary for the record object.
 
         Returns:
             Ret: Status

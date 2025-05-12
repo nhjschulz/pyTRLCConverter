@@ -1,7 +1,7 @@
 # pyTRLCConverter <!-- omit in toc -->
 
 ## Simple Requirement Example With Multiple Sources And Single Output
-The example just shows how requirements in **several files** are converted to Markdown format **without any project specific conversion**. pyTRLCConverter will generate without project specific conversion functions just a simple output. A **single** output file (\*.md) will be created which contains all requirements from all source files (\*.trlc).
+The example just shows how requirements in **several files** are converted to Markdown format **without any project specific conversion** and **without a translation file** to translate the requirement type attribute name. pyTRLCConverter will generate without project specific conversion functions just a simple output. A **single** output file (\*.md) will be created which contains all requirements from all source files (\*.trlc).
 
 ## Issues, Ideas And Bugs
 

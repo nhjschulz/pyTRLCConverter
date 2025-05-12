@@ -160,29 +160,32 @@ class RstConverter(BaseConverter):
         """
         assert self._fd is None
 
-        result = Ret.OK
+        # Call the base converter to initialize the common stuff.
+        result = BaseConverter.begin(self)
 
-        # Single document mode?
-        if self._args.single_document is True:
-            log_verbose("Single document mode.")
-        else:
-            log_verbose("Multiple document mode.")
+        if result == Ret.OK:
 
-        # Set the value for empty attributes.
-        self._empty_attribute_value = self._args.empty
+            # Single document mode?
+            if self._args.single_document is True:
+                log_verbose("Single document mode.")
+            else:
+                log_verbose("Multiple document mode.")
 
-        log_verbose(f"Empty attribute value: {self._empty_attribute_value}")
+            # Set the value for empty attributes.
+            self._empty_attribute_value = self._args.empty
 
-        # Single document mode?
-        if self._args.single_document is True:
-            result = self._generate_out_file(self._args.name)
+            log_verbose(f"Empty attribute value: {self._empty_attribute_value}")
 
-            if self._fd is not None:
-                self._write_empty_line_on_demand()
-                self._fd.write(RstConverter.rst_create_heading(self._args.top_level, 1, self._args.name))
+            # Single document mode?
+            if self._args.single_document is True:
+                result = self._generate_out_file(self._args.name)
 
-                # All headings will be shifted by one level.
-                self._base_level = self._base_level + 1
+                if self._fd is not None:
+                    self._write_empty_line_on_demand()
+                    self._fd.write(RstConverter.rst_create_heading(self._args.top_level, 1, self._args.name))
+
+                    # All headings will be shifted by one level.
+                    self._base_level = self._base_level + 1
 
         return result
 
@@ -255,7 +258,7 @@ class RstConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
         # lobster-trace: SwRequirements.sw_req_rst_record
         """
         Process the given record object in a generic way.
@@ -264,8 +267,9 @@ class RstConverter(BaseConverter):
         defined for the record type.
 
         Args:
-            record (Record_Object): The record object
-            level (int): The record level
+            record (Record_Object): The record object.
+            level (int): The record level.
+            translation (dict): The attribute translation dictionary.
         
         Returns:
             Ret: Status
@@ -274,7 +278,7 @@ class RstConverter(BaseConverter):
 
         self._write_empty_line_on_demand()
 
-        return self._convert_record_object(record, level, None)
+        return self._convert_record_object(record, level, translation)
 
     def finish(self):
         # lobster-trace: SwRequirements.sw_req_rst_single_doc_mode

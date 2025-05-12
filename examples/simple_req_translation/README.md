@@ -1,8 +1,8 @@
 # pyTRLCConverter <!-- omit in toc -->
 
-## Simple Requirement Example With Project Specific Conversion
+## Simple Requirement with Translation Example
 
-The example just shows how the requirements in a **single file** are converted to Markdown format **with a project specific conversion**, but **without a translation file** to translate the requirement type attribute name. pyTRLCConverter will generate without project specific conversion functions just a simple output.
+The example just shows how the requirements in a **single file** are converted to Markdown format **without any project specific conversion**, but **with a translation file** to translate the requirement type attribute name. pyTRLCConverter will generate without project specific conversion functions just a simple output.
 
 ## Issues, Ideas And Bugs
 

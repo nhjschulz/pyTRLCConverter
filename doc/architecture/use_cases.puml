@@ -17,12 +17,14 @@ rectangle "System" {
 
 actor "User" as user
 file "Source file(s)\n(*.trlc)" as srcFiles
+file "Translation file\n(*.json)" as translationFile
 file "Requirement Specification Language file(s)\n(*.rsl)" as rlsFiles
 file "Destination file(s)" as dstFiles
 file "Project specific conversion file (PRJSCF)\n(*.py)" as projectSpecificConversionFile
 
 user --> ucConvertToFormat: Request conversion
 srcFiles --> ucConvertToFormat
+translationFile --> ucConvertToFormat
 rlsFiles --> ucConvertToFormat
 projectSpecificConversionFile -l-> ucConvertItemProjectSpecific
 ucCreateDestinationFile --> dstFiles

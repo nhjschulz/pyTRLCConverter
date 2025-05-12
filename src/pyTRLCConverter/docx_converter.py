@@ -123,7 +123,7 @@ class DocxConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
         # lobster-trace: SwRequirements.sw_req_docx_record
         """
         Process the given record object in a generic way.
@@ -132,13 +132,14 @@ class DocxConverter(BaseConverter):
         defined for the record type.
 
         Args:
-            record (Record_Object): The record object
-            level (int): The record level
+            record (Record_Object): The record object.
+            level (int): The record level.
+            translation (dict): The attribute translation dictionary.
         
         Returns:
             Ret: Status
         """
-        return self._convert_record_object(record, level, None)
+        return self._convert_record_object(record, level, translation)
 
     def finish(self) -> Ret:
         # lobster-trace: SwRequirements.sw_req_docx_file

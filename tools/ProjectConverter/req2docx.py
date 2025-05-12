@@ -20,11 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-from pyTRLCConverter.base_converter import RecordsPolicy
-from pyTRLCConverter.ret import Ret
-from pyTRLCConverter.trlc_helper import Record_Object
 
-# pylint: disable=wrong-import-order
 from generic_rsl_docx_converter import GenericRslDocxConverter
 
 # Variables ********************************************************************
@@ -48,13 +44,9 @@ class ProjectDocxConverter(GenericRslDocxConverter):
            {
                 "Info": self._convert_record_object_info,
                 "Image": self._convert_record_object_image,
-                "PlantUML": self._convert_record_object_plantuml,
-                "SwReq": self._convert_sw_req,
-                "SwReqNonFunc": self._convert_sw_req_non_func,
-                "SwConstraint": self._convert_sw_constraint
+                "PlantUML": self._convert_record_object_plantuml
            }
         )
-        self._record_policy = RecordsPolicy.RECORD_SKIP_UNDEFINED
 
     @staticmethod
     def get_description() -> str:
@@ -64,59 +56,6 @@ class ProjectDocxConverter(GenericRslDocxConverter):
             str: Converter description
         """
         return "Convert into project specific docx format."
-
-    
-    def _convert_sw_req(self, sw_req: Record_Object, level: int) -> Ret:
-        """Convert a requirement record object to the destination format.
-
-        Args:
-            sw_req (Record_Object): Software requirement to print
-            level (int): Current level of the record object
-        """
-
-        attribute_translation = {
-            "description": "Description",
-            "valid_status": "Valid Status",
-            "note": "Note",
-            "verification_criteria": "Verification Criteria",
-            "derived": "Derived"
-        }
-
-        return self._convert_record_object(sw_req, level, attribute_translation)
-
-    def _convert_sw_req_non_func(self, sw_req: Record_Object, level: int) -> Ret:
-        """Convert a software non-functional requirement.
-
-        Args:
-            sw_req (Record_Object): Software non-functional requirement to print
-            level (int): Current level of the record object
-        """
-
-        attribute_translation = {
-            "description": "Description",
-            "valid_status": "Valid Status",
-            "note": "Note",
-            "derived": "Derived"
-        }
-
-        return self._convert_record_object(sw_req, level, attribute_translation)
-
-    def _convert_sw_constraint(self, sw_constraint: Record_Object, level: int) -> Ret:
-        """Convert a software constraint.
-
-        Args:
-            sw_constraint (Record_Object): Software constraint to print
-            level (int): Current level of the record object
-        """
-
-        attribute_translation = {
-            "description": "Description",
-            "valid_status": "Valid Status",
-            "note": "Note",
-            "derived": "Derived"
-        }
-
-        return self._convert_record_object(sw_constraint, level, attribute_translation)
 
 # Functions ********************************************************************
 
