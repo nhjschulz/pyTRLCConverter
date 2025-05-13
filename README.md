@@ -26,6 +26,7 @@ Find the requirements, test cases, coverage and etc. on the [github pages](https
   - [Conversion to docx format](#conversion-to-docx-format)
   - [Conversion to reStructuredText format](#conversion-to-restructuredtext-format)
   - [Dump TRLC item list to console](#dump-trlc-item-list-to-console)
+  - [Use a attribte name translation](#use-a-attribte-name-translation)
   - [Show tool version](#show-tool-version)
   - [PlantUML](#plantuml)
 - [Examples](#examples)
@@ -167,6 +168,24 @@ Mainly for development all TRLC items can be dumped to the console.
 ```bash
 pyTRLCConverter --source trlc/model --source trlc/swe-req dump
 ```
+
+### Use a attribte name translation
+
+The built-in converters are showin the requirements and its attributes as table. The first column contains always the attribute name and the second column the attribute value. Because the attribute name must be compliant to the TRLC standard, it is not always human readable.
+
+Therefore a translation JSON file can be used to translate the attribute names. Use the ```--translation``` argument to specify the translation file.
+
+Translation file example:
+
+```json
+{
+    "SwRequirement": {
+        "desc": "Description"
+    }
+}
+```
+
+See the [example](./examples/simple_req_translation/) for more information.
 
 ### Show tool version
 
