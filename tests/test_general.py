@@ -56,6 +56,43 @@ def test_tc_cli_no_arguments(record_property, capsys, monkeypatch):
     # Check if the program requested an argument from the user.
     assert "arguments are required" in captured.err
 
+def test_tc_translation(record_property, capsys, monkeypatch):
+    # lobster-trace: SwTests.tc_translation
+    """
+    Check whether a translation is applied.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        capsys (Any): Used to capture stdout and stderr.
+        monkeypatch (Any): Used to mock program arguments.
+    """
+    record_property("lobster-trace", "SwTests.tc_translation")
+
+    # Mock program arguments to simulate running the script with a project specific converter.
+    monkeypatch.setattr("sys.argv", [
+        "pyTRLCConverter",
+        "--source", "./tests/utils/req.rsl",
+        "--source", "./tests/utils/single_req_no_section.trlc",
+        "--project", "./tests/utils/psc_simple.py",
+        "--translation", "./tests/utils/translation.json",
+        "simple"
+    ])
+
+    # Expecting the programm to run without any exceptions.
+    main()
+
+    # Capture stdout and stderr.
+    captured = capsys.readouterr()
+
+    # No error output expected.
+    assert captured.err == ""
+
+    # Check if the expected output.
+    lines = captured.out.splitlines()
+    assert len(lines) == 2
+    assert lines[0] == "req_id_1"
+    assert lines[1] == "Translated Description: Test description"
+
 def test_tc_prj_spec(record_property, capsys, monkeypatch):
     # lobster-trace: SwTests.tc_prj_spec
     """
@@ -153,7 +190,7 @@ def test_tc_process_trlc_symbols_one_file_one_req(record_property, capsys, monke
     lines = captured.out.splitlines()
     assert len(lines) == 2
     assert lines[0] == "req_id_1"
-    assert lines[1] == "Test description"
+    assert lines[1] == "description: Test description"
 
 def test_tc_process_trlc_symbols_two_files_one_req(record_property, capsys, monkeypatch):
     # lobster-trace: SwTests.tc_process_trlc_symbols_two_files_one_req
@@ -190,11 +227,11 @@ def test_tc_process_trlc_symbols_two_files_one_req(record_property, capsys, monk
     lines = captured.out.splitlines()
     assert len(lines) == 6
     assert lines[0] == "req_id_1"
-    assert lines[1] == "Test description"
+    assert lines[1] == "description: Test description"
     assert lines[2] == "Test section"
     assert lines[3] == ""
     assert lines[4] == "req_id_2"
-    assert lines[5] == "Test description"
+    assert lines[5] == "description: Test description"
 
 def test_tc_verbose(record_property, capsys, monkeypatch):
     # lobster-trace: SwTests.tc_verbose
@@ -232,6 +269,6 @@ def test_tc_verbose(record_property, capsys, monkeypatch):
     lines = captured.out.splitlines()
     assert len(lines) == 17
     assert lines[15] == "req_id_1"
-    assert lines[16] == "Test description"
+    assert lines[16] == "description: Test description"
 
 # Main *************************************************************************

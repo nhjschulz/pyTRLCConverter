@@ -23,6 +23,13 @@ section "pyTRLCConverter" {
                 valid_status = AbstractRequirements.VALID_STATUS.valid
             }
 
+            SwReq sw_req_translation {
+                description = "The software shall support the requirement type attribute name translation via a translation file in JSON format."
+                verification_criteria = "Verify by converting one or more TRLC files with a translation file."
+                valid_status = AbstractRequirements.VALID_STATUS.valid
+                note = "Some attribute names may contain underscores or other special characters. These shall be translated to a humand readable names."
+            }
+
             SwReq sw_req_prj_spec {
                 description = "The software shall support project specific adaptions for the conversion."
                 verification_criteria = "Verify by converting one or more TRLC files with a project specific conversion file."
@@ -114,6 +121,12 @@ section "pyTRLCConverter" {
             SwReq sw_req_cli_out {
                 description = "The software shall support the command line argument '-o' and '--out' to specify the output directory."
                 verification_criteria = "Verify by calling the software with the argument '--out' and check if the output is written to the specified directory."
+                valid_status = AbstractRequirements.VALID_STATUS.valid
+            }
+
+            SwReq sw_req_cli_translation {
+                description = "The software shall support the command line argument '-tr' and '--translation' to specify the translation JSON file."
+                verification_criteria = "Verify by calling the software with the argument '--translation' and check if the output is written to the specified directory."
                 valid_status = AbstractRequirements.VALID_STATUS.valid
             }
         }

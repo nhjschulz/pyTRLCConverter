@@ -67,7 +67,9 @@ class CustomMarkdownConverter(MarkdownConverter):
         Args:
             req (Record_Object): Requirement to print.
             level (int): Current level of the record object.
-            _translation (dict): Translation dictionary for the record object.
+            _translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
+
 
         Returns:
             Ret: Status

@@ -27,7 +27,7 @@ from generic_rsl_rst_converter import GenericRslRstConverter
 
 # Classes **********************************************************************
 
-
+# pylint: disable=too-few-public-methods
 class TestCaseRstConverter(GenericRslRstConverter):
     """Custom Project specific reStructuredText converter for test cases.
     """

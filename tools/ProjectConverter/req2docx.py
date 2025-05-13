@@ -27,6 +27,7 @@ from generic_rsl_docx_converter import GenericRslDocxConverter
 
 # Classes **********************************************************************
 
+# pylint: disable=too-few-public-methods
 class ProjectDocxConverter(GenericRslDocxConverter):
     """Custom Project specific Docx format converter.
     """

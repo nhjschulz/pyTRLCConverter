@@ -27,7 +27,7 @@ from generic_rsl_markdown_converter import GenericRslMarkdownConverter
 
 # Classes **********************************************************************
 
-
+# pylint: disable=too-few-public-methods
 class ProjectMarkdownConverter(GenericRslMarkdownConverter):
     """Custom Project specific Markdown Converter.
     """

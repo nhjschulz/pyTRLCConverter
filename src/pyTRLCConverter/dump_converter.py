@@ -20,6 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+from typing import Optional
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -89,7 +90,7 @@ class DumpConverter(BaseConverter):
         print(f"{' ' * level}Section: {section} at level: {level}")
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """
         Process the given record object in a generic way.
 
@@ -99,8 +100,9 @@ class DumpConverter(BaseConverter):
         Args:
             record (Record_Object): The record object.
             level (int): The record level.
-            _translation (dict): The attribute translation dictionary.
-        
+            _translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
+
         Returns:
             Ret: Status
         """

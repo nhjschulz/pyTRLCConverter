@@ -22,6 +22,7 @@
 # Imports **********************************************************************
 import sys
 from enum import Enum
+from typing import Optional
 from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
@@ -47,6 +48,7 @@ class RecordsPolicy(Enum):
 
 class BaseConverter(AbstractConverter):
     # lobster-trace: SwRequirements.sw_req_destination_format
+    # lobster-trace: SwRequirements.sw_req_translation
     """
     Base converter with empty method implementations and helper functions 
     for subclassing converters.
@@ -179,13 +181,14 @@ class BaseConverter(AbstractConverter):
 
     # helpers **************************************************************
 
-    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """Convert a record object generically.
 
         Args:
             record (Record_Object): The record object.
             level (int): The record level.
-            translation (dict): The attribute translation dictionary.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status

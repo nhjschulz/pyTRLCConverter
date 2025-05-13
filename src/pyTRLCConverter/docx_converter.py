@@ -123,7 +123,7 @@ class DocxConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_docx_record
         """
         Process the given record object in a generic way.
@@ -134,7 +134,9 @@ class DocxConverter(BaseConverter):
         Args:
             record (Record_Object): The record object.
             level (int): The record level.
-            translation (dict): The attribute translation dictionary.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
+
         
         Returns:
             Ret: Status
@@ -162,7 +164,7 @@ class DocxConverter(BaseConverter):
 
         return result
 
-    def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
+    def _convert_record_object(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_docx_record
         """
         Process the given record object.
@@ -170,7 +172,8 @@ class DocxConverter(BaseConverter):
         Args:
             record (Record_Object): The record object.
             level (int): The record level.
-            attribute_translation (Optional[dict]): Attribute translation (attribute name -> user friendly name).
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status
@@ -192,9 +195,9 @@ class DocxConverter(BaseConverter):
             if value is None:
                 value = self._empty_attribute_value
 
-            if attribute_translation is not None:
-                if key in attribute_translation:
-                    key = attribute_translation[key]
+            if translation is not None:
+                if key in translation:
+                    key = translation[key]
 
             cells = table.add_row().cells
             cells[0].text = key

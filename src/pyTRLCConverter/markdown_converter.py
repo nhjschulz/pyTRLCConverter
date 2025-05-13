@@ -268,7 +268,7 @@ class MarkdownConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_record
         # lobster-trace: SwRequirements.sw_req_markdown_md_top_level
         """
@@ -280,7 +280,8 @@ class MarkdownConverter(BaseConverter):
         Args:
             record (Record_Object): The record object.
             level (int): The record level.
-            translation (dict): The attribute translation dictionary.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
         
         Returns:
             Ret: Status
@@ -448,11 +449,17 @@ class MarkdownConverter(BaseConverter):
         return MarkdownConverter.markdown_create_link(record_reference.to_python_object(), anchor_tag)
 
     def _get_trlc_ast_walker(self) -> TrlcAstWalker:
-        # If a record object contains a record reference, the record reference will be converted to
-        # a Markdown link.
-        # If a record object contains an array of record references, the array will be converted to
-        # a Markdown list of links.
-        # Otherwise the record object fields attribute values will be written to the Markdown table.
+        # lobster-trace: SwRequirements.sw_req_markdown_record
+        """
+        If a record object contains a record reference, the record reference will be converted to
+        a Markdown link.
+        If a record object contains an array of record references, the array will be converted to
+        a Markdown list of links.
+        Otherwise the record object fields attribute values will be written to the Markdown table.
+
+        Returns:
+            TrlcAstWalker: The TRLC AST walker.
+        """
         trlc_ast_walker = TrlcAstWalker()
         trlc_ast_walker.add_dispatcher(
             Implicit_Null,
@@ -473,7 +480,7 @@ class MarkdownConverter(BaseConverter):
         return trlc_ast_walker
 
     # pylint: disable=too-many-locals
-    def _convert_record_object(self, record: Record_Object, level: int, attribute_translation: Optional[dict]) -> Ret:
+    def _convert_record_object(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         # lobster-trace: SwRequirements.sw_req_markdown_record
         """
         Process the given record object.
@@ -481,7 +488,8 @@ class MarkdownConverter(BaseConverter):
         Args:
             record (Record_Object): The record object.
             level (int): The record level.
-            attribute_translation (Optional[dict]): Attribute translation (attribute name -> user friendly name).
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
         
         Returns:
             Ret: Status
@@ -505,9 +513,9 @@ class MarkdownConverter(BaseConverter):
         for name, value in record.field.items():
             # Translate the attribute name if available.
             attribute_name = name
-            if attribute_translation is not None:
-                if name in attribute_translation:
-                    attribute_name = attribute_translation[name]
+            if translation is not None:
+                if name in translation:
+                    attribute_name = translation[name]
 
             attribute_name = self.markdown_escape(attribute_name)
 

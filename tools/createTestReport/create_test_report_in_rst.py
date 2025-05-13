@@ -20,6 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+from typing import Optional
 from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.rst_converter import RstConverter
@@ -79,13 +80,15 @@ class CustomRstConverter(RstConverter):
         return super().leave_file(file_name)
 
     # pylint: disable=unused-argument
-    def _append_test_case_result(self, record: Record_Object, level: int) -> Ret:
+    def _append_test_case_result(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """
         Append test case result.
 
         Args:
-            record (Record_Object): Record object to convert
-            level (int): Current level of the record object
+            record (Record_Object): Record object to convert.
+            level (int): Current level of the record object.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status

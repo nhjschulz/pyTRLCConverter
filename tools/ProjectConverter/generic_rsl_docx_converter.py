@@ -23,6 +23,7 @@ support for the TRLC record types defined in Generic.rsl.
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+from typing import Optional
 import docx
 from pyTRLCConverter.docx_converter import DocxConverter
 from pyTRLCConverter.ret import Ret
@@ -51,13 +52,14 @@ class GenericRslDocxConverter(DocxConverter):
         self._img_counter = 1
 
     # pylint: disable=unused-argument
-    def _convert_record_object_info(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def _convert_record_object_info(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """Convert an information record object to the destination format.
 
         Args:
             record (Record_Object): The record object to convert.
             level (int): Current level of the record object.
-            translation (dict): Translation dictionary for the record object.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status
@@ -65,13 +67,14 @@ class GenericRslDocxConverter(DocxConverter):
         self._docx.add_paragraph(self._get_attribute(record, "description"))
         return Ret.OK
 
-    def _convert_record_object_plantuml(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def _convert_record_object_plantuml(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """Convert a Plantuml diagram record object to the destination format.
 
         Args:
             record (Record_Object): The record object to convert.
             level (int): Current level of the record object.
-            translation (dict): Translation dictionary for the record object.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status
@@ -90,13 +93,14 @@ class GenericRslDocxConverter(DocxConverter):
 
         return result
 
-    def _convert_record_object_image(self, record: Record_Object, level: int, translation: dict) -> Ret:
+    def _convert_record_object_image(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """Convert a software diagram record object to the destination format.
 
         Args:
             record (Record_Object): The record object to convert.
             level (int): Current level of the record object.
-            translation (dict): Translation dictionary for the record object.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status

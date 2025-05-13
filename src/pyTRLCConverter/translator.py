@@ -30,6 +30,7 @@ from pyTRLCConverter.log_verbose import log_verbose
 # Classes **********************************************************************
 
 class Translator():
+    # lobster-trace: SwRequirements.sw_req_translation
     """
     This class implements the requirement attribute translator.
     """
