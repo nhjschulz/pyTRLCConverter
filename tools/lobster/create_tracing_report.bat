@@ -21,33 +21,32 @@ set LOBSTER_PYTHON=lobster-python
 set LOBSTER_REPORT=lobster-report
 set LOBSTER_RENDERER=lobster-html-report
 set OUT_DIR=out
-set MODELS=..\..\..\trlc\model
+set MODELS=.\..\..\trlc\model
 
-set SW_REQ_LOBSTER_CONF=..\lobster-trlc-sw-req.yaml
-set SW_REQ_LOBSTER_OUT=sw_req.lobster
+set SW_REQ_LOBSTER_CONF=.\lobster-trlc-sw-req.yaml
+set SW_REQ_LOBSTER_OUT=%OUT_DIR%\sw_req.lobster
 
-set SW_TEST_LOBSTER_CONF=..\lobster-trlc-sw-test.yaml
-set SW_TEST_LOBSTER_OUT=sw_test.lobster
+set SW_TEST_LOBSTER_CONF=.\lobster-trlc-sw-test.yaml
+set SW_TEST_LOBSTER_OUT=%OUT_DIR%\sw_test.lobster
 
-set SW_CODE_SOURCES=..\..\..\src\pyTRLCConverter
-set SW_CODE_LOBSTER_OUT=sw_code.lobster
+set SW_CODE_SOURCES=.\..\..\src\pyTRLCConverter
+set SW_CODE_LOBSTER_OUT=%OUT_DIR%\sw_code.lobster
 
-set SW_TEST_CODE_SOURCES=..\..\..\tests
-set SW_TEST_CODE_LOBSTER_OUT=sw_test_code.lobster
+set SW_TEST_CODE_SOURCES=.\..\..\tests
+set SW_TEST_CODE_LOBSTER_OUT=%OUT_DIR%\sw_test_code.lobster
 
-set SW_REQ_LOBSTER_REPORT_CONF=..\lobster-report-sw-req.conf
-set SW_REQ_LOBSTER_REPORT_OUT=lobster-report-sw-req.lobster
-set SW_REQ_LOBSTER_HTML_OUT=sw_req_tracing_report.html
+set SW_REQ_LOBSTER_REPORT_CONF=.\lobster-report-sw-req.conf
+set SW_REQ_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-req.lobster
+set SW_REQ_LOBSTER_HTML_OUT=%OUT_DIR%\sw_req_tracing_report.html
 
-set SW_TEST_LOBSTER_REPORT_CONF=..\lobster-report-sw-test.conf
-set SW_TEST_LOBSTER_REPORT_OUT=lobster-report-sw-test.lobster
-set SW_TEST_LOBSTER_HTML_OUT=sw_test_tracing_report.html
+set SW_TEST_LOBSTER_REPORT_CONF=.\lobster-report-sw-test.conf
+set SW_TEST_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-test.lobster
+set SW_TEST_LOBSTER_HTML_OUT=%OUT_DIR%\sw_test_tracing_report.html
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
 )
 
-cd %OUT_DIR%
 
 rem ********** SW-Requirements **********
 %LOBSTER_TRLC% --config %SW_REQ_LOBSTER_CONF% --out %SW_REQ_LOBSTER_OUT%
@@ -111,4 +110,4 @@ goto finished
 pause
 
 :finished
-cd ..
+echo Finished
