@@ -58,6 +58,7 @@ def test_tc_cli_no_arguments(record_property, capsys, monkeypatch):
 
 def test_tc_translation(record_property, capsys, monkeypatch):
     # lobster-trace: SwTests.tc_translation
+    # lobster-trace: SwTests.tc_cli_translation
     """
     Check whether a translation is applied.
 
@@ -67,6 +68,7 @@ def test_tc_translation(record_property, capsys, monkeypatch):
         monkeypatch (Any): Used to mock program arguments.
     """
     record_property("lobster-trace", "SwTests.tc_translation")
+    record_property("lobster-trace", "SwTests.tc_cli_translation")
 
     # Mock program arguments to simulate running the script with a project specific converter.
     monkeypatch.setattr("sys.argv", [
