@@ -25,25 +25,25 @@ OUT_DIR=out
 MODELS=./../../trlc/model
 
 SW_REQ_LOBSTER_CONF=./lobster-trlc-sw-req.yaml
-SW_REQ_LOBSTER_OUT=$OUT_DIR/sw_req.lobster
+SW_REQ_LOBSTER_OUT=$OUT_DIR/sw_req-lobster.json
 
 SW_TEST_LOBSTER_CONF=./lobster-trlc-sw-test.yaml
-SW_TEST_LOBSTER_OUT=$OUT_DIR/sw_test.lobster
+SW_TEST_LOBSTER_OUT=$OUT_DIR/sw_test-lobster.json
 
 SW_CODE_SOURCES=./../../src/pyTRLCConverter
-SW_CODE_LOBSTER_OUT=$OUT_DIR/sw_code.lobster
+SW_CODE_LOBSTER_OUT=$OUT_DIR/sw_code-lobster.json
 
 SW_TEST_CODE_SOURCES=./../../tests
-SW_TEST_CODE_LOBSTER_OUT=$OUT_DIR/sw_test_code.lobster
+SW_TEST_CODE_LOBSTER_OUT=$OUT_DIR/sw_test_code-lobster.json
 
 SW_REQ_LOBSTER_REPORT_CONF=./lobster-report-sw-req.conf
-SW_REQ_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-req.lobster
-SW_REQ_LOBSTER_ONLINE_REPORT_OUT=$OUT_DIR/lobster-online-report-sw-req.lobster
+SW_REQ_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-req-lobster.json
+SW_REQ_LOBSTER_ONLINE_REPORT_OUT=$OUT_DIR/lobster-online-report-sw-req-lobster.json
 SW_REQ_LOBSTER_HTML_OUT=$OUT_DIR/sw_req_tracing_online_report.html
 
 SW_TEST_LOBSTER_REPORT_CONF=./lobster-report-sw-test.conf
-SW_TEST_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-test.lobster
-SW_TEST_LOBSTER_ONLINE_REPORT_OUT=$OUT_DIR/lobster-online-report-sw-rest.lobster
+SW_TEST_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-test-lobster.json
+SW_TEST_LOBSTER_ONLINE_REPORT_OUT=$OUT_DIR/lobster-online-report-sw-rest-lobster.json
 SW_TEST_LOBSTER_HTML_OUT=$OUT_DIR/sw_test_tracing_online_report.html
 
 LOCAL_REPOSITORY_ROOT=./../..

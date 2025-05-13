@@ -86,7 +86,7 @@ jobs:
             cd ./tools/lobster
             chmod +x create_tracing_online_report.sh
             ./create_tracing_online_report.sh
-            rm -f ./out/*.lobster
+            rm -f ./out/*-lobster.json
             cd ../..
 
       - name: Build sphinx webpages
