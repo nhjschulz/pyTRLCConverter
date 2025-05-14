@@ -26,6 +26,8 @@ set TEST_RESULT_REPORT_TRLC=test_result_report.trlc
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
+) else (
+    del /q /s "%OUT_DIR%\*"
 )
 
 rem Create the test report and the coverage analysis.

@@ -26,6 +26,8 @@ TEST_RESULT_REPORT_TRLC="test_result_report.trlc"
 
 if [ ! -d "$OUT_DIR" ]; then
     mkdir -p "$OUT_DIR"
+else
+    rm -rf "$OUT_DIR"/*
 fi
 
 # Create the test report and the coverage analysis.

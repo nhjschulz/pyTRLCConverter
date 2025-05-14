@@ -45,6 +45,8 @@ SW_TEST_LOBSTER_HTML_OUT=$OUT_DIR/sw_test_tracing_report.html
 
 if [ ! -d "$OUT_DIR" ]; then
     mkdir "$OUT_DIR"
+else
+    rm -f "$OUT_DIR"/*
 fi
 
 # ********** SW-Requirements **********
