@@ -1,4 +1,4 @@
-@echo off
+@REM @echo off
 
 rem pyTRLCConverter - A tool to convert TRLC files to specific formats.
 rem Copyright (c) 2024 - 2025 NewTec GmbH
@@ -22,6 +22,8 @@ cd ..\req2markdown
 
 if not exist "out" (
     md out
+) else (
+    del /q /s "out\*" 
 )
 
 rem ****************************************************************************************************
@@ -41,3 +43,6 @@ pyTRLCConverter --source=..\..\trlc\swe-req --source=..\..\trlc\model -o=%SWE_RE
 if errorlevel 1 (
     pause
 )
+
+:finished
+echo %OUT_DIR%

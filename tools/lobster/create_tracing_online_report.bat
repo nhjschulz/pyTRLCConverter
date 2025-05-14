@@ -50,6 +50,8 @@ set LOCAL_REPOSITORY_ROOT=.\..\..
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
+) else (
+    del /q "%OUT_DIR%\*"
 )
 
 rem ********** SW-Requirements **********

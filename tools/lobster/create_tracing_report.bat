@@ -45,6 +45,8 @@ set SW_TEST_LOBSTER_HTML_OUT=%OUT_DIR%\sw_test_tracing_report.html
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
+) else (
+    del /q "%OUT_DIR%\*" 
 )
 
 

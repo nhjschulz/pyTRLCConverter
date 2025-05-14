@@ -50,6 +50,8 @@ LOCAL_REPOSITORY_ROOT=./../..
 
 if [ ! -d "$OUT_DIR" ]; then
     mkdir -p $OUT_DIR
+else
+    rm -f "$OUT_DIR"/*
 fi
 
 # ********** SW-Requirements **********
