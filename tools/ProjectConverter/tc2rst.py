@@ -21,6 +21,7 @@
 
 # Imports **********************************************************************
 
+# pylint: disable=import-error
 from generic_rsl_rst_converter import GenericRslRstConverter
 
 # Variables ********************************************************************

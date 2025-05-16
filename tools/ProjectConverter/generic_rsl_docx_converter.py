@@ -25,6 +25,7 @@ support for the TRLC record types defined in Generic.rsl.
 # Imports **********************************************************************
 from typing import Optional
 import docx
+# pylint: disable=import-error
 from pyTRLCConverter.docx_converter import DocxConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
