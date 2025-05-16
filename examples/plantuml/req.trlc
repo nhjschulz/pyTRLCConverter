@@ -8,6 +8,6 @@ section "Heading" {
     }
 
     Requirement req_id_simple {
-        description = "This is a simple requirement"
+        description = "This is a simple requirement."
     }
 }

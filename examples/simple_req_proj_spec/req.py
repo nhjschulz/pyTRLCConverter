@@ -20,6 +20,8 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
+from typing import Optional
+
 from pyTRLCConverter.base_converter import RecordsPolicy
 from pyTRLCConverter.ret import Ret
 
@@ -61,12 +63,15 @@ class CustomMarkdownConverter(MarkdownConverter):
         """
         return "Convert into project extended markdown format."
 
-    def _print_req(self, req: Record_Object, level: int) -> Ret:
+    def _print_req(self, req: Record_Object, level: int, _translation: Optional[dict]) -> Ret:
         """Prints the requirement.
 
         Args:
-            req (Record_Object): Requirement to print
-            level (int): Current level of the record object
+            req (Record_Object): Requirement to print.
+            level (int): Current level of the record object.
+            _translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
+
 
         Returns:
             Ret: Status
@@ -74,6 +79,8 @@ class CustomMarkdownConverter(MarkdownConverter):
 
         self._write_empty_line_on_demand()
 
+        # Translation file is not used, therefore _translation is not needed.
+        # Its translated here, just for example.
         attribute_translation = {
             "description": "Description"
         }

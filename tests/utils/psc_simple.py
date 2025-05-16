@@ -20,7 +20,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 # Imports **********************************************************************
-
+from typing import Optional
 from trlc.ast import Record_Object
 
 from pyTRLCConverter.ret import Ret
@@ -70,22 +70,29 @@ class SimpleConverter(BaseConverter):
 
         return Ret.OK
 
-    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """Convert a record object generically.
 
         Args:
-            record (Record_Object): The record object
-            level (int): The record level
+            record (Record_Object): The record object.
+            level (int): The record level.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status
         """
         attributes = record.to_python_dict()
+        attribute_name = "description"
+        description = attributes[attribute_name]
+        attribute_name_translation = attribute_name
 
-        description = attributes["description"]
+        if translation is not None:
+            if attribute_name in translation:
+                attribute_name_translation = translation[attribute_name]
 
         print(f"{record.name}")
-        print(f"{description}")
+        print(f"{attribute_name_translation}: {description}")
 
         return Ret.OK
 

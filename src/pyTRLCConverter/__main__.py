@@ -137,6 +137,16 @@ def _create_args_parser() -> argparse.ArgumentParser:
         help="Python module with project specific conversion functions."
     )
 
+    # lobster-trace: SwRequirements.sw_req_cli_translation
+    parser.add_argument(
+        "-tr",
+        "--translation",
+        type=str,
+        default=None,
+        required=False,
+        help="Requirement attribute translation JSON file."
+    )
+
     return parser
 
 def main() -> int:
@@ -209,6 +219,7 @@ def main() -> int:
 
                     walker = ItemWalker(args, converter)
                     ret_status = walker.walk_symbols(symbols)
+
                 except (FileNotFoundError, OSError) as exc:
                     log_error(exc)
                     ret_status = Ret.ERROR
