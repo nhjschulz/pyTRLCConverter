@@ -27,6 +27,7 @@ support for the TRLC record types defined in Generic.rsl.
 import os
 import shutil
 from typing import Optional
+# pylint: disable=import-error
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.rst_converter import RstConverter
 from pyTRLCConverter.trlc_helper import Record_Object

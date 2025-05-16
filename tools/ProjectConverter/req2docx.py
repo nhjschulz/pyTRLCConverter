@@ -21,6 +21,7 @@
 
 # Imports **********************************************************************
 
+# pylint: disable=import-error
 from generic_rsl_docx_converter import GenericRslDocxConverter
 
 # Variables ********************************************************************
