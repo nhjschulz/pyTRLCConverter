@@ -21,9 +21,14 @@
 
 # Imports **********************************************************************
 
+import sys
+import logging
+
 # Variables ********************************************************************
 
 _VERBOSE_ENABLED = False
+logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Classes **********************************************************************
 
@@ -57,5 +62,18 @@ def log_verbose(message):
     """
     if _VERBOSE_ENABLED:
         print(message)
+
+def log_error(message, show_timestamp=False):
+    """Prints an error and optionally a timestamp with it
+
+    Args:
+        message (str): The error message
+        show_timestamp (bool, optional): Option to enable logging. Defaults to False.
+    """
+    if show_timestamp:
+        logging.error(message)
+    else:
+        print(message, file=sys.stderr)
+
 
 # Main *************************************************************************
