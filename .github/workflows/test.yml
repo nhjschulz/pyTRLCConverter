@@ -85,7 +85,7 @@ jobs:
 
       - name: Analysing the code with pylint
         run: |
-          pylint ./src
+          pylint ./src ./tools
 
   test:
     # The type of runner that the job will run on.
