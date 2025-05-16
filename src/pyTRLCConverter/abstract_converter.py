@@ -82,7 +82,7 @@ class AbstractConverter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def convert_record_object(self, record : Record_Object, level: int ) -> Ret:
+    def convert_record_object(self, record : Record_Object, level: int) -> Ret:
         """ Process the given  record object
         
         Args:

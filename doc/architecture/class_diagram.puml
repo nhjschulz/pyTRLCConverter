@@ -1,6 +1,6 @@
 @startuml class_diagram
 
-interface AbstractConverter <<abstract>>{
+interface "AbstractConverter" as abstractConverter <<abstract>> {
     + {abstract} register(args_parser)
     + {abstract} convert_section()
     + {abstract} convert_record()
@@ -11,35 +11,37 @@ interface AbstractConverter <<abstract>>{
 
 }
 
-note top of AbstractConverter
+note top of abstractConverter
     Interface for converting TRLC symbols
     into destination format.
 end note
 
-class BaseConverter <<abstract>> {
+class "BaseConverter" as baseConverter <<abstract>> {
 }
 
 rectangle "Built-in Converter" {
 
-    class MarkdownConverter {
+    class "MarkdownConverter" as markdownConverter {
     }
 
-    class RstConverter {
+    class "RstConverter" as rstConverter {
 
     }
-    class DocxConverter {
+
+    class "DocxConverter" as docxConverter {
     }
-    class DumpConverter {
+
+    class "DumpConverter" as dumpConverter {
     }
 }
 
-AbstractConverter <|.. BaseConverter: <<realize>>
-BaseConverter <|.. MarkdownConverter: <<realize>>
-BaseConverter <|.. DocxConverter: <<realize>>
-BaseConverter <|.. DumpConverter: <<realize>>
-BaseConverter <|.. RstConverter: <<realize>>
+abstractConverter <|.. baseConverter: <<realize>>
+baseConverter <|.. markdownConverter: <<realize>>
+baseConverter <|.. docxConverter: <<realize>>
+baseConverter <|.. dumpConverter: <<realize>>
+baseConverter <|.. rstConverter: <<realize>>
 
-class version <<module>> {
+class "version" as version <<module>> {
 }
 
 note top of version
@@ -48,7 +50,7 @@ end note
 
 rectangle Utilities {
 
-    class log_verbose <<module>> {
+    class "log_verbose" as log_verbose <<module>> {
     }
 
     note top of log_verbose
@@ -56,7 +58,7 @@ rectangle Utilities {
          verbose logging.
     end note
 
-    class plantuml <<module>> {
+    class "plantuml" as plantuml <<module>> {
     }
 
     note top of plantuml
@@ -76,32 +78,41 @@ rectangle Utilities {
     end note
 }
 
-
-class main <<module>> {
+class "main" as main <<module>> {
     - _table: []
     + main() : int
 }
 
-class ItemWalker
-note top of ItemWalker
+class "ItemWalker" as itemWalker
+
+note top of itemWalker
     TRLC item list traverse logic 
 end note
 
 
-main ..> ItemWalker: <<use>>
-ItemWalker ..> AbstractConverter: <<use>>
-main *--- AbstractConverter
+main ..> itemWalker: <<use>>
+itemWalker ..> abstractConverter: <<use>>
+main *--- abstractConverter
 main ..> version: <<use>>
 
 
-class "ProjectSpecific Converter" {
+class "ProjectSpecific Converter" as prjSpecConverter {
 }
 
-note right of "ProjectSpecific Converter"
+note right of prjSpecConverter
 May also subclass one of the "Built-in Converter"
 end note
 
-BaseConverter <|.r. "ProjectSpecific Converter": <<realize>>
-main o- "ProjectSpecific Converter" : Dynamic loading "--project <file>" option
+baseConverter <|.r. prjSpecConverter: <<realize>>
+main o- prjSpecConverter : Dynamic loading "--project <file>" option
+
+class "Translator" as translator
+
+note top of translator
+    Loads translation file and
+    provides translation functions.
+end note
+
+translator <- baseConverter
 
 @enduml

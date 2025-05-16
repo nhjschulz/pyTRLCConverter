@@ -125,11 +125,11 @@ def test_tc_cli_exclude(record_property, capsys, monkeypatch):
     lines = captured.out.splitlines()
     assert len(lines) == 6
     assert lines[0] == "req_id_1"
-    assert lines[1] == "Test description"
+    assert lines[1] == "description: Test description"
     assert lines[2] == "Test section"
     assert lines[3] == ""
     assert lines[4] == "req_id_2"
-    assert lines[5] == "Test description"
+    assert lines[5] == "description: Test description"
 
 def test_tc_cli_include(record_property, capsys, monkeypatch):
     # lobster-trace: SwTests.tc_cli_include

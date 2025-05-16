@@ -22,9 +22,11 @@
 # Imports **********************************************************************
 import sys
 from enum import Enum
+from typing import Optional
 from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
+from pyTRLCConverter.translator import Translator
 
 # Variables ********************************************************************
 
@@ -46,6 +48,7 @@ class RecordsPolicy(Enum):
 
 class BaseConverter(AbstractConverter):
     # lobster-trace: SwRequirements.sw_req_destination_format
+    # lobster-trace: SwRequirements.sw_req_translation
     """
     Base converter with empty method implementations and helper functions 
     for subclassing converters.
@@ -76,6 +79,9 @@ class BaseConverter(AbstractConverter):
         # Set the default value for empty attributes.
         self._empty_attribute_value = BaseConverter.EMPTY_ATTRIBUTE_DEFAULT
 
+        # Requirement type attribute translator.
+        self._translator = Translator()
+
     @classmethod
     def register(cls, args_parser: any) -> None:
         """Register converter specific argument parser.
@@ -95,7 +101,13 @@ class BaseConverter(AbstractConverter):
         Returns:
             Ret: Status
         """
-        return Ret.OK
+        result = Ret.OK
+
+        if isinstance(self._args.translation, str):
+            if self._translator.load(self._args.translation) is False:
+                result = Ret.ERROR
+
+        return result
 
     def enter_file(self, file_name: str) -> Ret:
         """Enter a file.
@@ -141,11 +153,13 @@ class BaseConverter(AbstractConverter):
         Returns:
             Ret: Status
         """
+        # Get the record attribute translation dictionary.
+        translation = self._translator.get_translation(record.n_typ.name)
 
-        # check for a specific record handler
+        # Check for a specific record handler.
         record_handler = self._record_handler_dict.get(record.n_typ.name)
         if callable(record_handler):
-            result = record_handler(record, level)
+            result = record_handler(record, level, translation)
 
             # Don't trust project specific handlers to return a valid status.
             if not isinstance(result, Ret):
@@ -153,7 +167,8 @@ class BaseConverter(AbstractConverter):
                 result = Ret.ERROR
 
         elif self._record_policy == RecordsPolicy.RECORD_CONVERT_ALL:
-            result = self.convert_record_object_generic(record, level)
+            result = self.convert_record_object_generic(record, level, translation)
+
         else:
             result = Ret.OK
 
@@ -166,12 +181,14 @@ class BaseConverter(AbstractConverter):
 
     # helpers **************************************************************
 
-    def convert_record_object_generic(self, record: Record_Object, level: int) -> Ret:
+    def convert_record_object_generic(self, record: Record_Object, level: int, translation: Optional[dict]) -> Ret:
         """Convert a record object generically.
 
         Args:
-            record (Record_Object): The record object
-            level (int): The record level
+            record (Record_Object): The record object.
+            level (int): The record level.
+            translation (Optional[dict]): Translation dictionary for the record object.
+                                            If None, no translation is applied.
 
         Returns:
             Ret: Status
@@ -206,7 +223,7 @@ class BaseConverter(AbstractConverter):
             attribute_name (str): The attribute name to get the value from.
 
         Returns:
-            str: The attribute value
+            str: The attribute value.
         """
         record_dict = record.to_python_dict()
         attribute_value = record_dict[attribute_name]

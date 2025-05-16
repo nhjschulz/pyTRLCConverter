@@ -32,10 +32,11 @@ rem ****************************************************************************
 set SW_TEST_OUT_FORMAT=rst
 set SW_TEST_OUT_DIR=.\out\sw-tests\%SW_TEST_OUT_FORMAT%
 set SW_TEST_CONVERTER=..\ProjectConverter\tc2rst
+set TRANSLATION=..\ProjectConverter\translation.json
 
 if not exist %SW_TEST_OUT_DIR% (
     md %SW_TEST_OUT_DIR%
 )
 
 echo Generate software tests ...
-pyTRLCConverter --source=..\..\trlc\swe-req --source=..\..\trlc\swe-test --exclude=..\..\trlc\swe-req --source=..\..\trlc\model -o=%SW_TEST_OUT_DIR% --verbose --project=%SW_TEST_CONVERTER% %SW_TEST_OUT_FORMAT%
+pyTRLCConverter --source=..\..\trlc\swe-req --source=..\..\trlc\swe-test --exclude=..\..\trlc\swe-req --source=..\..\trlc\model -o=%SW_TEST_OUT_DIR% --verbose --project=%SW_TEST_CONVERTER% --translation=%TRANSLATION% %SW_TEST_OUT_FORMAT%

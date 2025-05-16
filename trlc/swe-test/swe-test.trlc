@@ -16,6 +16,11 @@ section "SW-Tests" {
             verifies = [SwRequirements.sw_req_cli]
         }
 
+        SwTestCase tc_translation {
+            description = "This test case check whether the translation of requirement attributes works."
+            verifies = [SwRequirements.sw_req_translation]
+        }
+
         SwTestCase tc_prj_spec {
             description = "This test case check whether a project specific converter can be instantiated."
             verifies = [SwRequirements.sw_req_prj_spec, SwRequirements.sw_req_prj_spec_file, SwRequirements.sw_req_prj_spec_interface]
@@ -75,6 +80,11 @@ section "SW-Tests" {
         SwTestCase tc_cli_include {
             description = "This test case checks whether a TRLC file can be included as on demand context in the conversion."
             verifies = [SwRequirements.sw_req_cli_include]
+        }
+
+        SwTestCase tc_cli_translation {
+            description = "This test case checks whether a translation file can be configured via the command line."
+            verifies = [SwRequirements.sw_req_cli_translation]
         }
     }
 
