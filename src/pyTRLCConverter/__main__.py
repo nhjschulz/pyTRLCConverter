@@ -36,7 +36,7 @@ from pyTRLCConverter.version import __license__, __repository__, __version__
 from pyTRLCConverter.trlc_helper import get_trlc_symbols
 from pyTRLCConverter.markdown_converter import MarkdownConverter
 from pyTRLCConverter.docx_converter import DocxConverter
-from pyTRLCConverter.log_verbose import enable_verbose, log_verbose, is_verbose_enabled, log_error
+from pyTRLCConverter.logger import enable_verbose, log_verbose, is_verbose_enabled, log_error
 from pyTRLCConverter.rst_converter import RstConverter
 
 # Variables ********************************************************************

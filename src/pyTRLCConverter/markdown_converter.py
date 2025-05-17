@@ -26,7 +26,7 @@ from trlc.ast import Implicit_Null, Record_Object, Record_Reference
 from pyTRLCConverter.base_converter import BaseConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import TrlcAstWalker
-from pyTRLCConverter.log_verbose import log_verbose, log_error
+from pyTRLCConverter.logger import log_verbose, log_error
 
 # Variables ********************************************************************
 

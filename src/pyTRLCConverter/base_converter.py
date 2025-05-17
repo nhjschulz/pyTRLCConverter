@@ -26,7 +26,7 @@ from pyTRLCConverter.abstract_converter import AbstractConverter
 from pyTRLCConverter.ret import Ret
 from pyTRLCConverter.trlc_helper import Record_Object
 from pyTRLCConverter.translator import Translator
-from pyTRLCConverter.log_verbose import log_error
+from pyTRLCConverter.logger import log_error
 
 # Variables ********************************************************************
 

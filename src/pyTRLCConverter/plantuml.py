@@ -29,7 +29,7 @@ import urllib
 import urllib.parse
 import requests
 
-from pyTRLCConverter.log_verbose import log_verbose, log_error
+from pyTRLCConverter.logger import log_verbose, log_error
 
 # Variables ********************************************************************
 

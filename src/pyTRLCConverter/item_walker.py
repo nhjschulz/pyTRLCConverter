@@ -26,7 +26,7 @@ import traceback
 from trlc.ast import Symbol_Table
 
 from pyTRLCConverter.abstract_converter import AbstractConverter
-from pyTRLCConverter.log_verbose import log_verbose, log_error
+from pyTRLCConverter.logger import log_verbose, log_error
 from pyTRLCConverter.trlc_helper import get_file_dict_from_symbols, is_item_record, is_item_section
 from pyTRLCConverter.ret import Ret
 
