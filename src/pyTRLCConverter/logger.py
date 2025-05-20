@@ -1,4 +1,4 @@
-"""Log verbose functionality.
+"""Log verbose functionality and errors.
 
     Author: Andreas Merkle (andreas.merkle@newtec.de)
 """
