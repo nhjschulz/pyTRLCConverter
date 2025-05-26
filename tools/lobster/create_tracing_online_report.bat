@@ -110,7 +110,7 @@ if errorlevel 1 (
     goto error
 )
 
-rem ********** Online Report SW-Requirements **********
+rem ********** Online Report SW-Tests **********
 %LOBSTER_ONLINE_REPORT% --out %SW_TEST_LOBSTER_ONLINE_REPORT_OUT% %SW_TEST_LOBSTER_REPORT_OUT% --repo-root %LOCAL_REPOSITORY_ROOT%
 
 if errorlevel 1 (
