@@ -102,7 +102,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# ********** Online Report SW-Requirements **********
+# ********** Online Report SW-Tests **********
 $LOBSTER_ONLINE_REPORT --out $SW_TEST_LOBSTER_ONLINE_REPORT_OUT $SW_TEST_LOBSTER_REPORT_OUT --repo-root $LOCAL_REPOSITORY_ROOT
 if [ $? -ne 0 ]; then
     exit 1
