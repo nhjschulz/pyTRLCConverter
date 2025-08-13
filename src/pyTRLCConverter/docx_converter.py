@@ -201,7 +201,7 @@ class DocxConverter(BaseConverter):
 
             cells = table.add_row().cells
             cells[0].text = key
-            cells[1].text = value
+            cells[1].text = str(value)
 
         # Add a paragraph with the record object location
         p = self._docx.add_paragraph()

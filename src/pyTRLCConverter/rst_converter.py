@@ -424,7 +424,7 @@ class RstConverter(BaseConverter):
         # Create a target ID for the record
         target_id = f"{file_name}-{record_name.lower().replace(' ', '-')}"
 
-        return RstConverter.rst_create_link(record_reference.to_python_object(), target_id)
+        return RstConverter.rst_create_link(str(record_reference.to_python_object()), target_id)
 
     def _get_trlc_ast_walker(self) -> TrlcAstWalker:
         # lobster-trace: SwRequirements.sw_req_rst_record
@@ -452,7 +452,7 @@ class RstConverter(BaseConverter):
             None
         )
         trlc_ast_walker.set_other_dispatcher(
-            lambda expression: RstConverter.rst_escape(expression.to_python_object())
+            lambda expression: RstConverter.rst_escape(str(expression.to_python_object()))
         )
 
         return trlc_ast_walker
