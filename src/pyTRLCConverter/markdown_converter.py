@@ -445,7 +445,7 @@ class MarkdownConverter(BaseConverter):
 
         anchor_tag = file_name + "#" + record_name.lower().replace(" ", "-")
 
-        return MarkdownConverter.markdown_create_link(record_reference.to_python_object(), anchor_tag)
+        return MarkdownConverter.markdown_create_link(str(record_reference.to_python_object()), anchor_tag)
 
     def _get_trlc_ast_walker(self) -> TrlcAstWalker:
         # lobster-trace: SwRequirements.sw_req_markdown_record
@@ -473,7 +473,7 @@ class MarkdownConverter(BaseConverter):
             None
         )
         trlc_ast_walker.set_other_dispatcher(
-            lambda expression: MarkdownConverter.markdown_escape(expression.to_python_object())
+            lambda expression: MarkdownConverter.markdown_escape(str(expression.to_python_object()))
         )
 
         return trlc_ast_walker
