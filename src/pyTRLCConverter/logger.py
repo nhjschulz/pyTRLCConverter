@@ -64,6 +64,7 @@ def log_verbose(message : str) -> None:
         print(message)
 
 def log_error(message : str, show_timestamp : str = False) -> None:
+    # lobster-trace: SwRequirements.sw_req_error
     """Prints an error and optionally a timestamp with it
 
     Args:

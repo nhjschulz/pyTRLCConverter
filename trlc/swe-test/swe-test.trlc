@@ -45,6 +45,11 @@ section "SW-Tests" {
             description = "This test case check whether in verbose mode more information is printed out."
             verifies = [SwRequirements.sw_req_verbose_mode]
         }
+
+        SwTestCase tc_error {
+            description = "This test case check whether error messages are printed to stderr."
+            verifies = [SwRequirements.sw_req_error]
+        }
     }
 
     section "Project Specific Conversion" {

@@ -32,6 +32,7 @@ from pyTRLCConverter.__main__ import main
 
 def test_tc_cli_no_arguments(record_property, capsys, monkeypatch):
     # lobster-trace: SwTests.tc_cli
+    # lobster-trace: SwTests.tc_error
     """
     If the command line interface is called without any arguments, it shall require the user to
     provide at least one argument.
