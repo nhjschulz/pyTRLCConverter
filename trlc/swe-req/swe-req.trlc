@@ -60,6 +60,12 @@ section "pyTRLCConverter" {
                 verification_criteria = "Verify by converting one or more TRLC files with the verbose mode enabled."
                 valid_status = AbstractRequirements.VALID_STATUS.valid
             }
+
+            SwReq sw_req_error {
+                description = "The software shall log any error message on stderr."
+                verification_criteria = "Verify by calling the software with no or invalid arguments."
+                valid_status = AbstractRequirements.VALID_STATUS.valid
+            }
         }
 
         section "Project Specific Conversion" {
