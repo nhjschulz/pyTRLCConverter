@@ -251,6 +251,24 @@ def test_tc_rst_table(record_property, tmp_path):
     assert table_lines[0] == "    | Value3  | Value4  |"
     assert table_lines[1] == "    +---------+---------+"
 
+def test_tc_rst_list(record_property, tmp_path):
+    # lobster-trace: SwTests.tc_rst_list
+    """
+    The reStructuredText converter shall provide the functionality to create reStructuredText lists.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_rst_list")
+
+    rst_converter = RstConverter(Namespace(out=str(tmp_path), exclude=None))
+
+    # Create a list with items.
+    items = ["Item1", "Item2!", "Item3"]
+    list_output = rst_converter.rst_create_list(items, escape=True)
+    assert list_output == "* Item1\n* Item2\\!\n* Item3"
+
 def test_tc_rst_link(record_property, tmp_path):
     # lobster-trace: SwTests.tc_rst_link
     """

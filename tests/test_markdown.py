@@ -211,6 +211,27 @@ def test_tc_markdown_table(record_property, tmp_path):
     assert markdown_converter.markdown_append_table_row(["Value!", "Value#"], escape=False) == \
         r"| Value! | Value# |" + "\n"
 
+def test_tc_markdown_list(record_property, tmp_path):
+    # lobster-trace: SwTests.tc_markdown_list
+    """
+    The Markdown converter shall provide the functionality to create Markdown lists.
+
+    Args:
+        record_property (Any): Used to inject the test case reference into the test results.
+        tmp_path (Path): Used to create a temporary output directory.
+    """
+    record_property("lobster-trace", "SwTests.tc_markdown_list")
+
+    markdown_converter = MarkdownConverter(Namespace(out=str(tmp_path), exclude=None))
+
+    # Create a Markdown list without html. Expect each item to be prefixed with an asterix and space.
+    assert markdown_converter.markdown_create_list(["Item1", "Item2!"], use_html=False, escape=False) == \
+        "* Item1\n* Item2!\n"
+    # Create a Markdown list with html.
+    # Expect each item to be a list element and the full list to be enclosed in an unordered list tag.
+    assert markdown_converter.markdown_create_list(["Item1", "Item2!"], use_html=True) == \
+        "<ul><li>Item1</li><li>Item2\\!</li></ul>"
+
 def test_tc_markdown_link(record_property, tmp_path):
     # lobster-trace: SwTests.tc_markdown_link
     """
