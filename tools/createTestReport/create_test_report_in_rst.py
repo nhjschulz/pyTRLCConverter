@@ -28,6 +28,8 @@ from pyTRLCConverter.trlc_helper import Record_Object
 
 # Variables ********************************************************************
 
+TEST_CASES_FILE_NAME = "swe-test.rst"
+
 # Classes **********************************************************************
 
 
@@ -125,7 +127,7 @@ class CustomRstConverter(RstConverter):
         if test_case is None:
             test_case = self.rst_escape("N/A")
         else:
-            anchor_tag = test_case.replace("SwTests.", "sw_test.rst-").lower()
+            anchor_tag = test_case.replace("SwTests.", TEST_CASES_FILE_NAME + "-").lower()
 
             test_case = self.rst_create_link(test_case, anchor_tag)
 
