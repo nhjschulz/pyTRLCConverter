@@ -688,7 +688,7 @@ class MarkdownConverter(BaseConverter):
         list_str = ""
 
         if use_html is True:
-            list_str += "<ul>\n"
+            list_str += "<ul>"
 
         for value_raw in list_values:
             value = value_raw
