@@ -133,6 +133,12 @@ section "SW-Tests" {
             verifies = [SwRequirements.sw_req_markdown_table]
         }
 
+        SwTestCase tc_markdown_list {
+            description = '''This test case checks whether the default Markdown converter provides a function
+             to create valid Markdown list and a valid HTML list.'''
+            verifies = [SwRequirements.sw_req_markdown_list]
+        }
+
         SwTestCase tc_markdown_link {
             description = '''This test case checks whether the default Markdown converter provides a function
              to create valid Markdown links.'''
@@ -211,6 +217,12 @@ section "SW-Tests" {
             description = '''This test case checks whether the default reStructuredText converter provides the functionality
              to create valid reStructuredText tables.'''
             verifies = [SwRequirements.sw_req_rst_table]
+        }
+
+        SwTestCase tc_rst_list {
+            description = '''This test case checks whether the default reStructuredText converter provides a function
+             to create valid reStructuredText list.'''
+            verifies = [SwRequirements.sw_req_rst_list]
         }
 
         SwTestCase tc_rst_link {

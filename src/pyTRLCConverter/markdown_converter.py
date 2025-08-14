@@ -523,13 +523,7 @@ class MarkdownConverter(BaseConverter):
 
             attribute_value = ""
             if isinstance(walker_result, list):
-                # List every list item line by line.
-                for idx, walker_result_item in enumerate(walker_result):
-                    if 0 < idx:
-                        attribute_value += "<br>"
-
-                    attribute_value += walker_result_item
-
+                attribute_value = self.markdown_create_list(walker_result, True, False)
             else:
                 attribute_value = walker_result
 
@@ -677,6 +671,40 @@ class MarkdownConverter(BaseConverter):
         table_row += "\n"
 
         return table_row
+
+    @staticmethod
+    def markdown_create_list(list_values: List[str], use_html: bool = False, escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_markdown_list
+        """Create a unordered Markdown list.
+        The values will be automatically escaped for Markdown if necessary.
+
+        Args:
+            list_values (List[str]): List of list values.
+            use_html (bool): Use HTML for the list (default: False).
+            escape (bool): Escapes every list value (default: True).
+        Returns:
+            str: Markdown list
+        """
+        list_str = ""
+
+        if use_html is True:
+            list_str += "<ul>"
+
+        for value_raw in list_values:
+            value = value_raw
+
+            if escape is True:  # Escape the value if necessary.
+                value = MarkdownConverter.markdown_escape(value)
+
+            if use_html is True:
+                list_str += f"<li>{value}</li>" # No line feed here, because the HTML list is not a Markdown list.
+            else:
+                list_str += f"* {value}\n"
+
+        if use_html is True:
+            list_str += "</ul>" # No line feed here, because the HTML list is not a Markdown list.
+
+        return list_str
 
     @staticmethod
     def markdown_create_link(text: str, url: str, escape: bool = True) -> str:

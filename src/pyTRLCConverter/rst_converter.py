@@ -502,13 +502,7 @@ class RstConverter(BaseConverter):
 
             attribute_value = ""
             if isinstance(walker_result, list):
-                # List every list item line by line.
-                for idx, walker_result_item in enumerate(walker_result):
-                    if 0 < idx:
-                        attribute_value += "\n"
-
-                    attribute_value += walker_result_item
-
+                attribute_value = self.rst_create_list(walker_result, False)
             else:
                 attribute_value = walker_result
 
@@ -686,6 +680,35 @@ class RstConverter(BaseConverter):
         separator_row = "    +" + "+".join(["-" * (width + 2) for width in max_widths]) + "+\n"
 
         return table_row + separator_row
+
+    @staticmethod
+    def rst_create_list(list_values: List[str], escape: bool = True) -> str:
+        # lobster-trace: SwRequirements.sw_req_rst_list
+        """Create a unordered reStructuredText list.
+        The values will be automatically escaped for reStructuredText if necessary.
+
+        Args:
+            list_values (List[str]): List of list values.
+            escape (bool): Escapes every list value (default: True).
+        
+        Returns:
+            str: reStructuredText list
+        """
+        list_str = ""
+
+        for idx, value_raw in enumerate(list_values):
+            value = value_raw
+
+            if escape is True:  # Escape the value if necessary.
+                value = RstConverter.rst_escape(value)
+
+            list_str += f"* {value}"
+
+            # The last list value must not have a newline at the end.
+            if idx < len(list_values) - 1:
+                list_str += "\n"
+
+        return list_str
 
     @staticmethod
     def rst_create_link(text: str, target: str, escape: bool = True) -> str:
