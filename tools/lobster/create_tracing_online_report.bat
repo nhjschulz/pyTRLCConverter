@@ -41,13 +41,21 @@ set SW_REQ_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-req-lobster.json
 set SW_REQ_LOBSTER_ONLINE_REPORT_OUT=%OUT_DIR%\lobster-online-report-sw-req-lobster.json
 set SW_REQ_LOBSTER_HTML_OUT=%OUT_DIR%\sw_req_tracing_online_report.html
 
-set LOCAL_REPOSITORY_ROOT=.\..\..
+set SW_REQ_LOBSTER_ONLINE_REPORT_CONF=%OUT_DIR%\online_report_config.yaml
 
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
 ) else (
     del /q "%OUT_DIR%\*"
 )
+
+rem ********** Create online report configuration  **********
+for /f "delims=" %%i in ('git rev-parse HEAD') do set COMMIT_ID=%%i
+for /f "delims=" %%i in ('git remote get-url origin') do set BASE_URL=%%i
+echo report: '%SW_REQ_LOBSTER_REPORT_OUT%' > %SW_REQ_LOBSTER_ONLINE_REPORT_CONF%
+echo commit_id: '%COMMIT_ID%' >> %SW_REQ_LOBSTER_ONLINE_REPORT_CONF%
+echo repo_root: '.\..\..' >> %SW_REQ_LOBSTER_ONLINE_REPORT_CONF%
+echo base_url: '%BASE_URL%' >> %SW_REQ_LOBSTER_ONLINE_REPORT_CONF%
 
 rem ********** SW-Requirements **********
 %LOBSTER_TRLC% --config %SW_REQ_LOBSTER_CONF% --out %SW_REQ_LOBSTER_OUT%
@@ -85,7 +93,7 @@ if errorlevel 1 (
 )
 
 rem ********** Online Report SW-Requirements **********
-%LOBSTER_ONLINE_REPORT% --out %SW_REQ_LOBSTER_ONLINE_REPORT_OUT% %SW_REQ_LOBSTER_REPORT_OUT% --repo-root %LOCAL_REPOSITORY_ROOT%
+%LOBSTER_ONLINE_REPORT% --out %SW_REQ_LOBSTER_ONLINE_REPORT_OUT% --config %SW_REQ_LOBSTER_ONLINE_REPORT_CONF%
 
 if errorlevel 1 (
     goto error

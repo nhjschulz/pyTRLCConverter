@@ -40,7 +40,7 @@ dev = [
   "myst-parser >= 4.0.0",
   "sphinxcontrib-plantuml >= 0.30",
   "m2r >= 0.3.1",
-  "bmw-lobster >= 0.13.2"
+  "bmw-lobster >= 1.0.0"
 ]
 
 [project.urls]
