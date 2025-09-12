@@ -41,11 +41,6 @@ set SW_REQ_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-req-lobster.json
 set SW_REQ_LOBSTER_ONLINE_REPORT_OUT=%OUT_DIR%\lobster-online-report-sw-req-lobster.json
 set SW_REQ_LOBSTER_HTML_OUT=%OUT_DIR%\sw_req_tracing_online_report.html
 
-set SW_TEST_LOBSTER_REPORT_CONF=.\lobster-report-sw-test.conf
-set SW_TEST_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-test-lobster.json
-set SW_TEST_LOBSTER_ONLINE_REPORT_OUT=%OUT_DIR%\lobster-online-report-sw-rest-lobster.json
-set SW_TEST_LOBSTER_HTML_OUT=%OUT_DIR%\sw_test_tracing_online_report.html
-
 set LOCAL_REPOSITORY_ROOT=.\..\..
 
 if not exist "%OUT_DIR%" (
@@ -98,27 +93,6 @@ if errorlevel 1 (
 
 rem ********** Report SW-Requirements to HTML **********
 %LOBSTER_RENDERER% --out %SW_REQ_LOBSTER_HTML_OUT% %SW_REQ_LOBSTER_ONLINE_REPORT_OUT%
-
-if errorlevel 1 (
-    goto error
-)
-
-rem ********** Report SW-Tests **********
-%LOBSTER_REPORT% --lobster-config %SW_TEST_LOBSTER_REPORT_CONF% --out %SW_TEST_LOBSTER_REPORT_OUT%
-
-if errorlevel 1 (
-    goto error
-)
-
-rem ********** Online Report SW-Tests **********
-%LOBSTER_ONLINE_REPORT% --out %SW_TEST_LOBSTER_ONLINE_REPORT_OUT% %SW_TEST_LOBSTER_REPORT_OUT% --repo-root %LOCAL_REPOSITORY_ROOT%
-
-if errorlevel 1 (
-    goto error
-)
-
-rem ********** Report SW-Tests to HTML **********
-%LOBSTER_RENDERER% --out %SW_TEST_LOBSTER_HTML_OUT% %SW_TEST_LOBSTER_ONLINE_REPORT_OUT%
 
 if errorlevel 1 (
     goto error

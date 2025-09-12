@@ -39,10 +39,6 @@ set SW_REQ_LOBSTER_REPORT_CONF=.\lobster-report-sw-req.conf
 set SW_REQ_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-req-lobster.json
 set SW_REQ_LOBSTER_HTML_OUT=%OUT_DIR%\sw_req_tracing_report.html
 
-set SW_TEST_LOBSTER_REPORT_CONF=.\lobster-report-sw-test.conf
-set SW_TEST_LOBSTER_REPORT_OUT=%OUT_DIR%\lobster-report-sw-test-lobster.json
-set SW_TEST_LOBSTER_HTML_OUT=%OUT_DIR%\sw_test_tracing_report.html
-
 if not exist "%OUT_DIR%" (
     md %OUT_DIR%
 ) else (
@@ -87,20 +83,6 @@ if errorlevel 1 (
 
 rem ********** Report SW-Requirements to HTML **********
 %LOBSTER_RENDERER% --out %SW_REQ_LOBSTER_HTML_OUT% %SW_REQ_LOBSTER_REPORT_OUT%
-
-if errorlevel 1 (
-    goto error
-)
-
-rem ********** Report SW-Tests **********
-%LOBSTER_REPORT% --lobster-config %SW_TEST_LOBSTER_REPORT_CONF% --out %SW_TEST_LOBSTER_REPORT_OUT%
-
-if errorlevel 1 (
-    goto error
-)
-
-rem ********** Report SW-Tests to HTML **********
-%LOBSTER_RENDERER% --out %SW_TEST_LOBSTER_HTML_OUT% %SW_TEST_LOBSTER_REPORT_OUT%
 
 if errorlevel 1 (
     goto error

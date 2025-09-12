@@ -41,11 +41,6 @@ SW_REQ_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-req-lobster.json
 SW_REQ_LOBSTER_ONLINE_REPORT_OUT=$OUT_DIR/lobster-online-report-sw-req-lobster.json
 SW_REQ_LOBSTER_HTML_OUT=$OUT_DIR/sw_req_tracing_online_report.html
 
-SW_TEST_LOBSTER_REPORT_CONF=./lobster-report-sw-test.conf
-SW_TEST_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-test-lobster.json
-SW_TEST_LOBSTER_ONLINE_REPORT_OUT=$OUT_DIR/lobster-online-report-sw-rest-lobster.json
-SW_TEST_LOBSTER_HTML_OUT=$OUT_DIR/sw_test_tracing_online_report.html
-
 LOCAL_REPOSITORY_ROOT=./../..
 
 if [ ! -d "$OUT_DIR" ]; then
@@ -92,24 +87,6 @@ fi
 
 # ********** Report SW-Requirements to HTML **********
 $LOBSTER_RENDERER --out $SW_REQ_LOBSTER_HTML_OUT $SW_REQ_LOBSTER_ONLINE_REPORT_OUT
-if [ $? -ne 0 ]; then
-    exit 1
-fi
-
-# ********** Report SW-Tests **********
-$LOBSTER_REPORT --lobster-config $SW_TEST_LOBSTER_REPORT_CONF --out $SW_TEST_LOBSTER_REPORT_OUT
-if [ $? -ne 0 ]; then
-    exit 1
-fi
-
-# ********** Online Report SW-Tests **********
-$LOBSTER_ONLINE_REPORT --out $SW_TEST_LOBSTER_ONLINE_REPORT_OUT $SW_TEST_LOBSTER_REPORT_OUT --repo-root $LOCAL_REPOSITORY_ROOT
-if [ $? -ne 0 ]; then
-    exit 1
-fi
-
-# ********** Report SW-Tests to HTML **********
-$LOBSTER_RENDERER --out $SW_TEST_LOBSTER_HTML_OUT $SW_TEST_LOBSTER_ONLINE_REPORT_OUT
 if [ $? -ne 0 ]; then
     exit 1
 fi
