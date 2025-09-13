@@ -39,10 +39,6 @@ SW_REQ_LOBSTER_REPORT_CONF=./lobster-report-sw-req.conf
 SW_REQ_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-req-lobster.json
 SW_REQ_LOBSTER_HTML_OUT=$OUT_DIR/sw_req_tracing_report.html
 
-SW_TEST_LOBSTER_REPORT_CONF=./lobster-report-sw-test.conf
-SW_TEST_LOBSTER_REPORT_OUT=$OUT_DIR/lobster-report-sw-test-lobster.json
-SW_TEST_LOBSTER_HTML_OUT=$OUT_DIR/sw_test_tracing_report.html
-
 if [ ! -d "$OUT_DIR" ]; then
     mkdir "$OUT_DIR"
 else
@@ -88,20 +84,6 @@ fi
 $LOBSTER_RENDERER --out "$SW_REQ_LOBSTER_HTML_OUT" "$SW_REQ_LOBSTER_REPORT_OUT"
 if [ $? -ne 0 ]; then
     echo "Error in Report SW-Requirements to HTML"
-    exit 1
-fi
-
-# ********** Report SW-Tests **********
-$LOBSTER_REPORT --lobster-config "$SW_TEST_LOBSTER_REPORT_CONF" --out "$SW_TEST_LOBSTER_REPORT_OUT"
-if [ $? -ne 0 ]; then
-    echo "Error in Report SW-Tests"
-    exit 1
-fi
-
-# ********** Report SW-Tests to HTML **********
-$LOBSTER_RENDERER --out "$SW_TEST_LOBSTER_HTML_OUT" "$SW_TEST_LOBSTER_REPORT_OUT"
-if [ $? -ne 0 ]; then
-    echo "Error in Report SW-Tests to HTML"
     exit 1
 fi
 

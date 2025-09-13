@@ -13,7 +13,7 @@ component "lobster-online-report" as lobsterOnlineReport<<tool>>
 component "lobster-html-report" as lobsterHtmlReport<<tool>>
 component "lobster-html-report" as lobsterHtmlReportOnline<<tool>>
 
-file "lobster-trlc.conf" as lobsterTrlcConf<<config>>
+file "lobster-trlc.yaml" as lobsterTrlcConf<<config>>
 file "trlc.lobster" as trlcLobsterFile
 file "Source file(s)\n(*.trlc)" as sourceFiles
 file "Model(s)\n(*.rls)" as modelFiles
@@ -27,7 +27,9 @@ file "tracing_online_report.html" as tracingOnlineReportHtml
 
 lobsterTrlc ..> trlcLobsterFile: <<create>>
 
-lobsterTrlcConf ..> lobsterTrlc: <<flow>>
+lobsterTrlcConf ...> lobsterTrlc: <<flow>>
+lobsterTrlcConf ..> sourceFiles: <<select>>
+lobsterTrlcConf ..> modelFiles: <<select>>
 
 sourceFiles ..> lobsterTrlc: <<flow>>
 modelFiles ..> lobsterTrlc: <<flow>>
@@ -51,7 +53,8 @@ onlineReportLobsterFile .> lobsterHtmlReportOnline: <<flow>>
 lobsterHtmlReportOnline .> tracingOnlineReportHtml: <<create>>
 
 note left of lobsterTrlcConf
-    Defines which attributes shall be taken over
+    Selects the source and model files and
+    which attributes shall be taken over
     into the report from the sources (*.trlc).
 end note
 
